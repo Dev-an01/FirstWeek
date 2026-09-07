@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "file_version": "1.0",
+    "generated_date": "2025-10-21",
+    "total_products": 3,
+    "purpose": "NexaTech product portfolio definitions"
+  },
+  
+  "products": [
+    {
+      "id": "product_workflow_pro",
+      "name": "WorkFlow Pro",
+      "category": "Project Management",
+      "description": "Enterprise-grade project management and collaboration platform",
+      "target_market": ["Enterprise", "Mid-market"],
+      "launched_date": "2018-12-01",
+      "current_version": "4.2",
+      "pricing_tiers": [
+        {
+          "tier": "Professional",
+          "price_annual_jpy": 85000,
+          "seats_included": "Unlimited",
+          "features": [
+            "Core project management",
+            "Team collaboration",
+            "Basic reporting",
+            "API access",
+            "Email support"
+          ]
+        },
+        {
+          "tier": "Enterprise",
+          "price_annual_jpy": 300000,
+          "pricing_model": "Custom",
+          "features": [
+            "All Professional features",
+            "Advanced analytics",
+            "Custom integrations",
+            "Dedicated CSM",
+            "Priority support",
+            "SLA guarantees"
+          ]
+        }
+      ],
+      "customers": 380,
+      "total_seats": 42000,
+      "annual_recurring_revenue": 2800000000,
+      "key_features": [
+        "Task and project tracking",
+        "Gantt charts and timelines",
+        "Resource management",
+        "Team collaboration (comments, @mentions)",
+        "File sharing and version control",
+        "Custom workflows",
+        "Reporting and analytics",
+        "Mobile apps (iOS, Android)",
+        "API and integrations",
+        "AI-powered search (beta)"
+      ],
+      "integrations": [
+        "Slack",
+        "Microsoft Teams",
+        "Google Workspace",
+        "Salesforce",
+        "Jira",
+        "GitHub"
+      ],
+      "decision_cases_mentioned": [
+        "DC_AKIKO_001",
+        "DC_AKIKO_002",
+        "DC_AKIKO_005",
+        "DC_SARAH_002",
+        "DC_YUKI_001"
+      ],
+      "notes": "Flagship product, 65% of company revenue. AI search pilot was in WorkFlow Pro.",
+      "confidentiality": "public"
+    },
+    {
+      "id": "product_teamsync",
+      "name": "TeamSync",
+      "category": "Internal Communication",
+      "description": "Internal team communication and knowledge management platform",
+      "target_market": ["Enterprise", "Mid-market"],
+      "launched_date": "2020-03-15",
+      "current_version": "2.8",
+      "pricing_tiers": [
+        {
+          "tier": "Professional",
+          "price_annual_jpy": 45000,
+          "seats_included": "Unlimited",
+          "features": [
+            "Team chat and channels",
+            "File sharing",
+            "Search",
+            "Basic integrations",
+            "Mobile apps"
+          ]
+        },
+        {
+          "tier": "Enterprise",
+          "price_annual_jpy": 150000,
+          "pricing_model": "Custom",
+          "features": [
+            "All Professional features",
+            "Advanced search",
+            "Custom integrations",
+            "Admin controls",
+            "Compliance features"
+          ]
+        }
+      ],
+      "customers": 285,
+      "total_seats": 28000,
+      "annual_recurring_revenue": 980000000,
+      "key_features": [
+        "Real-time messaging",
+        "Channels and direct messages",
+        "File sharing and collaboration",
+        "Voice and video calls",
+        "Screen sharing",
+        "Search and knowledge management",
+        "Integrations with other tools",
+        "Mobile apps",
+        "Guest access"
+      ],
+      "integrations": [
+        "WorkFlow Pro",
+        "Google Calendar",
+        "Outlook",
+        "Zoom",
+        "Box"
+      ],
+      "decision_cases_mentioned": ["DC_YUKI_001", "DC_YUKI_003"],
+      "notes": "Second product, 23% of revenue. Part of modular monolith refactoring (separate module).",
+      "confidentiality": "public"
+    },
+    {
+      "id": "product_talenthub",
+      "name": "TalentHub",
+      "category": "HR Management",
+      "description": "Human resources management and talent development platform",
+      "target_market": ["Enterprise", "Mid-market"],
+      "launched_date": "2021-06-01",
+      "current_version": "1.5",
+      "pricing_tiers": [
+        {
+          "tier": "Professional",
+          "price_annual_jpy": 65000,
+          "seats_included": "Unlimited employees",
+          "features": [
+            "Employee database",
+            "Time-off management",
+            "Performance reviews",
+            "Basic reporting",
+            "Employee self-service"
+          ]
+        },
+        {
+          "tier": "Enterprise",
+          "price_annual_jpy": 220000,
+          "pricing_model": "Custom",
+          "features": [
+            "All Professional features",
+            "Advanced analytics",
+            "Custom workflows",
+            "Succession planning",
+            "Learning management"
+          ]
+        }
+      ],
+      "customers": 195,
+      "total_seats": 18000,
+      "annual_recurring_revenue": 420000000,
+      "key_features": [
+        "Employee information management",
+        "Time-off and absence tracking",
+        "Performance review workflows",
+        "Goal setting and OKRs",
+        "Compensation management",
+        "Onboarding workflows",
+        "Learning and development",
+        "HR analytics and reporting",
+        "Compliance tracking"
+      ],
+      "integrations": [
+        "WorkFlow Pro",
+        "Payroll systems",
+        "ATS (Applicant Tracking Systems)"
+      ],
+      "decision_cases_mentioned": ["DC_YUKI_001", "DC_YUKI_003"],
+      "notes": "Newest product, 12% of revenue. Smallest team (10 engineers reporting directly to CTO Yuki). Part of modular monolith refactoring.",
+      "confidentiality": "public"
+    }
+  ],
+  
+  "product_strategy": {
+    "current_focus": [
+      "AI features across all products (started with WorkFlow Pro)",
+      "Mid-market expansion (all products)",
+      "Mobile experience improvements",
+      "Integration ecosystem expansion"
+    ],
+    "upcoming": [
+      "AI recommendations engine",
+      "Advanced automation",
+      "Mobile-first features",
+      "API v3 for all products"
+    ]
+  }
+}

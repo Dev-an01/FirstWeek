@@ -1,0 +1,13 @@
+id,name,version,effective_date,owner_executive,category,confidentiality,file_path,last_updated,review_frequency
+POLICY-FIN-001,Discount Policy,2.1,2024-01-30,Raj Patel,Finance,Internal,test_data/policies/discount_policy.md,2024-01-30,Quarterly
+POLICY-FIN-004,Travel Expense Policy,1.2,2024-01-15,Raj Patel,Finance,Internal,test_data/policies/travel_expense_policy.md,2024-01-15,Annually
+POLICY-HR-001,Remote Work Policy,1.3,2024-01-01,Akiko Tanaka,People,Internal,test_data/policies/remote_work_policy.md,2024-01-01,Annually
+POLICY-IT-001,Information Security Policy,3.0,2024-10-01,Yuki Nakamura,IT,Internal,test_data/policies/information_security_policy.md,2024-10-01,Quarterly
+POLICY-IT-003,Data Privacy Policy,2.2,2024-05-01,Yuki Nakamura,IT,Public,test_data/policies/data_privacy_policy.md,2024-05-01,Annually
+POLICY-FIN-006,Procurement Policy,1.4,2024-02-01,Raj Patel,Finance,Internal,test_data/policies/procurement_policy.md,2024-02-01,Annually
+POLICY-SALES-001,Sales Compensation Policy,2.3,2024-01-01,Raj Patel,Sales,Internal,test_data/policies/sales_compensation_policy.md,2024-01-01,Annually
+POLICY-HR-003,Professional Development Policy,1.2,2024-07-01,Akiko Tanaka,People,Internal,test_data/policies/professional_development_policy.md,2024-07-01,Annually
+POLICY-HR-002,Time Off Policy,2.1,2024-04-01,Akiko Tanaka,People,Internal,test_data/policies/time_off_policy.md,2024-04-01,Annually
+POLICY-FIN-005,Expense Reimbursement Policy,1.3,2024-03-01,Raj Patel,Finance,Internal,test_data/policies/expense_reimbursement_policy.md,2024-03-01,Annually
+POLICY-HR-004,Code of Conduct,1.1,2024-01-01,Akiko Tanaka,People,Public,test_data/policies/code_of_conduct.md,2024-01-01,Annually
+POLICY-HR-005,Hiring Approval Policy,1.2,2024-02-01,Raj Patel,People,Internal,test_data/policies/hiring_approval_policy.md,2024-02-01,Annually

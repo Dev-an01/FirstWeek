@@ -1,0 +1,139 @@
+# AI Officer RAG - Minimal Production Requirements
+# ================================================
+# Optimized for faster installation and smaller Docker images
+
+# ============================================================================
+# HEAVY ML DEPENDENCIES (installed first in Dockerfile for caching)
+# ============================================================================
+# These are pre-installed in Docker Layer 1 and should NOT be duplicated here:
+# - torch==2.1.2
+# - transformers==4.36.2
+# - sentence-transformers==2.7.0
+# - numpy==1.26.4
+
+# ============================================================================
+# SPEECH-TO-TEXT (STT) - Faster Whisper
+# ============================================================================
+faster-whisper>=1.1.0
+webrtcvad>=2.0.10
+
+# ============================================================================
+# CORE FRAMEWORK
+# ============================================================================
+# Note: spacy model downloaded separately via setup script
+
+# Core AI/ML Libraries
+# ---------------------
+spacy==3.7.4                      # NER for entity extraction
+gliner>=0.1.4                     # Multilingual zero-shot NER (better than spaCy for JA/multilingual)
+# Note: spacy model downloaded separately via setup script
+
+# Database Drivers
+# ----------------
+psycopg2-binary==2.9.9           # PostgreSQL (with pgvector)
+asyncpg==0.29.0                  # Async PostgreSQL driver for FastAPI (CRITICAL)
+neo4j==5.24.0                   # Graph database (5.14.1 has packaging issue)
+redis==4.6.0                    # Redis for L2 caching (4.6.0 for celery compatibility)
+
+# Numerical Computing & Machine Learning
+# ----------------------------------------
+numpy>=1.24.0,<2.0.0            # Required by embeddings & transformers
+scikit-learn==1.3.2             # For cosine similarity in semantic chunking
+
+# FastAPI & Web
+# -------------
+fastapi==0.109.2                # API framework
+uvicorn[standard]==0.27.1       # ASGI server
+starlette==0.36.3               # ASGI framework (FastAPI base - explicit for Docker)
+httpx>=0.27.0                   # Modern async HTTP client (for services)
+pydantic               # Data validation
+pydantic-settings        # Settings management (updated for pydantic 2.7.4 compatibility)
+
+# Configuration
+# -------------
+python-dotenv==1.0.1            # Environment variables
+PyYAML==6.0.1                   # YAML config files
+
+# Utilities
+# ---------
+tqdm==4.66.1                    # Progress bars (for embedding generation)
+requests==2.31.0                # HTTP client (for testing)
+fuzzywuzzy==0.18.0              # Fuzzy string matching for persona extraction
+python-Levenshtein==0.25.0      # Fast string comparison (fuzzywuzzy speedup)
+psutil==5.9.6                   # CPU/memory monitoring for observability
+
+# LLM Integration (Phase 4 - Complete)
+# -------------------------------------
+openai>=1.12.0                  # OpenAI API (GPT-4, GPT-3.5)
+zhipuai>=2.0.0                  # GLM API (Zhipu AI)
+groq>=0.4.0                     # Groq API (Mixtral, LLaMA)
+google-genai>=0.5.0             # Google Gemini API (Live API + REST) - 0.5.0+ has send_realtime_input
+# anthropic>=0.8.0              # Anthropic API (future)
+
+# Task Queue & Background Processing
+# -----------------------------------
+celery[redis]==5.3.4                         # Celery with Redis broker support (task queue)
+
+# Observability & Monitoring (Phase 5)
+# -------------------------------------
+opentelemetry-api==1.21.0                    # OpenTelemetry API
+opentelemetry-sdk==1.21.0                    # OpenTelemetry SDK
+opentelemetry-instrumentation==0.42b0        # Base instrumentation
+opentelemetry-instrumentation-fastapi==0.42b0  # FastAPI auto-instrumentation
+opentelemetry-instrumentation-psycopg2==0.42b0 # PostgreSQL instrumentation
+opentelemetry-instrumentation-redis==0.42b0    # Redis instrumentation (optional)
+opentelemetry-exporter-otlp==1.21.0          # OTLP exporter for collector
+opentelemetry-exporter-prometheus==0.42b0    # Prometheus exporter
+prometheus-client==0.14.1                    # Prometheus client (already installed)
+py-cpuinfo==9.0.0                            # CPU info for resource monitoring
+
+# LangGraph & LangSmith (Phase 6 - Workflow Orchestration)
+# ---------------------------------------------------------
+langchain-core>=0.1.0                        # LangChain core abstractions
+langgraph>=0.0.20                            # Workflow orchestration with StateGraph
+langsmith>=0.1.50                            # LangSmith tracing and monitoring (supports name param)
+nest-asyncio==1.6.0                          # Nested asyncio event loops for LangGraph
+
+tenacity==9.0.0
+
+# Audio Services - Text-to-Speech (Phase 7 - Audio Integration)
+# ================================================================
+# Kokoro TTS (High-quality multilingual TTS with real-time streaming)
+kokoro>=0.9.4                      # Kokoro TTS library (82M parameter model)
+soundfile>=0.12.1                  # Audio file I/O (required by kokoro)
+
+# Japanese TTS Dependencies (Complete chain for Japanese support)
+# Second generation tokenizer (recommended):
+pyopenjtalk>=0.3.0                 # Japanese phoneme processing with full unidic
+scipy>=1.10.0                      # Scientific computing (required by pyopenjtalk)
+
+# First generation tokenizer (legacy but still used):
+fugashi>=1.3.0                     # Japanese morphological analyzer (MeCab wrapper)
+unidic-lite>=1.0.8                 # Lightweight unidic dictionary for fugashi
+jaconv>=0.3.0                      # Japanese character conversion (hiragana/katakana)
+mojimoji>=0.0.12                   # Full-width/half-width character converter
+
+# Common utilities:
+num2words>=0.5.10                  # Number to words conversion
+
+# FastAPI additions for audio
+python-multipart>=0.0.12           # File upload support for FastAPI
+
+# Note: torch and numpy already installed above (shared dependencies)
+# Note: espeak-ng system dependency installed in Dockerfile
+
+# Google Cloud TTS - Chirp 3 Instant (Alternative TTS with voice cloning)
+# ------------------------------------------------------------------------
+google-cloud-texttospeech>=2.16.0    # Google Cloud TTS API (v1beta1 for streaming with custom voices)
+
+# Meeting Scheduler (Phase 8 - Bot Scheduling Integration)
+# =========================================================
+APScheduler==3.10.4                  # Job scheduling for automatic bot joining
+
+# Video Service Integration (Back-end driven)
+# =========================================================
+websockets>=12.0                     # WebSocket client for GCP Video Service integration
+# Onboarding Service (Phase 9 - Executive Onboarding Pipeline)
+# =============================================================
+pdfplumber>=0.10.0                   # PDF parsing with Japanese support
+python-docx>=1.1.0                   # DOCX parsing

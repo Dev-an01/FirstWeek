@@ -1,0 +1,5 @@
+id,name,title,department,email,formality_scale,directness_scale,warmth_scale,technical_depth,decision_speed,risk_tolerance,background,years_at_company,years_in_role
+exec_001_test,Akiko Tanaka,CEO & Co-Founder,Executive,akiko.tanaka@nexatech.jp,7,8,8,Medium,Fast,Calculated,"MBA from Stanford, 8 years at McKinsey, Co-founded NexaTech in 2019",5,5
+exec_002_test,Raj Patel,CFO,Finance,raj.patel@nexatech.jp,8,9,5,High,Deliberate,Conservative,"MBA from Wharton, 12 years in finance (Goldman Sachs, PE), Joined NexaTech 2021",3,3
+exec_003_test,Yuki Nakamura,CTO,Engineering,yuki.nakamura@nexatech.jp,3,9,7,Very High,Fast,Moderate,"CS from Tokyo University, 10 years engineering (Google, startups), Co-founded NexaTech 2019",5,5
+exec_004_test,Sarah Kim,CMO,Marketing,sarah.kim@nexatech.jp,6,7,9,Medium,Moderate,Moderate,"Marketing background (HubSpot, Salesforce), Joined NexaTech 2022",2,2

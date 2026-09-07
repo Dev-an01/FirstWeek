@@ -1,0 +1,88 @@
+---
+# Global Static IP Address (reserve this first via: gcloud compute addresses create firstweek-ip --global)
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: firstweek-cert
+  namespace: firstweek
+spec:
+  domains:
+    - your-domain.com  # REPLACE with your actual domain
+    - www.your-domain.com  # REPLACE with your actual domain
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: firstweek-ingress
+  namespace: firstweek
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "firstweek-ip"
+    networking.gke.io/managed-certificates: "firstweek-cert"
+    kubernetes.io/ingress.class: "gce"
+    # Enable HTTPS redirect
+    networking.gke.io/v1beta1.FrontendConfig: "firstweek-frontend-config"
+spec:
+  rules:
+  - host: your-domain.com  # REPLACE with your actual domain
+    http:
+      paths:
+      # Frontend (React SPA)
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 5173
+      # Auth Service API
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 3001
+      # Chat Service API
+      - path: /api/chat
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-service
+            port:
+              number: 3002
+      # Recall Service API
+      - path: /api/recall
+        pathType: Prefix
+        backend:
+          service:
+            name: recall-service
+            port:
+              number: 3003
+      # Avatar Interface
+      - path: /avatar
+        pathType: Prefix
+        backend:
+          service:
+            name: avatar-interface
+            port:
+              number: 3004
+      # RAG API
+      - path: /api/v1
+        pathType: Prefix
+        backend:
+          service:
+            name: rag-api
+            port:
+              number: 8000
+
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: firstweek-frontend-config
+  namespace: firstweek
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: "301"

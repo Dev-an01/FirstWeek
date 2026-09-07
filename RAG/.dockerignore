@@ -1,0 +1,83 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+*.md
+!README.md
+docs/
+DOCUMENTATION_SUMMARY.md
+HYBRID_SEARCH_COMPLETE.md
+API_*.md
+SYSTEM_READY.md
+*_COMPLETE.md
+*_INVESTIGATION.md
+COMMIT_MESSAGE.md
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+test_*.py
+*_test.py
+tests/
+demos/
+
+# Logs and temp files
+*.log
+logs/
+debug_output.txt
+demo_test_results.txt
+*.tmp
+temp/
+tmp/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.yml
+docker-compose.override.yml
+docker-compose.prod.yml
+Dockerfile
+.dockerignore
+
+# Scripts (loaded separately)
+quick_test.py
+check_*.py
+debug_*.py
+test_*.py
+verify_*.py

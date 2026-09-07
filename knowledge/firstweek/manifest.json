@@ -1,0 +1,579 @@
+{
+  "schemaVersion": 1,
+  "visibility": "private",
+  "companyId": "local-workspace",
+  "snapshotAt": "2026-09-06T22:08:17.429328+00:00",
+  "sourceRoot": "/Users/dev_an/projects",
+  "projects": [
+    {
+      "id": "firstweek",
+      "name": "FirstWeek",
+      "summary": "Private project onboarding with conversational, source-backed answers",
+      "stack": [
+        "React",
+        "Express",
+        "FastAPI",
+        "PostgreSQL",
+        "SQLite FTS5",
+        "Sentence Transformers",
+        "Groq"
+      ],
+      "document": "firstweek.md",
+      "ownershipStatus": "unverified",
+      "evidence": [
+        {
+          "path": "FirstWeek/README.md",
+          "sha256": "66159b3b0af450bd6e9a482f22ffaac25329c6dc3fa4c0eb57be4ae6b60f750a"
+        },
+        {
+          "path": "FirstWeek/frontend/src/firstweek/Workspace.jsx",
+          "sha256": "1c6dfc547e0685837de9cf4f43bb1baa95349602eb992bf8ebd30c61ab379e70"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/routes/firstweekRoutes.js",
+          "sha256": "53ebf1c6df151fd218da72d72a30af26aa2cd631ca8c70535c9b90c8668a3f23"
+        },
+        {
+          "path": "FirstWeek/RAG/firstweek/api.py",
+          "sha256": "423fa2455e92f41f6aa5bc4427271d595cd027ccdcfc9a1a2035a0628f427dfc"
+        },
+        {
+          "path": "FirstWeek/RAG/firstweek/index.py",
+          "sha256": "12b0507869e8f49a55d7153071e029cf0e8bd8becefa0743a5c70a11bfeb8f4d"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/shared/prisma/schema.prisma",
+          "sha256": "eb2ff8aec982c15243880e8357e08e47e85ee8bd88187b083969e05caee4b9dd"
+        }
+      ],
+      "architecture": {
+        "title": "From question to grounded answer",
+        "caption": "The active FirstWeek request path. PostgreSQL authorizes access; the local index retrieves evidence. Groq generates the final answer.",
+        "nodes": [
+          {
+            "id": "browser",
+            "label": "Project workspace",
+            "detail": "React sends the question and recent turns.",
+            "col": 0,
+            "row": 0
+          },
+          {
+            "id": "gateway",
+            "label": "Membership gateway",
+            "detail": "Express verifies the session and project access.",
+            "col": 1,
+            "row": 0
+          },
+          {
+            "id": "identity",
+            "label": "Identity database",
+            "detail": "PostgreSQL stores users, projects and memberships.",
+            "col": 2,
+            "row": 0
+          },
+          {
+            "id": "retrieval",
+            "label": "Scoped retrieval",
+            "detail": "FastAPI combines FTS5 and local vector similarity.",
+            "col": 1,
+            "row": 1
+          },
+          {
+            "id": "model",
+            "label": "Generative model",
+            "detail": "Groq receives only selected evidence and conversation.",
+            "col": 2,
+            "row": 1
+          },
+          {
+            "id": "answer",
+            "label": "Cited response",
+            "detail": "The gateway rechecks membership before delivery.",
+            "col": 2,
+            "row": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": "browser",
+            "target": "gateway",
+            "label": "question"
+          },
+          {
+            "source": "gateway",
+            "target": "identity",
+            "label": "access check"
+          },
+          {
+            "source": "gateway",
+            "target": "retrieval",
+            "label": "verified scope"
+          },
+          {
+            "source": "retrieval",
+            "target": "model",
+            "label": "evidence"
+          },
+          {
+            "source": "model",
+            "target": "answer",
+            "label": "generated answer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ai-pr-review-agent",
+      "name": "AI PR Review Agent",
+      "summary": "Repository-grounded pull request reviews",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "LangGraph",
+        "Redis",
+        "Next.js"
+      ],
+      "document": "ai-pr-review-agent.md",
+      "ownershipStatus": "unverified",
+      "evidence": [
+        {
+          "path": "ai-pr-review-agent/README.md",
+          "sha256": "ff973bf2c42581610a69828c91cea7b9e1a1d3be0c16f1195de4bdb1aaeb51f2"
+        },
+        {
+          "path": "ai-pr-review-agent/backend/orchestrator/graph.py",
+          "sha256": "75866766c8b5a2f708c36fb4f09f839668f4ca79883fd1841d3e190a63a7da9f"
+        },
+        {
+          "path": "ai-pr-review-agent/backend/orchestrator/nodes.py",
+          "sha256": "ddc21d9966ab79f7f5f23c2abe04e5bfbd6f3374dd0f5b3b8c504d1c66e54824"
+        },
+        {
+          "path": "ai-pr-review-agent/backend/data/ingestion.py",
+          "sha256": "60c2725d23ab2631744f3cd61507d0fcd73de6739f195cfcff27c6849cb8d04f"
+        }
+      ],
+      "architecture": {
+        "title": "From pull request to review",
+        "caption": "A documented workflow: validate ingress, queue work, run specialists, then aggregate and apply approval/confidence gates.",
+        "nodes": [
+          {
+            "id": "github",
+            "label": "GitHub webhook",
+            "detail": "Signed pull-request events enter the service.",
+            "col": 0,
+            "row": 0
+          },
+          {
+            "id": "ingress",
+            "label": "FastAPI ingress",
+            "detail": "Validate signatures and delivery identity.",
+            "col": 1,
+            "row": 0
+          },
+          {
+            "id": "queue",
+            "label": "Redis / ARQ",
+            "detail": "Separate request acceptance from worker execution.",
+            "col": 2,
+            "row": 0
+          },
+          {
+            "id": "worker",
+            "label": "Review worker",
+            "detail": "Fetch the diff and repository-grounded context.",
+            "col": 2,
+            "row": 1
+          },
+          {
+            "id": "agents",
+            "label": "LangGraph specialists",
+            "detail": "Security, quality, tests and documentation review.",
+            "col": 1,
+            "row": 1
+          },
+          {
+            "id": "gate",
+            "label": "Aggregation + gate",
+            "detail": "Merge findings and determine approval or posting.",
+            "col": 0,
+            "row": 1
+          }
+        ],
+        "edges": [
+          {
+            "source": "github",
+            "target": "ingress",
+            "label": "event"
+          },
+          {
+            "source": "ingress",
+            "target": "queue",
+            "label": "enqueue"
+          },
+          {
+            "source": "queue",
+            "target": "worker",
+            "label": "job"
+          },
+          {
+            "source": "worker",
+            "target": "agents",
+            "label": "diff + context"
+          },
+          {
+            "source": "agents",
+            "target": "gate",
+            "label": "findings"
+          }
+        ]
+      }
+    },
+    {
+      "id": "moneyplant",
+      "name": "MoneyPlant",
+      "summary": "Telegram-first finance tracking with a private dashboard",
+      "stack": [
+        "TypeScript",
+        "Next.js",
+        "PostgreSQL",
+        "Drizzle",
+        "grammY"
+      ],
+      "document": "moneyplant.md",
+      "ownershipStatus": "unverified",
+      "evidence": [
+        {
+          "path": "MoneyPlant/README.md",
+          "sha256": "56c1964552e76778e5e87dcb87d5d93b030244e7eeafe3f0d43c9d5e3132ae17"
+        },
+        {
+          "path": "MoneyPlant/package.json",
+          "sha256": "5202bb9a25ad99ba7cea5c6cc6458cf03f7a3e696095b81e31a1c40a7fa57b69"
+        },
+        {
+          "path": "MoneyPlant/packages/core/package.json",
+          "sha256": "3bb7a8d535c70e0f4a78d976c6b1564435568574423c2375908c6f34e4606a29"
+        },
+        {
+          "path": "MoneyPlant/apps/web/package.json",
+          "sha256": "a23fa9fdc266b9fe7d53f0eaa11f9f11f308a8b5476061f03b4542129ad89b30"
+        },
+        {
+          "path": "MoneyPlant/apps/bot/package.json",
+          "sha256": "90849ebcea10d35fadde9dc345d63f2932a8fd2937485704e9943906f77c763d"
+        }
+      ],
+      "architecture": {
+        "title": "From Telegram message to dashboard",
+        "caption": "The documented transaction flow. Ambiguous categorization can use Claude; this diagram does not imply the project is currently deployed.",
+        "nodes": [
+          {
+            "id": "telegram",
+            "label": "Telegram message",
+            "detail": "A person sends an expense or investment.",
+            "col": 0,
+            "row": 0
+          },
+          {
+            "id": "bot",
+            "label": "Telegram bot",
+            "detail": "grammY handles incoming messages.",
+            "col": 1,
+            "row": 0
+          },
+          {
+            "id": "core",
+            "label": "Core logic",
+            "detail": "Parse amounts, categorize and hold pending entries.",
+            "col": 2,
+            "row": 0
+          },
+          {
+            "id": "claude",
+            "label": "Claude fallback",
+            "detail": "Ambiguous categories use an amount-masked prompt.",
+            "col": 1,
+            "row": 1
+          },
+          {
+            "id": "db",
+            "label": "Shared database",
+            "detail": "PostgreSQL and Drizzle persist committed transactions.",
+            "col": 2,
+            "row": 1
+          },
+          {
+            "id": "web",
+            "label": "Private dashboard",
+            "detail": "Next.js displays spending, transactions and investments.",
+            "col": 2,
+            "row": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": "telegram",
+            "target": "bot",
+            "label": "message"
+          },
+          {
+            "source": "bot",
+            "target": "core",
+            "label": "parse"
+          },
+          {
+            "source": "core",
+            "target": "claude",
+            "label": "when ambiguous"
+          },
+          {
+            "source": "core",
+            "target": "db",
+            "label": "after correction window"
+          },
+          {
+            "source": "db",
+            "target": "web",
+            "label": "read transactions"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-builder",
+      "name": "RAG-Builder",
+      "summary": "A small, framework-light document retrieval pipeline",
+      "stack": [
+        "Python",
+        "Sentence Transformers",
+        "PyTorch",
+        "CSV"
+      ],
+      "document": "rag-builder.md",
+      "ownershipStatus": "unverified",
+      "evidence": [
+        {
+          "path": "RAG-Builder/README.md",
+          "sha256": "8fc3928cce013d9f03f14c8ee92351204976ad466849506966a1021184536099"
+        },
+        {
+          "path": "RAG-Builder/services/retrieve.py",
+          "sha256": "b293263b5abbbc3d7c0bc6543545a0672d141206ffe900994547d00b252adc8b"
+        },
+        {
+          "path": "RAG-Builder/services/embed_model.py",
+          "sha256": "9ccef1c0259705894dc92130d4c5d978b9e53312368f5b856db1372e3abb81c4"
+        },
+        {
+          "path": "RAG-Builder/main.py",
+          "sha256": "100298122164168cfc4eac8aed4b58e391cb0cd5057bf3651db53727dd905d85"
+        }
+      ],
+      "architecture": {
+        "title": "From PDF to retrieved context",
+        "caption": "An educational local pipeline. The inspected retriever uses dot-product scoring; normalization was not established by this review.",
+        "nodes": [
+          {
+            "id": "pdf",
+            "label": "PDF input",
+            "detail": "Extract text from local documents.",
+            "col": 0,
+            "row": 0
+          },
+          {
+            "id": "chunks",
+            "label": "Text chunks",
+            "detail": "Split text into retrieval-sized passages.",
+            "col": 1,
+            "row": 0
+          },
+          {
+            "id": "vectors",
+            "label": "Embedding CSV",
+            "detail": "Sentence Transformer vectors are stored in CSV.",
+            "col": 2,
+            "row": 0
+          },
+          {
+            "id": "query",
+            "label": "User question",
+            "detail": "Embed the incoming question.",
+            "col": 0,
+            "row": 1
+          },
+          {
+            "id": "rank",
+            "label": "Top-k retrieval",
+            "detail": "Score with dot products and select matching chunks.",
+            "col": 1,
+            "row": 1
+          },
+          {
+            "id": "llm",
+            "label": "Response generation",
+            "detail": "Supply retrieved passages to the selected LLM path.",
+            "col": 2,
+            "row": 1
+          }
+        ],
+        "edges": [
+          {
+            "source": "pdf",
+            "target": "chunks",
+            "label": "extract + split"
+          },
+          {
+            "source": "chunks",
+            "target": "vectors",
+            "label": "embed + save"
+          },
+          {
+            "source": "query",
+            "target": "rank",
+            "label": "query vector"
+          },
+          {
+            "source": "vectors",
+            "target": "rank",
+            "label": "stored vectors"
+          },
+          {
+            "source": "rank",
+            "target": "llm",
+            "label": "retrieved context"
+          }
+        ]
+      }
+    },
+    {
+      "id": "personal-site",
+      "name": "Personal Site",
+      "summary": "Project case studies, public writing and private learning notes",
+      "stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "MongoDB"
+      ],
+      "document": "personal-site.md",
+      "ownershipStatus": "unverified",
+      "evidence": [
+        {
+          "path": "personal-site/README.md",
+          "sha256": "475742bb2fbafe1346add60416d3dab48c9d6dfc74295d7a24eaa32b6b0dde13"
+        },
+        {
+          "path": "personal-site/package.json",
+          "sha256": "37d27ed8ae333beaed8f758d309faa8a3d542c928bd6b928b49c484af95e9178"
+        },
+        {
+          "path": "personal-site/src/lib/projects.ts",
+          "sha256": "5cafaf33482325f59a71ecdecaac1c754ce56ce7f9bcb39f5fbb1278097b590f"
+        },
+        {
+          "path": "personal-site/src/app/api/projects/route.ts",
+          "sha256": "7aa877c8830b7c619273f90beabd5f443697004d8d7e329816fa973fd67d5010"
+        }
+      ],
+      "architecture": {
+        "title": "Two content paths in one site",
+        "caption": "Project case studies use a version-controlled collection. Writing and private learning notes use a separate persistence path; private notes are not indexed by FirstWeek.",
+        "nodes": [
+          {
+            "id": "visitor",
+            "label": "Site visitor",
+            "detail": "Browse project case studies and public writing.",
+            "col": 0,
+            "row": 0
+          },
+          {
+            "id": "next",
+            "label": "Next.js App Router",
+            "detail": "Render pages and route content requests.",
+            "col": 1,
+            "row": 0
+          },
+          {
+            "id": "projects",
+            "label": "Project collection",
+            "detail": "Version-controlled project JSON supports case studies.",
+            "col": 2,
+            "row": 0
+          },
+          {
+            "id": "auth",
+            "label": "Protected workflows",
+            "detail": "Authentication guards editing and private areas.",
+            "col": 1,
+            "row": 1
+          },
+          {
+            "id": "mongo",
+            "label": "MongoDB",
+            "detail": "Persistence for writing and learning-log workflows.",
+            "col": 2,
+            "row": 1
+          }
+        ],
+        "edges": [
+          {
+            "source": "visitor",
+            "target": "next",
+            "label": "browse"
+          },
+          {
+            "source": "next",
+            "target": "projects",
+            "label": "case studies"
+          },
+          {
+            "source": "next",
+            "target": "auth",
+            "label": "private / editing"
+          },
+          {
+            "source": "auth",
+            "target": "mongo",
+            "label": "protected content"
+          }
+        ]
+      }
+    }
+  ],
+  "excluded": [
+    {
+      "directory": "riscV",
+      "reason": "No files available to support a project overview."
+    },
+    {
+      "directory": "cpp_shell",
+      "reason": "Excluded from FirstWeek at owner request; Learning RAG and C++ Shell are deferred until publication."
+    },
+    {
+      "directory": "Learning_RAG",
+      "reason": "Excluded from FirstWeek at owner request; Learning RAG and C++ Shell are deferred until publication."
+    },
+    {
+      "directory": "WasmEdge",
+      "reason": "Excluded from FirstWeek at owner request."
+    },
+    {
+      "directory": "OopsC++",
+      "reason": "Excluded from FirstWeek at owner request."
+    },
+    {
+      "directory": "random_exp",
+      "reason": "Excluded from FirstWeek at owner request."
+    }
+  ],
+  "retiredProjectIds": [
+    "FirstWeek",
+    "wasmedge",
+    "random-exp",
+    "oopscpp",
+    "learning-rag",
+    "cpp-shell",
+    "riscv"
+  ]
+}

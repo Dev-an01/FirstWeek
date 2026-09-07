@@ -1,0 +1,1265 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Snapshots LoginPage Snapshots should match snapshot for initial render 1`] = `
+<div>
+  <div
+    class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4"
+  >
+    <div
+      class="fixed top-4 right-4 z-50"
+    >
+      <button
+        class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white/90 backdrop-blur-sm border border-gray-200 hover:text-primary hover:bg-primary/10 hover:border-primary/30 rounded-lg transition-all shadow-sm hover:shadow-md"
+        title="Toggle Language"
+      >
+        <svg
+          class="lucide lucide-languages"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m5 8 6 6"
+          />
+          <path
+            d="m4 14 6-6 2-3"
+          />
+          <path
+            d="M2 5h12"
+          />
+          <path
+            d="M7 2h1"
+          />
+          <path
+            d="m22 22-5-10-5 10"
+          />
+          <path
+            d="M14 18h6"
+          />
+        </svg>
+        <span
+          class="hidden sm:inline"
+        >
+          EN
+        </span>
+      </button>
+    </div>
+    <div
+      class="w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10"
+    >
+      <div
+        class="flex flex-col items-center mb-6"
+      >
+        <img
+          alt="AI Avatar Logo"
+          class="h-12 sm:h-16 mb-4"
+          src="/logo/header_logo.svg"
+        />
+        <h1
+          class="text-xl sm:text-2xl font-bold text-primary text-center"
+        >
+          Welcome Back
+        </h1>
+        <p
+          class="text-sm text-gray-600 mt-2"
+        >
+          Login to access your account
+        </p>
+      </div>
+      <form
+        class="space-y-4 w-full"
+        novalidate=""
+      >
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Email or Username"
+              autocomplete="username"
+              class="w-full px-4 py-3 pr-12 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="255"
+              placeholder="Email or Username"
+              required=""
+              type="text"
+              value=""
+            />
+            <div
+              aria-hidden="true"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary"
+            >
+              <svg
+                class="lucide lucide-mail"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="16"
+                  rx="2"
+                  width="20"
+                  x="2"
+                  y="4"
+                />
+                <path
+                  d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Password"
+              autocomplete="current-password"
+              class="w-full px-4 py-3 pr-24 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="128"
+              placeholder="Password"
+              required=""
+              type="password"
+              value=""
+            />
+            <div
+              class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2"
+            >
+              <button
+                aria-label="Show password"
+                class="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  class="lucide lucide-eye"
+                  fill="none"
+                  height="20"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+              </button>
+              <svg
+                aria-hidden="true"
+                class="text-primary"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="11"
+                  rx="2"
+                  ry="2"
+                  width="18"
+                  x="3"
+                  y="11"
+                />
+                <path
+                  d="M7 11V7a5 5 0 0 1 10 0v4"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <input
+              class="w-4 h-4 accent-primary cursor-pointer focus:ring-2 focus:ring-primary rounded flex-shrink-0"
+              id="remember"
+              type="checkbox"
+            />
+            <label
+              class="text-primary cursor-pointer select-none"
+              for="remember"
+            >
+              Remember me
+            </label>
+          </div>
+          <a
+            href="/forgot-password"
+          >
+            Forgot Password?
+          </a>
+        </div>
+        <button
+          aria-disabled="false"
+          class="w-full py-3 px-6 rounded-full font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary bg-primary text-white hover:bg-primary-dark active:scale-98 "
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      <p
+        class="text-center mt-5 text-gray-600 text-sm"
+      >
+        Don't have an account?
+         
+        <a
+          href="/signup"
+        >
+          Sign Up
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots LoginPage Snapshots should match snapshot with validation errors 1`] = `
+<div>
+  <div
+    class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4"
+  >
+    <div
+      class="fixed top-4 right-4 z-50"
+    >
+      <button
+        class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white/90 backdrop-blur-sm border border-gray-200 hover:text-primary hover:bg-primary/10 hover:border-primary/30 rounded-lg transition-all shadow-sm hover:shadow-md"
+        title="Toggle Language"
+      >
+        <svg
+          class="lucide lucide-languages"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m5 8 6 6"
+          />
+          <path
+            d="m4 14 6-6 2-3"
+          />
+          <path
+            d="M2 5h12"
+          />
+          <path
+            d="M7 2h1"
+          />
+          <path
+            d="m22 22-5-10-5 10"
+          />
+          <path
+            d="M14 18h6"
+          />
+        </svg>
+        <span
+          class="hidden sm:inline"
+        >
+          EN
+        </span>
+      </button>
+    </div>
+    <div
+      class="w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10"
+    >
+      <div
+        class="flex flex-col items-center mb-6"
+      >
+        <img
+          alt="AI Avatar Logo"
+          class="h-12 sm:h-16 mb-4"
+          src="/logo/header_logo.svg"
+        />
+        <h1
+          class="text-xl sm:text-2xl font-bold text-primary text-center"
+        >
+          Welcome Back
+        </h1>
+        <p
+          class="text-sm text-gray-600 mt-2"
+        >
+          Login to access your account
+        </p>
+      </div>
+      <form
+        class="space-y-4 w-full"
+        novalidate=""
+      >
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Email or Username"
+              autocomplete="username"
+              class="w-full px-4 py-3 pr-12 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="255"
+              placeholder="Email or Username"
+              required=""
+              type="text"
+              value=""
+            />
+            <div
+              aria-hidden="true"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary"
+            >
+              <svg
+                class="lucide lucide-mail"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="16"
+                  rx="2"
+                  width="20"
+                  x="2"
+                  y="4"
+                />
+                <path
+                  d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Password"
+              autocomplete="current-password"
+              class="w-full px-4 py-3 pr-24 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="128"
+              placeholder="Password"
+              required=""
+              type="password"
+              value=""
+            />
+            <div
+              class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2"
+            >
+              <button
+                aria-label="Show password"
+                class="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  class="lucide lucide-eye"
+                  fill="none"
+                  height="20"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+              </button>
+              <svg
+                aria-hidden="true"
+                class="text-primary"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="11"
+                  rx="2"
+                  ry="2"
+                  width="18"
+                  x="3"
+                  y="11"
+                />
+                <path
+                  d="M7 11V7a5 5 0 0 1 10 0v4"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <input
+              class="w-4 h-4 accent-primary cursor-pointer focus:ring-2 focus:ring-primary rounded flex-shrink-0"
+              id="remember"
+              type="checkbox"
+            />
+            <label
+              class="text-primary cursor-pointer select-none"
+              for="remember"
+            >
+              Remember me
+            </label>
+          </div>
+          <a
+            href="/forgot-password"
+          >
+            Forgot Password?
+          </a>
+        </div>
+        <button
+          aria-disabled="false"
+          class="w-full py-3 px-6 rounded-full font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary bg-primary text-white hover:bg-primary-dark active:scale-98 "
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      <p
+        class="text-center mt-5 text-gray-600 text-sm"
+      >
+        Don't have an account?
+         
+        <a
+          href="/signup"
+        >
+          Sign Up
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots ProtectedRoute Snapshots should match snapshot when authenticated 1`] = `
+<div>
+  <div>
+    Protected Content
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots ProtectedRoute Snapshots should match snapshot when loading 1`] = `
+<div>
+  <div
+    class="min-h-screen flex items-center justify-center bg-gray-50"
+  >
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"
+    />
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots ProtectedRoute Snapshots should match snapshot when redirecting 1`] = `
+<div>
+  <div>
+    Redirecting to 
+    /login
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots Responsive Layout Snapshots should match snapshot for desktop viewport 1`] = `
+<div>
+  <div
+    class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4"
+  >
+    <div
+      class="fixed top-4 right-4 z-50"
+    >
+      <button
+        class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white/90 backdrop-blur-sm border border-gray-200 hover:text-primary hover:bg-primary/10 hover:border-primary/30 rounded-lg transition-all shadow-sm hover:shadow-md"
+        title="Toggle Language"
+      >
+        <svg
+          class="lucide lucide-languages"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m5 8 6 6"
+          />
+          <path
+            d="m4 14 6-6 2-3"
+          />
+          <path
+            d="M2 5h12"
+          />
+          <path
+            d="M7 2h1"
+          />
+          <path
+            d="m22 22-5-10-5 10"
+          />
+          <path
+            d="M14 18h6"
+          />
+        </svg>
+        <span
+          class="hidden sm:inline"
+        >
+          EN
+        </span>
+      </button>
+    </div>
+    <div
+      class="w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10"
+    >
+      <div
+        class="flex flex-col items-center mb-6"
+      >
+        <img
+          alt="AI Avatar Logo"
+          class="h-12 sm:h-16 mb-4"
+          src="/logo/header_logo.svg"
+        />
+        <h1
+          class="text-xl sm:text-2xl font-bold text-primary text-center"
+        >
+          Welcome Back
+        </h1>
+        <p
+          class="text-sm text-gray-600 mt-2"
+        >
+          Login to access your account
+        </p>
+      </div>
+      <form
+        class="space-y-4 w-full"
+        novalidate=""
+      >
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Email or Username"
+              autocomplete="username"
+              class="w-full px-4 py-3 pr-12 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="255"
+              placeholder="Email or Username"
+              required=""
+              type="text"
+              value=""
+            />
+            <div
+              aria-hidden="true"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary"
+            >
+              <svg
+                class="lucide lucide-mail"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="16"
+                  rx="2"
+                  width="20"
+                  x="2"
+                  y="4"
+                />
+                <path
+                  d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Password"
+              autocomplete="current-password"
+              class="w-full px-4 py-3 pr-24 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="128"
+              placeholder="Password"
+              required=""
+              type="password"
+              value=""
+            />
+            <div
+              class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2"
+            >
+              <button
+                aria-label="Show password"
+                class="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  class="lucide lucide-eye"
+                  fill="none"
+                  height="20"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+              </button>
+              <svg
+                aria-hidden="true"
+                class="text-primary"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="11"
+                  rx="2"
+                  ry="2"
+                  width="18"
+                  x="3"
+                  y="11"
+                />
+                <path
+                  d="M7 11V7a5 5 0 0 1 10 0v4"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <input
+              class="w-4 h-4 accent-primary cursor-pointer focus:ring-2 focus:ring-primary rounded flex-shrink-0"
+              id="remember"
+              type="checkbox"
+            />
+            <label
+              class="text-primary cursor-pointer select-none"
+              for="remember"
+            >
+              Remember me
+            </label>
+          </div>
+          <a
+            href="/forgot-password"
+          >
+            Forgot Password?
+          </a>
+        </div>
+        <button
+          aria-disabled="false"
+          class="w-full py-3 px-6 rounded-full font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary bg-primary text-white hover:bg-primary-dark active:scale-98 "
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      <p
+        class="text-center mt-5 text-gray-600 text-sm"
+      >
+        Don't have an account?
+         
+        <a
+          href="/signup"
+        >
+          Sign Up
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots Responsive Layout Snapshots should match snapshot for mobile viewport 1`] = `
+<div>
+  <div
+    class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4"
+  >
+    <div
+      class="fixed top-4 right-4 z-50"
+    >
+      <button
+        class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white/90 backdrop-blur-sm border border-gray-200 hover:text-primary hover:bg-primary/10 hover:border-primary/30 rounded-lg transition-all shadow-sm hover:shadow-md"
+        title="Toggle Language"
+      >
+        <svg
+          class="lucide lucide-languages"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m5 8 6 6"
+          />
+          <path
+            d="m4 14 6-6 2-3"
+          />
+          <path
+            d="M2 5h12"
+          />
+          <path
+            d="M7 2h1"
+          />
+          <path
+            d="m22 22-5-10-5 10"
+          />
+          <path
+            d="M14 18h6"
+          />
+        </svg>
+        <span
+          class="hidden sm:inline"
+        >
+          EN
+        </span>
+      </button>
+    </div>
+    <div
+      class="w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10"
+    >
+      <div
+        class="flex flex-col items-center mb-6"
+      >
+        <img
+          alt="AI Avatar Logo"
+          class="h-12 sm:h-16 mb-4"
+          src="/logo/header_logo.svg"
+        />
+        <h1
+          class="text-xl sm:text-2xl font-bold text-primary text-center"
+        >
+          Welcome Back
+        </h1>
+        <p
+          class="text-sm text-gray-600 mt-2"
+        >
+          Login to access your account
+        </p>
+      </div>
+      <form
+        class="space-y-4 w-full"
+        novalidate=""
+      >
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Email or Username"
+              autocomplete="username"
+              class="w-full px-4 py-3 pr-12 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="255"
+              placeholder="Email or Username"
+              required=""
+              type="text"
+              value=""
+            />
+            <div
+              aria-hidden="true"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary"
+            >
+              <svg
+                class="lucide lucide-mail"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="16"
+                  rx="2"
+                  width="20"
+                  x="2"
+                  y="4"
+                />
+                <path
+                  d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Password"
+              autocomplete="current-password"
+              class="w-full px-4 py-3 pr-24 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="128"
+              placeholder="Password"
+              required=""
+              type="password"
+              value=""
+            />
+            <div
+              class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2"
+            >
+              <button
+                aria-label="Show password"
+                class="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  class="lucide lucide-eye"
+                  fill="none"
+                  height="20"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+              </button>
+              <svg
+                aria-hidden="true"
+                class="text-primary"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="11"
+                  rx="2"
+                  ry="2"
+                  width="18"
+                  x="3"
+                  y="11"
+                />
+                <path
+                  d="M7 11V7a5 5 0 0 1 10 0v4"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <input
+              class="w-4 h-4 accent-primary cursor-pointer focus:ring-2 focus:ring-primary rounded flex-shrink-0"
+              id="remember"
+              type="checkbox"
+            />
+            <label
+              class="text-primary cursor-pointer select-none"
+              for="remember"
+            >
+              Remember me
+            </label>
+          </div>
+          <a
+            href="/forgot-password"
+          >
+            Forgot Password?
+          </a>
+        </div>
+        <button
+          aria-disabled="false"
+          class="w-full py-3 px-6 rounded-full font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary bg-primary text-white hover:bg-primary-dark active:scale-98 "
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      <p
+        class="text-center mt-5 text-gray-600 text-sm"
+      >
+        Don't have an account?
+         
+        <a
+          href="/signup"
+        >
+          Sign Up
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots Responsive Layout Snapshots should match snapshot for tablet viewport 1`] = `
+<div>
+  <div
+    class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4"
+  >
+    <div
+      class="fixed top-4 right-4 z-50"
+    >
+      <button
+        class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white/90 backdrop-blur-sm border border-gray-200 hover:text-primary hover:bg-primary/10 hover:border-primary/30 rounded-lg transition-all shadow-sm hover:shadow-md"
+        title="Toggle Language"
+      >
+        <svg
+          class="lucide lucide-languages"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m5 8 6 6"
+          />
+          <path
+            d="m4 14 6-6 2-3"
+          />
+          <path
+            d="M2 5h12"
+          />
+          <path
+            d="M7 2h1"
+          />
+          <path
+            d="m22 22-5-10-5 10"
+          />
+          <path
+            d="M14 18h6"
+          />
+        </svg>
+        <span
+          class="hidden sm:inline"
+        >
+          EN
+        </span>
+      </button>
+    </div>
+    <div
+      class="w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10"
+    >
+      <div
+        class="flex flex-col items-center mb-6"
+      >
+        <img
+          alt="AI Avatar Logo"
+          class="h-12 sm:h-16 mb-4"
+          src="/logo/header_logo.svg"
+        />
+        <h1
+          class="text-xl sm:text-2xl font-bold text-primary text-center"
+        >
+          Welcome Back
+        </h1>
+        <p
+          class="text-sm text-gray-600 mt-2"
+        >
+          Login to access your account
+        </p>
+      </div>
+      <form
+        class="space-y-4 w-full"
+        novalidate=""
+      >
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Email or Username"
+              autocomplete="username"
+              class="w-full px-4 py-3 pr-12 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="255"
+              placeholder="Email or Username"
+              required=""
+              type="text"
+              value=""
+            />
+            <div
+              aria-hidden="true"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary"
+            >
+              <svg
+                class="lucide lucide-mail"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="16"
+                  rx="2"
+                  width="20"
+                  x="2"
+                  y="4"
+                />
+                <path
+                  d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full"
+        >
+          <div
+            class="relative"
+          >
+            <input
+              aria-invalid="false"
+              aria-label="Password"
+              autocomplete="current-password"
+              class="w-full px-4 py-3 pr-24 bg-white border-2 rounded-xl outline-none transition-all focus:ring-2 focus:ring-primary focus:ring-opacity-50 border-gray-200 focus:border-primary"
+              maxlength="128"
+              placeholder="Password"
+              required=""
+              type="password"
+              value=""
+            />
+            <div
+              class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2"
+            >
+              <button
+                aria-label="Show password"
+                class="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  class="lucide lucide-eye"
+                  fill="none"
+                  height="20"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+              </button>
+              <svg
+                aria-hidden="true"
+                class="text-primary"
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="11"
+                  rx="2"
+                  ry="2"
+                  width="18"
+                  x="3"
+                  y="11"
+                />
+                <path
+                  d="M7 11V7a5 5 0 0 1 10 0v4"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <input
+              class="w-4 h-4 accent-primary cursor-pointer focus:ring-2 focus:ring-primary rounded flex-shrink-0"
+              id="remember"
+              type="checkbox"
+            />
+            <label
+              class="text-primary cursor-pointer select-none"
+              for="remember"
+            >
+              Remember me
+            </label>
+          </div>
+          <a
+            href="/forgot-password"
+          >
+            Forgot Password?
+          </a>
+        </div>
+        <button
+          aria-disabled="false"
+          class="w-full py-3 px-6 rounded-full font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary bg-primary text-white hover:bg-primary-dark active:scale-98 "
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      <p
+        class="text-center mt-5 text-gray-600 text-sm"
+      >
+        Don't have an account?
+         
+        <a
+          href="/signup"
+        >
+          Sign Up
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;

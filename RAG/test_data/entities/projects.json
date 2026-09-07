@@ -1,0 +1,402 @@
+{
+  "metadata": {
+    "file_version": "1.0",
+    "generated_date": "2025-10-21",
+    "total_projects": 12,
+    "purpose": "Project entities referenced in executive decision cases"
+  },
+  
+  "projects": [
+    {
+      "id": "project_ai_search_pilot",
+      "name": "AI Search Pilot (WorkFlow Pro)",
+      "status": "completed",
+      "start_date": "2024-06-01",
+      "end_date": "2024-09-15",
+      "budget": 12000000,
+      "actual_cost": 15000000,
+      "owner_id": "person_product_manager_ai",
+      "executive_sponsor": "exec_001_test",
+      "team_size": 4,
+      "products_affected": ["WorkFlow Pro"],
+      "decision_cases_mentioned": ["DC_AKIKO_002"],
+      "objective": "Pilot AI-powered search in WorkFlow Pro to validate customer demand and technical feasibility before full AI investment",
+      "outcomes": {
+        "success": true,
+        "customer_nps_impact": "+12 points for AI search users",
+        "search_effectiveness": "+40% improvement",
+        "lessons_learned": "Data quality is prerequisite for AI, not afterthought. Budget ¥15M vs ¥12M (data cleaning required extra 2 months)."
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_mid_market_brand_transformation",
+      "name": "Mid-Market Brand Transformation",
+      "status": "completed",
+      "start_date": "2024-04-15",
+      "end_date": "2024-10-10",
+      "budget": 25000000,
+      "actual_cost": 25000000,
+      "owner_id": "exec_004_test",
+      "executive_sponsor": "exec_001_test",
+      "team_size": 12,
+      "decision_cases_mentioned": ["DC_SARAH_002"],
+      "objective": "Rebrand from 'Enterprise-grade' to 'Scales with you' positioning to attract mid-market customers while maintaining enterprise appeal",
+      "deliverables": [
+        "Website redesign with split paths (mid-market vs enterprise)",
+        "8 mid-market case studies",
+        "Transparent pricing for Professional tier",
+        "Simplified onboarding (30-minute setup)",
+        "New brand messaging and content"
+      ],
+      "outcomes": {
+        "success": true,
+        "mid_market_customer_mix": "30% → 46% (target 50%)",
+        "conversion_improvement": "8% → 19% for mid-market",
+        "pipeline_impact": "+112% mid-market pipeline"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_technical_foundation_sprint",
+      "name": "6-Week Technical Foundation Sprint",
+      "status": "completed",
+      "start_date": "2024-07-15",
+      "end_date": "2024-08-26",
+      "budget": 75000000,
+      "actual_cost": 75000000,
+      "owner_id": "exec_003_test",
+      "executive_sponsor": "exec_003_test",
+      "team_size": 45,
+      "decision_cases_mentioned": ["DC_YUKI_004"],
+      "objective": "Address accumulated technical debt to restore engineering velocity and prevent 40% permanent productivity loss",
+      "deliverables": [
+        "Test coverage increase (30% → 72%)",
+        "Test suite optimization (45min → 12min)",
+        "Database indexing and optimization",
+        "Security vulnerability fixes (28 → 0 critical)",
+        "Automated rollback mechanism",
+        "Monitoring and observability improvements"
+      ],
+      "outcomes": {
+        "success": true,
+        "velocity_improvement": "+35% story points per sprint",
+        "deploy_frequency": "4/week → 9/week",
+        "production_bugs": "8/month → 3/month",
+                "engineer_satisfaction": "6.1/10 → 8.4/10"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_modular_monolith_refactor",
+      "name": "Modular Monolith Refactoring",
+      "status": "completed",
+      "start_date": "2024-01-22",
+      "end_date": "2024-04-05",
+      "budget": 20000000,
+      "actual_cost": 21000000,
+      "owner_id": "exec_003_test",
+      "executive_sponsor": "exec_003_test",
+      "team_size": 4,
+      "decision_cases_mentioned": ["DC_YUKI_001"],
+      "objective": "Restructure monolithic codebase into clear modules with enforced boundaries to improve velocity without microservices complexity",
+      "deliverables": [
+        "Module boundaries defined (WorkFlow, TeamSync, TalentHub)",
+        "Linting rules enforcing module isolation",
+        "Separate database schemas per module",
+        "Module-specific test suites",
+        "Deployment pipeline optimization"
+      ],
+      "outcomes": {
+        "success": true,
+        "deploy_frequency": "2/week → 6/week (3x improvement)",
+        "deploy_time": "45min → 12min",
+        "merge_conflicts": "-60% reduction",
+        "engineer_satisfaction": "4.2/10 → 7.8/10 for 'ability to ship independently'"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_aws_cost_optimization",
+      "name": "AWS Infrastructure Cost Optimization",
+      "status": "completed",
+      "start_date": "2024-06-25",
+      "end_date": "2025-03-20",
+      "budget": 0,
+      "savings": 37000000,
+      "owner_id": "exec_003_test",
+      "executive_sponsor": "exec_002_test",
+      "team_size": 6,
+      "decision_cases_mentioned": ["DC_RAJ_003"],
+      "objective": "Reduce AWS costs from ¥70M to ¥45M annually through optimization without impacting service quality",
+      "phases": [
+        {
+          "phase": 1,
+          "duration": "3 weeks",
+          "focus": "Eliminate unused test instances + auto-shutdown policies",
+          "savings": 15000000
+        },
+        {
+          "phase": 2,
+          "duration": "3 months",
+          "focus": "Rightsize databases + purchase reserved instances",
+          "savings": 18000000
+        },
+        {
+          "phase": 3,
+          "duration": "3 months",
+          "focus": "Data lifecycle policies + cost monitoring dashboard",
+          "savings": 6000000
+        }
+      ],
+      "outcomes": {
+        "success": true,
+        "total_savings": 37000000,
+        "gross_margin_improvement": "68% → 72%",
+        "engineering_time_invested": "800 hours",
+        "roi": "¥46,250 per engineering hour"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_intercom_implementation",
+      "name": "Intercom Customer Support Integration",
+      "status": "completed",
+      "start_date": "2024-03-20",
+      "end_date": "2024-04-10",
+      "budget": 4000000,
+      "actual_cost": 4000000,
+      "owner_id": "person_miho_suzuki",
+      "executive_sponsor": "exec_003_test",
+      "team_size": 2,
+      "decision_cases_mentioned": ["DC_YUKI_002"],
+      "objective": "Replace Zendesk with Intercom for better in-app support experience (buy vs build decision)",
+      "deliverables": [
+        "Intercom embedded widget in all 3 products",
+        "API integration layer for user context",
+        "Support team training",
+        "Migration from Zendesk"
+      ],
+      "outcomes": {
+        "success": true,
+        "implementation_time": "2.5 weeks (vs 6 months if built)",
+        "customer_satisfaction": "CSAT 68 → 84",
+        "support_efficiency": "+40% (no manual context lookup)",
+        "opportunity_cost_saved": "4 engineers × 4 months on core features = ¥60M value"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_marketing_sales_alignment",
+      "name": "Marketing-Sales Realignment Initiative",
+      "status": "completed",
+      "start_date": "2024-06-20",
+      "end_date": "2024-10-15",
+      "budget": 5000000,
+      "actual_cost": 5000000,
+      "owner_id": "exec_004_test",
+      "executive_sponsor": "exec_001_test",
+      "team_size": 6,
+      "decision_cases_mentioned": ["DC_SARAH_003"],
+      "objective": "Fix broken marketing-sales relationship by redefining lead quality, implementing SLAs, and aligning on revenue goals",
+      "deliverables": [
+        "New MQL → SRL (Sales-Ready Lead) definition",
+        "Bi-directional SLAs (marketing and sales)",
+        "Closed-loop feedback system",
+        "Simplified lead scoring (50 → 8 factors)",
+        "Shared revenue KPIs"
+      ],
+      "outcomes": {
+        "success": true,
+        "lead_quality": "12% → 38% SRL→Opportunity conversion",
+        "sales_efficiency": "82% time on quality leads (vs 12% before)",
+        "cac_efficiency": "¥150K → ¥58K cost per quality lead",
+        "pipeline_generated": "+72% increase (¥180M → ¥310M)"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_content_strategy_transformation",
+      "name": "Content Strategy: Quality Over Quantity",
+      "status": "completed",
+      "start_date": "2024-08-25",
+      "end_date": "2025-01-20",
+      "budget": 18000000,
+      "actual_cost": 18000000,
+      "owner_id": "exec_004_test",
+      "executive_sponsor": "exec_004_test",
+      "team_size": 7,
+      "decision_cases_mentioned": ["DC_SARAH_004"],
+      "objective": "Shift from high-volume commodity content (3-4 posts/week) to high-quality differentiated content (research reports, premium guides)",
+      "deliverables": [
+        "Reduced blog frequency (3-4/week → 1-2/week)",
+        "2 quarterly research reports ('State of B2B Productivity', 'Mid-Market Benchmarks')",
+        "4 premium guides (5K-10K words)",
+        "Weekly video series",
+        "Guest expert program"
+      ],
+      "outcomes": {
+        "success": true,
+        "engagement": "Time on page 1:15 → 4:20 (240% increase)",
+        "research_downloads": "21,100 total (12,400 + 8,700)",
+        "thought_leadership": "41% brand association (vs 22% before)",
+        "lead_quality": "SRLs from content +32%"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_security_incident_response",
+      "name": "SQL Injection Breach Response & Security Overhaul",
+      "status": "completed",
+      "start_date": "2024-09-20",
+      "end_date": "2024-11-20",
+      "budget": 13000000,
+      "actual_cost": 13000000,
+      "owner_id": "exec_003_test",
+      "executive_sponsor": "exec_003_test",
+      "team_size": 8,
+      "decision_cases_mentioned": ["DC_YUKI_005"],
+      "objective": "Respond to security breach with full disclosure, remediate vulnerabilities, and implement comprehensive security program",
+      "phases": [
+        {
+          "phase": "Immediate Response",
+          "duration": "24 hours",
+          "actions": [
+            "Patch SQL injection vulnerability",
+            "Lock down admin panel",
+            "Review all access logs",
+            "Disclose to 15,247 affected customers",
+            "Public blog post"
+          ]
+        },
+        {
+          "phase": "Remediation",
+          "duration": "2 weeks",
+          "actions": [
+            "External security audit (¥8M)",
+            "Penetration testing",
+            "Rate limiting on all APIs",
+            "Enhanced monitoring",
+            "Offer 12-month identity monitoring (¥5M)"
+          ]
+        },
+        {
+          "phase": "Prevention",
+          "duration": "Ongoing",
+          "actions": [
+            "Security training for all engineers",
+            "Quarterly security audits",
+            "Improved security practices"
+          ]
+        }
+      ],
+      "outcomes": {
+        "success": true,
+        "customer_churn": "0.02% (3 of 15,247)",
+        "brand_sentiment": "76% positive after response (was 89% negative before)",
+        "vulnerabilities_fixed": "8 additional found and fixed",
+        "customer_trust": "Increased based on transparent handling"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_production_crisis_response",
+      "name": "48-Hour Production Bug Crisis Management",
+      "status": "completed",
+      "start_date": "2024-08-30",
+      "end_date": "2024-09-15",
+      "budget": 900000,
+      "actual_cost": 900000,
+      "owner_id": "exec_003_test",
+      "executive_sponsor": "exec_001_test",
+      "team_size": 12,
+      "decision_cases_mentioned": ["DC_AKIKO_005"],
+      "objective": "Fix critical data export bug affecting 120 enterprise customers with proper 24-hour maintenance window vs rushed 6-hour fix",
+      "approach": [
+        "Chose 24-hour proper maintenance over risky 6-hour fix",
+        "Personal apology email from CEO to all affected customers",
+        "1-month service credit (¥900K total)",
+        "Detailed public post-mortem",
+        "Dedicated CSM for each affected customer",
+        "Hourly update emails during maintenance"
+      ],
+      "outcomes": {
+        "success": true,
+        "maintenance_duration": "23 hours (ahead of 24hr estimate)",
+        "customer_churn": "0 customers (zero churn)",
+        "nps_impact": "+3 points increase (counterintuitive positive impact)",
+        "social_media": "Sentiment turned positive, praised transparency",
+        "competitive_impact": "Used as differentiator in sales"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_career_development_program",
+      "name": "Company-Wide Career Development Program",
+      "status": "active",
+      "start_date": "2024-07-01",
+      "budget": 5000000,
+      "actual_cost": 3200000,
+      "owner_id": "exec_001_test",
+      "executive_sponsor": "exec_001_test",
+      "team_size": 3,
+      "decision_cases_mentioned": ["DC_AKIKO_003"],
+      "objective": "Address systemic career growth concerns after VP Engineering departure by creating clear career paths and development programs",
+      "deliverables": [
+        "Clear IC and management tracks",
+        "Mentorship program",
+        "Quarterly career conversations",
+        "External coaching for senior engineers",
+        "Career progression frameworks"
+      ],
+      "outcomes": {
+        "success": true,
+        "attrition_reduction": "12% → 8% (6 months after launch)",
+        "engineer_satisfaction": "Career growth score improved significantly",
+        "retention_of_key_talent": "98% retention post-program",
+        "recruiting_advantage": "Career development cited by 5+ candidates as reason for joining"
+      },
+      "confidentiality": "internal"
+    },
+    {
+      "id": "project_dso_improvement_initiative",
+      "name": "Working Capital Management - DSO Improvement",
+      "status": "in_progress",
+      "start_date": "2024-09-15",
+      "estimated_end_date": "2025-03-15",
+      "budget": 8000000,
+      "owner_id": "exec_002_test",
+      "executive_sponsor": "exec_002_test",
+      "team_size": 4,
+      "decision_cases_mentioned": ["DC_RAJ_005"],
+      "objective": "Reduce Days Sales Outstanding from 78 days to 45 days to recover ¥120M tied up in working capital",
+      "initiatives": [
+        {
+          "initiative": "Payment Terms Policy",
+          "description": "Default 30-day terms, 45-day for >¥15M customers with approval, 60-day requires CFO+CEO approval"
+        },
+        {
+          "initiative": "Process Improvements",
+          "description": "Automate invoicing (same-day), implement collections workflow (Day 15/30/45/60 actions), hire 2 collections specialists"
+        },
+        {
+          "initiative": "Sales Compensation Adjustment",
+          "description": "20% of commission paid on cash collection within 45 days (creates incentive alignment)"
+        },
+        {
+          "initiative": "Customer Risk Management",
+          "description": "Credit checks for >¥15M deals, payment plans for overdue customers"
+        }
+      ],
+      "progress": {
+        "current_dso": 75,
+        "target_dso": 45,
+        "working_capital_recovered": 22000000,
+        "collections_hired": 2,
+        "invoicing_automation": "Completed",
+        "policy_rollout": "Completed October 2024"
+      },
+      "confidentiality": "internal"
+    }
+  ]
+}

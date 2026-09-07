@@ -1,0 +1,99 @@
+# Query-Type Adaptive Retrieval Weights
+#
+# Different query types require different retrieval strategies.
+# These weights determine how much to trust each retrieval method
+# based on the classified query type.
+#
+# Weight values must sum to 1.0 for each query type.
+
+query_type_weights:
+  factual_lookup:
+    description: "Simple fact retrieval - keywords matter most"
+    vector: 0.80      # High: keyword matching crucial for facts
+    graph: 0.15       # Low: minimal relationship traversal needed
+    memory: 0.05      # Very low: facts in documents, not memory
+    reasoning: "Facts are in documents - use vector search to find them by keywords"
+    examples:
+      - "What is the CFO's email?"
+      - "Who is the current CTO?"
+      - "When did Project Pegasus start?"
+
+  relationship:
+    description: "Entity connections - graph structure crucial"
+    vector: 0.30      # Medium: need to find related docs
+    graph: 0.65       # Very high: relationships encoded in graph
+    memory: 0.05      # Very low: structural not conversational
+    reasoning: "Relationships are explicitly modeled in the knowledge graph - traverse it"
+    examples:
+      - "Who worked with Tanaka on Project Pegasus?"
+      - "How are Acme Corp and Beta Corp related?"
+      - "What's the connection between X and Y?"
+
+  decision:
+    description: "Decision-making - need precedents from memory"
+    vector: 0.35      # Medium: find relevant policy docs
+    graph: 0.25       # Medium: context from entity relationships
+    memory: 0.40      # High: past decisions inform current ones
+    reasoning: "Past decisions (memory) + policy docs (vector) + context (graph) = informed decision"
+    examples:
+      - "Should we approve 15% discount?"
+      - "What do you recommend for Q4 strategy?"
+      - "How should we approach this?"
+
+  procedural:
+    description: "How-to questions - past experience valuable"
+    vector: 0.30      # Medium: find process documentation
+    graph: 0.20       # Low: minimal relationship traversal
+    memory: 0.50      # Very high: 'how did we do this before?'
+    reasoning: "Procedural memory (past actions) is most valuable for how-to questions"
+    examples:
+      - "How do we submit expense reports?"
+      - "What's the process for approval?"
+      - "How can I access the system?"
+
+  comparison:
+    description: "Comparing entities - need both docs and connections"
+    vector: 0.40      # Medium-high: find docs about each entity
+    graph: 0.35       # Medium-high: understand relationships
+    memory: 0.25      # Medium: past comparisons helpful
+    reasoning: "Balance between docs about entities and their relationships to compare effectively"
+    examples:
+      - "Compare Acme Corp and Beta Corp"
+      - "What's the difference between Plan A and Plan B?"
+      - "Which option is better?"
+
+  conversational_context:
+    description: "Referring to past conversation"
+    vector: 0.30      # Medium: topical relevance
+    graph: 0.10       # Very low: not structural
+    memory: 0.60      # Very high: episodic memory critical
+    reasoning: "Conversation history (episodic memory) is the primary source for context"
+    examples:
+      - "What did we discuss about discounts yesterday?"
+      - "As mentioned earlier..."
+      - "Following up on our previous conversation..."
+
+# Default weights (used when classification confidence < 0.6)
+default_weights:
+  description: "Fallback weights for uncertain classification"
+  vector: 0.50
+  graph: 0.30
+  memory: 0.20
+  reasoning: "Balanced approach when query type is unclear"
+
+# Configuration
+config:
+  # Minimum confidence to use type-specific weights
+  # Below this threshold, use default weights
+  min_confidence_threshold: 0.6
+
+  # Blend type-specific weights with default based on confidence
+  # confidence_blending: true means:
+  #   final_weight = confidence * type_weight + (1 - confidence) * default_weight
+  confidence_blending: true
+
+  # Enable adaptive weighting (set to false to use default weights for all queries)
+  enabled: true
+
+  # Log classification decisions for monitoring
+  log_classifications: true

@@ -1,0 +1,111 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+# package-lock.json is intentionally committed for reproducible installs + `npm audit` in CI
+
+# Testing
+/coverage
+/playwright-report
+/test-results
+/.nyc_output
+*.lcov
+
+# Production builds
+/dist
+/build
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env*.local
+.env.production
+.env.development
+.env.test
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*~
+
+# OS files
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Debug files
+.vscode-test
+.vite-inspect
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Backup files
+*.bak
+*.backup
+
+# Claude AI files
+.claude/
+
+# Test files and scripts (development only)
+test-api.sh
+test-cors.html
+test-*.md
+*.test.html
+
+# Development documentation (uncomment to ignore)
+CORS_FIX.md
+BACKEND_INTEGRATION.md
+BROWSER_TESTING.md
+INTEGRATION_SUMMARY.md
+STATUS.md
+KENSEI_BRANDING.md
+PROFILE_FEATURE.md
+EMAIL_VERIFICATION_FEATURE.md
+test-password-reset.md
+TESTING_FIXES.md
+CHAT_INTEGRATION.md
+CODING_STANDARDS.md
+CODING_STANDARDS_COMPLIANCE.md
+CURRENT_STATUS.md
+EXECUTIVE_SELECTOR_IMPLEMENTATION.md
+CHAT_INTEGRATION_ANALYSIS.md
+CONVERSATION_IMPLEMENTATION_PLAN.md
+
+# Environment example (keep this for reference)
+!.env.example

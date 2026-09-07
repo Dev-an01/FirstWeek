@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recall-service
+  namespace: firstweek
+  labels:
+    app: recall-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3003
+      targetPort: 3003
+      protocol: TCP
+      name: http
+  selector:
+    app: recall-service
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recall-service
+  namespace: firstweek
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: recall-service
+  template:
+    metadata:
+      labels:
+        app: recall-service
+    spec:
+      initContainers:
+      - name: wait-for-rag
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          until nc -z rag-api 8000; do
+            echo "Waiting for rag-api..."
+            sleep 2
+          done
+          echo "RAG API is ready!"
+      containers:
+      - name: recall-service
+        image: gcr.io/PROJECT_ID/recall-service:latest  # REPLACE PROJECT_ID
+        ports:
+        - containerPort: 3003
+          name: http
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3003"
+        - name: RECALL_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: firstweek-secrets
+              key: RECALL_API_KEY
+        - name: RECALL_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: RECALL_API_URL
+        - name: RECALL_BOT_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: RECALL_BOT_NAME
+        - name: AVATAR_INTERFACE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: AVATAR_INTERFACE_URL
+        - name: RAG_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: RAG_API_URL
+        - name: DEFAULT_PROFILE_ID
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: DEFAULT_PROFILE_ID
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: LOG_LEVEL
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3003
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3003
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3

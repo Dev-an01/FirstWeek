@@ -1,0 +1,85 @@
+// backend/chat-service/shared/prisma/schema.prisma
+generator mainClient {
+  provider      = "prisma-client-js"
+  output        = "../lib/generated/client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================
+// Conversation Model - Chat conversations
+// =============================================
+model Conversation {
+  id            String    @id @default(cuid())
+  userId        String
+  title         String    @default("New Chat")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastMessageAt DateTime?
+
+  // Relations
+  messages Message[]
+
+  // Indexes for performance
+  @@index([userId, lastMessageAt])
+  @@index([userId, createdAt])
+  @@map("conversations")
+}
+
+// =============================================
+// Message Model - Individual messages
+// =============================================
+model Message {
+  id             String      @id @default(cuid())
+  conversationId String
+  role           MessageRole
+  content        String      @db.Text
+  createdAt      DateTime    @default(now())
+
+  // Optional metadata
+  metadata       Json?
+  tokenCount     Int?
+  processingTime Int?
+
+  // Relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Indexes for performance
+  @@index([conversationId, createdAt])
+  @@index([conversationId, role])
+  @@map("messages")
+}
+
+// =============================================
+// Message Role Enum
+// =============================================
+enum MessageRole {
+  user
+  assistant
+  system
+}
+
+// =============================================
+// Message Analytics (Optional - for future use)
+// =============================================
+model MessageAnalytics {
+  id             String   @id @default(cuid())
+  conversationId String
+  messageId      String
+  userId         String
+  query          String   @db.Text
+  responseTime   Int
+  ragSources     Json?
+  feedback       String?
+  createdAt      DateTime @default(now())
+
+  // Indexes for analytics queries
+  @@index([userId, createdAt])
+  @@index([conversationId])
+  @@index([messageId])
+  @@map("message_analytics")
+}

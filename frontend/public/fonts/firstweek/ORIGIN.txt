@@ -1,0 +1,3 @@
+Atkinson Hyperlegible Latin WOFF2 fonts reused from the user's existing personal-site/public/fonts assets.
+Source filenames: atkinson-regular-latin.woff2, atkinson-bold-latin.woff2.
+Used as a legible, self-hosted UI face for FirstWeek. No font service request is made by the browser.

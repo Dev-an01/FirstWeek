@@ -1,0 +1,17 @@
+{
+  "_description": "Legacy profile ID to current profile ID mapping",
+  "_usage": "Use this to support old API calls with legacy IDs",
+  "mappings": {
+    "akiko_tanaka": "exec_001_test",
+    "tanaka": "exec_001_test",
+    "raj_patel": "exec_002_test",
+    "yuki_nakamura": "exec_003_test",
+    "sarah_kim": "exec_004_test"
+  },
+  "reverse_mappings": {
+    "exec_001_test": "tanaka",
+    "exec_002_test": "raj_patel",
+    "exec_003_test": "yuki_nakamura",
+    "exec_004_test": "sarah_kim"
+  }
+}

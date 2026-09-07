@@ -1,0 +1,91 @@
+// backend/chat-service/shared/prisma/auth.schema.prisma
+// This schema is for accessing the auth database (avatar_user_db)
+// It only includes models that chat-service needs to query
+
+generator authClient {
+  provider      = "prisma-client-js"
+  output        = "../lib/generated/authClient"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("AUTH_DATABASE_URL")
+}
+
+// =============================================
+// User Model - From auth-service
+// =============================================
+model User {
+  id         String  @id @default(cuid())
+  username   String  @unique
+  email      String? @unique
+  firstName  String
+  lastName   String
+  profilePic String?
+
+  // Authorization
+  role UserRole @default(EMPLOYEE)
+
+  // Authentication
+  password        String
+  emailVerified   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+  isActive        Boolean   @default(true)
+
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+
+  // Relations
+  preferences UserPreferences?
+
+  // Indexes for performance
+  @@index([email])
+  @@index([username])
+  @@index([isActive])
+  @@index([createdAt])
+  @@index([emailVerified])
+  @@map("users")
+}
+
+// =============================================
+// UserPreferences Model - From auth-service
+// =============================================
+model UserPreferences {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  // RAG & AI Preferences
+  defaultProfileId String? @default("exec_003_test")
+  defaultTopK      Int     @default(5)
+  defaultMinScore  Float   @default(0.15)
+
+  // UI Preferences
+  streamingEnabled Boolean @default(true)
+  theme            String? @default("light")
+  language         String? @default("en")
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes for performance
+  @@index([userId])
+  @@map("user_preferences")
+}
+
+// =============================================
+// Enums
+// =============================================
+enum UserRole {
+  GUEST
+  EMPLOYEE
+  EXECUTIVE
+  COMPANY_ADMIN
+  SUPER_ADMIN
+}

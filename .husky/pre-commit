@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run linting in parallel
+echo "🔍 Running linting checks..."
+
+# # Run both in background, Uncomment if frontend linting is needed
+(cd frontend && npm run lint) &
+FRONTEND_PID=$!
+
+(cd backend && npm run lint) &
+BACKEND_PID=$!
+
+# # Wait for both to complete, uncomment if frontend linting is needed
+wait $FRONTEND_PID
+FRONTEND_EXIT=$?
+
+wait $BACKEND_PID  
+BACKEND_EXIT=$?
+
+# # Check results, uncomment if frontend linting is needed, yeah buddy
+if [ $FRONTEND_EXIT -ne 0 ]; then
+  echo "❌ Frontend linting failed!"
+  exit 1
+fi
+
+if [ $BACKEND_EXIT -ne 0 ]; then
+  echo "❌ Backend linting failed!"
+  exit 1
+fi
+
+echo "✅ All linting checks passed!"

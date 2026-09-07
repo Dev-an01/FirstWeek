@@ -1,0 +1,7 @@
+{
+  "dependencies": [".", "./requirements.txt"],
+  "graphs": {
+    "rag_workflow": "./langgraph_workflow/workflow.py:create_workflow"
+  },
+  "env": ".env"
+}

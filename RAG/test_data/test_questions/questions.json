@@ -1,0 +1,621 @@
+[
+    {
+      "id": "Q_YUKI_007",
+      "executive": "Yuki Nakamura",
+      "category": "policy_knowledge",
+      "difficulty": "medium",
+      "question": "What are the key security measures Yuki implemented after the security incident, and what policy changes were made?",
+      "expected_answer": {
+        "answer": "After the SQL injection incident (DC_YUKI_005), Yuki implemented comprehensive security improvements: (1) Quarterly penetration testing (vs annual before) - ¥8M per quarter, (2) Bug bounty program launch via HackerOne - ¥50K-¥1M rewards, (3) Enhanced monitoring with Datadog Security - real-time alerting for anomalies, (4) Updated Information Security Policy (POLICY-IT-001) to version 3.0 with new requirements, (5) Mandatory security training for all engineers (OWASP Top 10), (6) Legacy code audit program - all code >3 years old reviewed, (7) SOC 2 Type II certification kickoff (target Q1 2025). Policy changes in POLICY-IT-001: Quarterly security audits mandatory, all admin panels must have rate limiting and WAF, SQL injection prevention required (parameterized queries), security review required for auth/admin code PRs, incident disclosure within 24 hours (formalized Radical Transparency).",
+        "key_points": [
+          "Quarterly pentesting (¥8M/quarter)",
+          "Bug bounty program (HackerOne)",
+          "Enhanced monitoring (Datadog)", 
+          "Updated security policy to v3.0",
+          "Mandatory engineer security training",
+          "Legacy code audit program",
+          "SOC 2 Type II certification ongoing",
+          "24-hour disclosure requirement"
+        ],
+        "sources": [
+          "decision_cases: DC_YUKI_001, DC_YUKI_005",
+          "policies/information_security_policy.md (POLICY-IT-001)",
+          "documents/reports/2024-10-05_security_incident_postmortem.md"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_008",
+      "executive": "Yuki Nakamura",
+      "category": "communication_style",
+      "difficulty": "medium",
+      "question": "What specific phrases and language patterns does Yuki commonly use when communicating with the engineering team?",
+      "expected_answer": {
+        "answer": "Yuki's signature phrases include: 'Yo team!', 'Real talk:', 'Hell yes!', 'Let's ship great stuff!', 'This is the way', 'I'm proud of this team', 'Keep being awesome', and lots of emojis (🚀 🎉 💪 ✅ 🔥 ⚠️). He uses exclamation points frequently for enthusiasm. He says things like 'practiced 3x in staging first' (emphasizing preparation), 'zero downtime' (celebrating wins), and 'deploy frequency back to double digits!' (celebrating metrics). He's direct about problems: 'Real talk: We hit a wall' or 'We accumulated tech debt, need to pay it down before it kills us.' He avoids: Corporate jargon, passive voice ('it was decided'), overly formal language. He writes like he talks - conversational, enthusiastic, authentic. He often ends with 'Let's go!' or 'Keep shipping!' His casual style builds strong rapport and psychological safety with engineers.",
+        "key_points": [
+          "Common phrases: 'Yo team!', 'Real talk:', 'Hell yes!', 'Let's ship!'",
+          "Heavy emoji use (🚀 🎉 💪)",
+          "Lots of exclamation points",
+          "Direct about problems but positive tone",
+          "Celebrates wins with metrics",
+          "Avoids corporate jargon completely",
+          "Conversational, enthusiastic, authentic"
+        ],
+        "sources": [
+          "executive_profiles/exec_003_yuki_nakamura.json (communication_patterns)",
+          "documents/memos/2024-09-22_cto_security_incident_response.md",
+          "documents/presentations/2024-08-30_technical_debt_sprint_results.md"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_009",
+      "executive": "Yuki Nakamura",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What is Yuki's decision-making speed and technical depth compared to other executives?",
+      "expected_answer": {
+        "answer": "Yuki has 'Fast' decision-making speed - he makes technical decisions quickly when he has conviction. His technical depth is 'Very High' - he's the most technical person in leadership and can review code, architecture decisions, and technical trade-offs at a deep level. He has 'Moderate' risk tolerance - willing to take calculated technical risks (like the tech debt sprint or new technologies) but not reckless. His fast speed + high technical depth allows him to move quickly on technical decisions without needing extensive validation, though he does consult his engineering team for major choices.",
+        "key_points": [
+          "Decision speed: Fast",
+          "Technical depth: Very High (most technical executive)",
+          "Risk tolerance: Moderate (calculated risks)",
+          "Can review code and architecture deeply",
+          "Fast technical decisions with conviction",
+          "Consults team on major choices"
+        ],
+        "sources": [
+          "executive_profiles/exec_003_yuki_nakamura.json (decision_making_approach)"
+        ],
+        "confidence_threshold": 0.95
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_010",
+      "executive": "Yuki Nakamura",
+      "category": "precedent_application",
+      "difficulty": "hard",
+      "question": "A production incident occurs affecting 20% of customers. Based on Yuki's crisis management style, how would he handle the communication and response?",
+      "expected_answer": {
+        "answer": "Based on the security incident response (DC_YUKI_005), Yuki would: (1) Immediate action: Mobilize engineering team immediately, page on-call engineers, start war room, (2) Parallel investigation and mitigation: Fix the issue while investigating root cause (not sequential), (3) Fast internal communication: Update exec team and CEO within 30 minutes with initial assessment, (4) Customer communication: Transparent status page updates every 30-60 minutes during incident, (5) Full disclosure after resolution: Detailed post-mortem blog post within 24 hours explaining what happened, impact, root cause, and fixes, (6) Take personal accountability: 'This happened on my watch, here's what we're doing', (7) Offer compensation if appropriate: Service credits, extended trials, etc., (8) Long-term fixes: Document incident, implement monitoring to prevent recurrence, share learnings with team. Communication tone: Direct, honest, no sugarcoating, but calm and action-oriented. He would NOT: Hide or minimize the issue, wait to communicate until 'perfect information', blame specific engineers publicly, use corporate PR speak.",
+        "key_points": [
+          "Immediate action: Mobilize team, war room",
+          "Parallel: Fix AND investigate simultaneously",
+          "Fast internal updates (30 min to exec team)",
+          "Transparent customer updates every 30-60 min",
+          "Full disclosure within 24 hours post-resolution",
+          "Personal accountability, no blame",
+          "Offer appropriate compensation",
+          "Long-term fixes and learnings documented",
+          "Direct, honest communication (no PR speak)"
+        ],
+        "sources": [
+          "decision_cases: DC_YUKI_005 (security incident)",
+          "executive_profiles/exec_003_yuki_nakamura.json (communication_style, values)",
+          "company_values: Radical Transparency"
+        ],
+        "confidence_threshold": 0.75
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_011",
+      "executive": "Yuki Nakamura",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "Why did Yuki decide to implement quarterly penetration testing instead of annual, and what was the cost-benefit reasoning?",
+      "expected_answer": {
+        "answer": "After the security incident (DC_YUKI_005), Yuki changed from annual to quarterly penetration testing (DC_YUKI_001). Reasoning: (1) Annual testing too infrequent - security landscape changes fast, new vulnerabilities emerge constantly, (2) Proactive vs reactive: Quarterly testing catches issues before attackers do (the SQL injection was in 6-year-old code that was never audited), (3) Cost-benefit: ¥32M annually (¥8M × 4 quarters) vs average breach cost of ¥380M in Japan (IBM report) - ROI is clear, (4) Continuous improvement: Quarterly cadence creates feedback loop - find issues, fix, retest, validate, (5) SOC 2 requirement: Enterprise customers require quarterly audits for compliance. Despite the ¥32M annual cost (significant), Yuki argued it's 'prevention vs cure' - much cheaper than dealing with another breach. CFO Raj approved after seeing the ROI calculation. This shows Yuki's shift from reactive to proactive security investment.",
+        "key_points": [
+          "Changed annual → quarterly pentesting",
+          "Cost: ¥32M annually (¥8M × 4)",
+          "Reasoning: Annual too infrequent in fast-changing security landscape",
+          "Average breach costs ¥380M (IBM data)",
+          "ROI: Prevention cheaper than incident response",
+          "Enables continuous improvement feedback loop",
+          "SOC 2 and enterprise customer requirement",
+          "CFO approved based on ROI"
+        ],
+        "sources": [
+          "decision_cases: DC_YUKI_001, DC_YUKI_005",
+          "documents/reports/2024-10-05_security_incident_postmortem.md (Section 7.3)"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_012",
+      "executive": "Yuki Nakamura",
+      "category": "communication_style",
+      "difficulty": "medium",
+      "question": "How does Yuki's communication style change when addressing the board versus the engineering team?",
+      "expected_answer": {
+        "answer": "Yuki adapts his style by audience but maintains authenticity: **To Engineering Team**: Very casual ('Yo team!'), uses emojis and slang, peer-like communication, celebrates wins enthusiastically, direct about problems ('Real talk'), technical depth, encourages and motivates. **To Board/Executives**: Slightly more structured but still casual by executive standards, still uses some casual language ('Hell yes' even in board meetings), focuses on business impact of technical decisions (velocity, customer impact, ROI), provides data but explains in accessible terms (not overly technical), maintains transparency and directness. **Consistent across both**: Authentic and honest, avoids corporate jargon, takes accountability, shows enthusiasm, transparent about challenges. Example: In tech debt sprint presentation to executives, he opened with 'Yo team!' but structured content with clear metrics and business impact. In board meeting, he explained security incident honestly without PR spin. He doesn't become a 'different person' for executives - his casual authenticity is consistent.",
+        "key_points": [
+          "Engineering: Very casual, emojis, peer-like, technical depth",
+          "Board/Exec: Slightly more structured, focuses on business impact",
+          "Still casual even with board (by executive standards)",
+          "Consistent: Authentic, transparent, no jargon, accountable",
+          "Doesn't change personality by audience",
+          "Explains technical concepts in business terms for non-technical audiences"
+        ],
+        "sources": [
+          "executive_profiles/exec_003_yuki_nakamura.json (communication_style)",
+          "documents/presentations/2024-08-30_technical_debt_sprint_results.md (exec team example)",
+          "documents/meeting_notes/2024-06-15_board_meeting_q2_review.md (board example)"
+        ],
+        "confidence_threshold": 0.80
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_013",
+      "executive": "Yuki Nakamura",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What major projects is Yuki currently leading or has recently led?",
+      "expected_answer": {
+        "answer": "Yuki is leading or recently led: (1) AI Search Implementation (DC_AKIKO_002) - AI-powered search for WorkFlow Pro, currently in beta with 200 users, GA planned Q3 2024, (2) 6-Week Technical Debt Sprint (DC_YUKI_004) - Completed July-August 2024, major velocity improvement achieved, (3) Intercom Migration (DC_YUKI_002) - Completed Q1 2024, replaced Zendesk successfully, (4) SOC 2 Type II Certification (DC_YUKI_001) - In progress, target Q1 2025, (5) Mobile App Rebuild - In progress Q3-Q4 2024, offline mode and performance improvements, (6) Security Improvements (DC_YUKI_005) - Post-incident overhaul, ongoing quarterly audits and bug bounty program. In Neo4j graph, these are connected as: (Yuki)-[:OWNS_PROJECT]->(Project nodes).",
+        "key_points": [
+          "AI Search (beta, GA Q3 2024)",
+          "Tech Debt Sprint (completed July-Aug 2024)",
+          "Intercom Migration (completed Q1 2024)",
+          "SOC 2 Type II (in progress, target Q1 2025)",
+          "Mobile App Rebuild (in progress Q3-Q4)",
+          "Security improvements (ongoing)"
+        ],
+        "sources": [
+          "executive_profiles/exec_003_yuki_nakamura.json",
+          "Neo4j graph: Executive → OWNS_PROJECT → Project",
+          "decision_cases: DC_YUKI_001-005"
+        ],
+        "confidence_threshold": 0.90
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_014",
+      "executive": "Yuki Nakamura",
+      "category": "precedent_application",
+      "difficulty": "hard",
+      "question": "The product team wants to launch a new feature to beta users without comprehensive testing to meet a deadline. Based on Yuki's approach, how would he respond?",
+      "expected_answer": {
+        "answer": "Based on Yuki's decisions (tech debt sprint DC_YUKI_004 showing commitment to quality, security incident DC_YUKI_005 showing consequences of rushing), he would likely PUSH BACK but offer alternatives: (1) Question the deadline: Is this a real deadline or arbitrary? Can we negotiate an extra week for proper testing?, (2) Risk assessment: What's the worst case if this breaks? Customer-facing vs internal feature?, (3) Propose compromise: Ship to smaller beta group first (50 users not 200), monitor closely, expand if stable, (4) Require minimum quality bar: Core functionality tested, rollback plan ready, monitoring in place, on-call coverage, (5) Learn from past: Reference security incident where legacy code caused problems - 'We don't cut corners on quality', (6) Offer resources: Can we pull engineers from other work to help test faster?. He would APPROVE if: Non-critical feature, small beta group, proper rollback plan, team has conviction it's ready. He would BLOCK if: Customer-facing and high-risk, no rollback plan, team doesn't feel confident. His philosophy: Ship fast but not recklessly, technical debt and quality issues compound, better to delay 1 week than break production.",
+        "key_points": [
+          "Push back on rushing without proper testing",
+          "Question if deadline is real or arbitrary",
+          "Assess risk (customer impact, rollback plan)",
+          "Propose compromise: Smaller beta, then expand",
+          "Require minimum quality bar",
+          "Reference past lessons (security incident)",
+          "Ship fast but not recklessly",
+          "Quality issues compound - better to delay than break"
+        ],
+        "sources": [
+          "decision_cases: DC_YUKI_004 (quality focus), DC_YUKI_005 (consequences of technical shortcuts)",
+          "executive_profiles/exec_003_yuki_nakamura.json (values: sustainable velocity, quality)",
+          "communication_style: direct, willing to say no"
+        ],
+        "confidence_threshold": 0.75
+      }
+    },
+    
+    {
+      "id": "Q_YUKI_015",
+      "executive": "Yuki Nakamura",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "What is Yuki's philosophy on technical debt, and how does the 6-week sprint decision reflect this?",
+      "expected_answer": {
+        "answer": "Yuki's philosophy: 'Technical debt is real debt - it accumulates interest and eventually you must pay it back, voluntarily or forced. Better to pay it proactively on your terms.' The 6-week sprint (DC_YUKI_004) embodies this: (1) Recognized the problem: Velocity declining 40%, team frustrated, firefighting daily - 'we hit a wall', (2) Bold solution: Pause ALL features for 6 weeks to pay down debt (¥75M opportunity cost), (3) Conviction: Convinced CEO Akiko that '6 weeks now saves 6 months later', (4) Execution: Focused sprint on tests, refactoring, performance, security - paid down the debt systematically, (5) Validated ROI: 36% velocity improvement, 2x deploy frequency, 60% fewer bugs - the math worked, (6) Institutionalized: Now does quarterly 1-week mini-sprints to prevent accumulation. His philosophy: Short-term pain for long-term health, sustainable velocity beats short-term features, technical foundation matters, prevention better than crisis. This contrasts with many CTOs who let debt grow until forced refactor.",
+        "key_points": [
+          "Technical debt is real debt with compounding interest",
+          "Must pay proactively or be forced to later",
+          "6-week sprint: Bold move to pause all features",
+          "¥75M cost but ¥120M value gained (ROI validated)",
+          "Results: +36% velocity, 2x deploys, -60% bugs",
+          "Quarterly mini-sprints prevent reaccumulation",
+          "Sustainable velocity > short-term features",
+          "Long-term thinking and technical leadership"
+        ],
+        "sources": [
+          "decision_cases: DC_YUKI_004",
+          "documents/presentations/2024-08-30_technical_debt_sprint_results.md",
+          "executive_profiles/exec_003_yuki_nakamura.json (values, philosophy)"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+
+    {
+      "id": "Q_SARAH_001",
+      "executive": "Sarah Kim",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What is Sarah Kim's title and professional background?",
+      "expected_answer": {
+        "answer": "Sarah Kim is the Chief Marketing Officer (CMO) at NexaTech. She has marketing background from HubSpot and Salesforce before joining NexaTech in 2022. She has been CMO for 2 years.",
+        "key_points": [
+          "CMO (Chief Marketing Officer)",
+          "Background: HubSpot and Salesforce",
+          "Joined NexaTech in 2022",
+          "2 years in CMO role"
+        ],
+        "sources": ["executive_profiles/exec_004_sarah_kim.json"],
+        "confidence_threshold": 0.95
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_002",
+      "executive": "Sarah Kim",
+      "category": "communication_style",
+      "difficulty": "easy",
+      "question": "How would you describe Sarah's communication style and how does it compare to other executives?",
+      "expected_answer": {
+        "answer": "Sarah has a balanced, professional yet warm communication style. She scores 6/10 on formality (professional but approachable), 7/10 on directness (clear but diplomatic), and 9/10 on warmth (very friendly and empathetic). She's the warmest communicator among executives while maintaining professionalism. She uses collaborative language like 'Let's figure this out together' and is skilled at managing stakeholder relationships across marketing and sales. Her style bridges the analytical (like Raj) and casual (like Yuki) - professional enough for executives but approachable for teams.",
+        "key_points": [
+          "Balanced and professional",
+          "Formality: 6/10 (professional but approachable)",
+          "Directness: 7/10 (clear but diplomatic)",
+          "Warmth: 9/10 (most warm executive)",
+          "Collaborative language",
+          "Skilled at stakeholder management",
+          "Bridges analytical and casual styles"
+        ],
+        "sources": ["executive_profiles/exec_004_sarah_kim.json"],
+        "confidence_threshold": 0.90
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_003",
+      "executive": "Sarah Kim",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "How did Sarah transform the mid-market brand positioning, and what were the results?",
+      "expected_answer": {
+        "answer": "Sarah led a ¥25M mid-market brand transformation (DC_SARAH_002, 6-month project Q1-Q2 2024). The problem: NexaTech was perceived as 'Enterprise-only', limiting growth in mid-market (50% of TAM). Her solution: (1) Repositioned from 'Enterprise-grade' to 'Scales with you', (2) Website redesign with split paths (mid-market vs enterprise journeys), (3) Created 8 mid-market case studies, (4) Introduced transparent pricing for Professional tier, (5) Messaging focused on accessibility and growth. Results: Mid-market leads +47% QoQ, website bounce rate 73%→58% (-15pp), trial signups +35% from mid-market, self-serve conversions 34% of Professional tier (no sales call needed), brand awareness in mid-market 18%→28%. Enterprise customers unaffected (actually appreciated broader appeal). This shows Sarah's strategic thinking, data-driven approach, and ability to execute large transformations successfully.",
+        "key_points": [
+          "¥25M investment, 6-month project (Q1-Q2 2024)",
+          "Problem: 'Enterprise-only' perception limiting growth",
+          "Solution: Reposition to 'Scales with you'",
+          "Website redesign, case studies, transparent pricing",
+          "Results: Mid-market leads +47%, bounce rate -15pp",
+          "Trial signups +35%, self-serve 34%",
+          "Brand awareness 18%→28%",
+          "Enterprise customers unaffected"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_002",
+          "documents/reports/2024-10-20_marketing_performance_q3.md"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_004",
+      "executive": "Sarah Kim",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "What was the marketing-sales alignment issue Sarah identified, and how did she fix it?",
+      "expected_answer": {
+        "answer": "Sarah identified a major lead quality problem (DC_SARAH_003): Marketing was sending MQLs (Marketing Qualified Leads) to sales, but only 12% converted to opportunities. Sales complained about 'junk leads', creating tension between teams. Sarah's solution: (1) Redefined lead quality: Created new 'SRL' (Sales-Ready Lead) definition with stricter criteria - target company size (100+ employees), decision influence (job title), bottom-funnel engagement (ROI calculator, demo request, pricing page 5+ visits), (2) Bi-directional SLAs: Marketing commits to lead quality, Sales commits to contact within 24 hours, (3) Weekly Revenue Team meetings: Marketing + Sales alignment meeting every Friday, (4) Closed-loop reporting: Track which SRLs became customers, feed learnings back to marketing. Results: Conversion improved from 12%→38% (+26pp, more than 3x), sales team satisfaction with leads dramatically increased (4.2/10→8.8/10), marketing-sales tension resolved. This shows Sarah's collaborative problem-solving and focus on quality over quantity.",
+        "key_points": [
+          "Problem: MQL→Opportunity conversion only 12%",
+          "Sales complained about 'junk leads', team tension",
+          "Solution: New SRL (Sales-Ready Lead) definition",
+          "Stricter criteria: Size, title, bottom-funnel engagement",
+          "Bi-directional SLAs, weekly alignment meetings",
+          "Closed-loop reporting for feedback",
+          "Results: 12%→38% conversion (+3x)",
+          "Sales satisfaction 4.2→8.8",
+          "Quality over quantity mindset"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_003",
+          "documents/memos/2024-08-15_cmo_marketing_sales_realignment.md",
+          "documents/reports/2024-10-20_marketing_performance_q3.md"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_005",
+      "executive": "Sarah Kim",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "What was Sarah's content strategy shift from quantity to quality, and why did she make this change?",
+      "expected_answer": {
+        "answer": "Sarah shifted content strategy (DC_SARAH_004) in Q3 2024. OLD approach: 3-4 blog posts/week, average 800 words, surface-level topics, time on page 1:15. NEW approach: 1-2 posts/week, average 2,500+ words, deep differentiated content, premium guides 5K-10K words. Reasoning: (1) Data showed surface content wasn't converting - bounce rate 68%, low engagement, (2) Research reports converted at 52% (SRL conversion) vs 28% for regular blogs, (3) Time on page matters for B2B - need depth to build authority, (4) One great piece beats 10 mediocre ones - quality over quantity, (5) Competitive differentiation through original research and deep insights. Results: Time on page +240% (1:15→4:20), bounce rate -26pp (68%→42%), content downloads +65%, SRLs from content +67%, organic traffic +29%. Major win: 'State of B2B Productivity' research report got 12,400 downloads and generated 85 SRLs with 52% conversion. This shows Sarah's data-driven decision-making and willingness to make strategic shifts based on performance.",
+        "key_points": [
+          "OLD: 3-4 posts/week, 800 words, surface-level",
+          "NEW: 1-2 posts/week, 2,500+ words, deep content",
+          "Reasoning: Research reports convert 52% vs 28% for blogs",
+          "Quality over quantity for B2B",
+          "Results: Time on page +240%, bounce rate -26pp",
+          "Content downloads +65%, SRLs +67%",
+          "Major win: Research report 12.4K downloads, 85 SRLs",
+          "Data-driven strategic shift"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_004",
+          "documents/reports/2024-10-20_marketing_performance_q3.md (Section 5)"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_006",
+      "executive": "Sarah Kim",
+      "category": "precedent_application",
+      "difficulty": "hard",
+      "question": "The product team wants to launch a new feature and asks marketing to drive 1,000 trial signups in 2 weeks. Based on Sarah's approach, how would she respond?",
+      "expected_answer": {
+        "answer": "Based on Sarah's quality-over-quantity mindset (DC_SARAH_003, DC_SARAH_004), she would push back on the volume target and reframe around quality: (1) Question the metric: 'Do we need 1,000 signups or 100 high-quality leads who will convert?' (Reference SRL vs MQL shift), (2) Assess feasibility: Can we generate 1,000 signups in 2 weeks? What's the source?, (3) Propose quality alternative: Target 200-300 qualified signups (right company size, right personas) instead of 1,000 random signups, (4) Focus on conversion: What matters is trial→customer conversion, not vanity signup numbers, (5) Coordinate with sales: Ensure sales can handle follow-up (learned from marketing-sales alignment), (6) Set realistic expectations: Prefer to under-promise and over-deliver than set unrealistic targets. She would likely negotiate: Agree to drive 300-500 qualified signups (not 1,000), with target conversion rate defined, proper sales follow-up planned, and success measured by trial→customer conversion, not just signup volume. This reflects her data-driven, quality-focused, collaborative approach.",
+        "key_points": [
+          "Push back on volume target, reframe around quality",
+          "Question: Do we need 1,000 or 100 high-quality leads?",
+          "Reference: SRL vs MQL lesson (quality > quantity)",
+          "Propose: 200-300 qualified signups instead",
+          "Focus on conversion, not vanity metrics",
+          "Coordinate with sales for follow-up",
+          "Set realistic expectations",
+          "Negotiate quality target vs volume target"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_003 (quality focus), DC_SARAH_004 (quality over quantity)",
+          "executive_profiles/exec_004_sarah_kim.json (decision_making_approach, values)",
+          "communication_style: collaborative, data-driven"
+        ],
+        "confidence_threshold": 0.75
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_007",
+      "executive": "Sarah Kim",
+      "category": "policy_knowledge",
+      "difficulty": "medium",
+      "question": "What was Sarah's recommendation on marketing budget allocation between demand gen and brand, and what was her reasoning?",
+      "expected_answer": {
+        "answer": "Sarah recommended shifting marketing budget allocation to 70% demand generation / 30% brand (from previous 85% demand gen / 15% brand) - documented in DC_SARAH_001. Her reasoning: (1) Data showed brand awareness correlated with win rates - customers with brand exposure converted 24 points higher (52% vs 28%), (2) Long-term investment needed: Can't sustain growth on demand gen alone, need brand pull, (3) Balanced approach: Short-term pipeline (demand gen) + long-term brand building, (4) Market research: 18% brand awareness was limiting growth, target 30% by EOY, (5) Competitive positioning: Need brand strength to differentiate from WorkMax and EnterpriseFlow. Results: Brand awareness grew 18%→28% (on track to 30%), win rates improved, ROI validated the shift. CFO Raj approved the budget after seeing correlation data. This shows Sarah's strategic thinking balancing short-term and long-term marketing goals.",
+        "key_points": [
+          "Recommended 70% demand gen / 30% brand (from 85/15)",
+          "Data: Brand-aware prospects convert 24pp higher (52% vs 28%)",
+          "Long-term investment in brand necessary",
+          "Balanced approach: Short-term + long-term",
+          "Brand awareness 18%→28% (target 30%)",
+          "Win rates improved with brand investment",
+          "CFO approved after seeing data",
+          "Strategic balance of short and long-term goals"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_001",
+          "documents/reports/2024-10-20_marketing_performance_q3.md"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_008",
+      "executive": "Sarah Kim",
+      "category": "communication_style",
+      "difficulty": "medium",
+      "question": "How does Sarah typically handle cross-functional conflicts, and what language does she use?",
+      "expected_answer": {
+        "answer": "Sarah excels at managing cross-functional relationships, especially marketing-sales tension. Her approach: (1) Acknowledge the problem openly: 'We had tension between marketing and sales over lead quality' (transparency), (2) Collaborative framing: Uses 'we' and 'together' - 'Let's figure this out together', 'How can we improve this?', (3) Data-driven discussion: Present objective data to remove emotion - showed 12% conversion rate, let numbers speak, (4) Seek win-win solutions: SRL definition benefited both marketing (better targeting) and sales (better leads), (5) Regular check-ins: Weekly Revenue Team meetings to maintain alignment, (6) Give credit generously: 'Kenji (VP Sales) and the team were great partners in this', (7) Empathetic communication: Acknowledges others' frustrations and concerns. Her language: 'I appreciate your perspective', 'Let's align on...', 'What I'm hearing is...', 'How can marketing better support you?', 'We're on the same team'. She avoids: Blame, defensiveness, silo mentality. Her warmth (9/10) and diplomatic directness (7/10) make her effective at resolving conflicts.",
+        "key_points": [
+          "Acknowledge problems openly (transparency)",
+          "Collaborative language: 'we', 'together'",
+          "Data-driven to remove emotion",
+          "Seek win-win solutions",
+          "Regular check-ins to maintain alignment",
+          "Give credit generously",
+          "Empathetic communication",
+          "Phrases: 'Let's figure this out together', 'How can I support you?'",
+          "Avoids blame and defensiveness"
+        ],
+        "sources": [
+          "executive_profiles/exec_004_sarah_kim.json (communication_style, conflict_resolution)",
+          "decision_cases: DC_SARAH_003 (marketing-sales alignment)",
+          "documents/memos/2024-08-15_cmo_marketing_sales_realignment.md"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_009",
+      "executive": "Sarah Kim",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What is Sarah's decision-making speed and risk tolerance?",
+      "expected_answer": {
+        "answer": "Sarah's decision-making speed is 'Moderate' - she takes time to gather data and consult stakeholders, but doesn't over-analyze. She balances thoughtfulness with action. Her risk tolerance is 'Moderate' - willing to take calculated risks on new strategies (like brand investment and mid-market repositioning) but validates with data first. She's neither overly conservative (like Raj) nor highly risk-tolerant, preferring tested approaches with data validation. This balanced approach suits her role bridging creative marketing and business outcomes.",
+        "key_points": [
+          "Decision speed: Moderate (thoughtful but not slow)",
+          "Risk tolerance: Moderate (calculated risks)",
+          "Balances data gathering with action",
+          "Validates ideas with data before big bets",
+          "Neither overly conservative nor highly risk-tolerant",
+          "Balanced approach suits CMO role"
+        ],
+        "sources": [
+          "executive_profiles/exec_004_sarah_kim.json (decision_making_approach)"
+        ],
+        "confidence_threshold": 0.95
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_010",
+      "executive": "Sarah Kim",
+      "category": "precedent_application",
+      "difficulty": "hard",
+      "question": "Marketing is asked to cut ¥20M from their budget. Based on Sarah's priorities and past decisions, what would she likely cut and what would she protect?",
+      "expected_answer": {
+        "answer": "Based on Sarah's strategic priorities (DC_SARAH_001, DC_SARAH_002, DC_SARAH_004), she would: **PROTECT (do NOT cut)**: (1) Brand investment (30% of budget) - fought hard for 70/30 split, brand awareness correlates with win rates, (2) High-performing content (research reports, deep content) - drives 52% SRL conversion vs 28% for regular content, (3) Mid-market initiatives - core growth strategy, showing +47% lead growth, (4) Marketing-sales alignment resources (weekly meetings, closed-loop reporting) - hard-won improvement, (5) Core demand gen channels with proven ROI (Google Ads ROAS 8.2:1, LinkedIn 7.8:1). **CUT (find ¥20M here)**: (1) Low-performing display ads (ROAS only 6.5:1, below average) - ¥2M saved, (2) Events with poor ROI (3.2:1 ROAS) - reduce to tier-1 events only, ¥10M saved, (3) Some paid social underperforming - ¥3M saved, (4) Reduce frequency of lower-impact content - ¥2M saved, (5) Tools and tech stack optimization - negotiate renewals, eliminate unused tools - ¥3M saved. Total: ¥20M found without touching strategic priorities. This reflects her data-driven approach: Cut based on ROI, protect what's working and strategic.",
+        "key_points": [
+          "PROTECT: Brand (70/30 split strategic), high-performing content, mid-market, marketing-sales alignment, proven demand gen",
+          "CUT: Display ads (low ROI), most events (poor ROAS 3.2:1), underperforming social, low-impact content, tool optimization",
+          "¥20M found: ¥10M events, ¥2M display, ¥3M social, ¥2M content, ¥3M tools",
+          "Data-driven: Cut based on ROI metrics",
+          "Protect strategic priorities over tactical spending",
+          "Quality over quantity maintained"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_001 (brand strategy), DC_SARAH_002 (mid-market), DC_SARAH_004 (content quality)",
+          "documents/reports/2024-10-20_marketing_performance_q3.md (channel ROI data)",
+          "executive_profiles/exec_004_sarah_kim.json (strategic priorities, data-driven)"
+        ],
+        "confidence_threshold": 0.70,
+        "evaluation_notes": "Should demonstrate understanding of Sarah's data-driven, ROI-focused, strategic approach to resource allocation"
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_011",
+      "executive": "Sarah Kim",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "What major research initiative did Sarah lead, and what was the impact?",
+      "expected_answer": {
+        "answer": "Sarah led the 'State of B2B Productivity in Japan 2024' research report (DC_SARAH_005, ¥5M investment). This was a comprehensive study of 500+ B2B companies analyzing productivity trends, challenges, and solutions. Impact: (1) 12,400 downloads (massive reach), (2) 85 SRLs generated with 52% conversion rate (highest of any content), (3) Established thought leadership - positioned NexaTech as industry expert, (4) Media coverage - 8 articles citing the research, (5) Sales enablement - became key asset in enterprise deals, (6) Competitive differentiation through original research vs competitor content marketing. ROI: ¥5M cost, generated ~¥45M in influenced pipeline (85 SRLs × 52% conversion × ¥10M average deal = ~¥45M). This shows Sarah's strategic thinking: Invest in differentiated, high-value content that establishes authority and drives quality leads, not just volume.",
+        "key_points": [
+          "'State of B2B Productivity in Japan 2024' research",
+          "¥5M investment",
+          "12,400 downloads",
+          "85 SRLs with 52% conversion (highest performing content)",
+          "~¥45M influenced pipeline",
+          "Thought leadership and media coverage",
+          "Sales enablement tool",
+          "Original research as differentiation",
+          "Quality leads over volume"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_005",
+          "documents/reports/2024-10-20_marketing_performance_q3.md (Section 5.2)"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_012",
+      "executive": "Sarah Kim",
+      "category": "communication_style",
+      "difficulty": "medium",
+      "question": "What specific phrases and vocabulary patterns does Sarah commonly use?",
+      "expected_answer": {
+        "answer": "Sarah's common phrases include: 'Let's figure this out together', 'I appreciate your perspective', 'What I'm hearing is...', 'How can marketing better support you?', 'We're on the same team', 'Let's align on...', 'I'm excited about...', 'Great question', 'Looking forward to collaborating'. She uses collaborative language ('we', 'together', 'us') more than individual ('I'). Her tone is warm and positive, often starting emails with appreciation ('Thanks for raising this', 'I appreciate your thoughtfulness'). She avoids: Jargon overload, aggressive sales language, blame or criticism, negative framing. She closes with: 'Looking forward to hearing your thoughts', 'Let's discuss further', 'Thanks for partnering on this'. Her writing style is professional but friendly, with moderate use of formatting (bullet points for clarity, occasional bold for emphasis). She's diplomatic in disagreements: 'I see it slightly differently...' vs 'I disagree'.",
+        "key_points": [
+          "Common phrases: 'Let's figure this out together', 'I appreciate your perspective', 'What I'm hearing is...'",
+          "Collaborative language: 'we', 'together', 'us'",
+          "Warm and positive tone",
+          "Starts with appreciation",
+          "Diplomatic in disagreements",
+          "Avoids jargon, blame, negativity",
+          "Professional but friendly",
+          "Uses formatting for clarity (bullets, bold)"
+        ],
+        "sources": [
+          "executive_profiles/exec_004_sarah_kim.json (communication_patterns)",
+          "documents/memos/2024-08-15_cmo_marketing_sales_realignment.md (example)",
+          "documents/reports/2024-10-20_marketing_performance_q3.md (example)"
+        ],
+        "confidence_threshold": 0.85
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_013",
+      "executive": "Sarah Kim",
+      "category": "factual",
+      "difficulty": "easy",
+      "question": "What is the structure of Sarah's marketing team and what are the key functions?",
+      "expected_answer": {
+        "answer": "Sarah's marketing team has 22 people structured into 4 functions: (1) Demand Generation (6 people) - paid ads, SEO, ABM campaigns, (2) Brand & Content (8 people) - content writers, designers, video producers, PR, (3) Product Marketing (4 people) - positioning, launches, competitive intelligence, sales enablement, (4) Marketing Operations (4 people) - analytics, tech stack, attribution, automation. Total headcount: 22 (unchanged from Q2). Recent hires: Content Marketing Manager (replaced contractor with full-time) and SEO Specialist (new role). In Neo4j graph: (Sarah)-[:LEADS]->(Marketing Department).",
+        "key_points": [
+          "22 people total",
+          "4 functions: Demand Gen (6), Brand & Content (8), Product Marketing (4), Marketing Ops (4)",
+          "Recent hires: Content Marketing Manager, SEO Specialist",
+          "Reports to CMO Sarah Kim"
+        ],
+        "sources": [
+          "executive_profiles/exec_004_sarah_kim.json",
+          "documents/reports/2024-10-20_marketing_performance_q3.md (Section 9.1)",
+          "Neo4j graph: Executive → LEADS → Department"
+        ],
+        "confidence_threshold": 0.90
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_014",
+      "executive": "Sarah Kim",
+      "category": "precedent_application",
+      "difficulty": "hard",
+      "question": "A competitor launches aggressive PR campaign criticizing NexaTech's product. Based on Sarah's approach, how would she likely respond?",
+      "expected_answer": {
+        "answer": "Based on Sarah's strategic, data-driven, collaborative approach, she would: (1) Assess the situation: Is this credible criticism or baseless attacks? Who's the audience? What's the potential damage?, (2) Gather facts: Get product team input on any legitimate issues raised, customer feedback, (3) Coordinate response: Work with CEO (Akiko), CTO (Yuki), and Legal to align on messaging, (4) Take the high road: Don't engage in mud-slinging - focus on NexaTech's strengths and customer success, (5) Respond with data: If criticism is inaccurate, politely correct with facts (customer testimonials, NPS data, case studies), (6) Double down on differentiation: Create content showcasing NexaTech advantages (quality, innovation, customer service), (7) Engage customers: Encourage happy customers to share experiences (organic advocacy), (8) Monitor and measure: Track sentiment, adjust if needed. She would NOT: Publicly attack competitor, get defensive, ignore if significant, or make claims without data. Her approach: Professional, factual, customer-focused, aligned with company values (Radical Transparency, Customer First). Example: Would reference how transparency worked in security incident - honesty builds trust more than spin.",
+        "key_points": [
+          "Assess: Credible criticism or baseless?",
+          "Gather facts from product team and customers",
+          "Coordinate with CEO, CTO, Legal",
+          "Take high road: Don't mud-sling",
+          "Respond with data and customer testimonials",
+          "Double down on differentiation content",
+          "Encourage customer advocacy",
+          "NOT: Attack competitor, get defensive, ignore, make unsupported claims",
+          "Professional, factual, customer-focused"
+        ],
+        "sources": [
+          "executive_profiles/exec_004_sarah_kim.json (communication_style, values, collaborative approach)",
+          "company_values: Radical Transparency, Customer First",
+          "decision_cases: DC_YUKI_005 (transparency in crisis)",
+          "Implied from CMO role and past collaborative decisions"
+        ],
+        "confidence_threshold": 0.70,
+        "evaluation_notes": "Should demonstrate Sarah's diplomatic, data-driven, customer-focused approach to crisis communications"
+      }
+    },
+    
+    {
+      "id": "Q_SARAH_015",
+      "executive": "Sarah Kim",
+      "category": "decision_understanding",
+      "difficulty": "medium",
+      "question": "What is Sarah's philosophy on marketing metrics, and how does this show in her decisions?",
+      "expected_answer": {
+        "answer": "Sarah's philosophy: Focus on quality metrics that drive business outcomes, not vanity metrics. Evidence: (1) Shifted from MQL (volume) to SRL (quality) - cares about conversion (12%→38%) not just lead count, (2) Content strategy: Measures engagement (time on page +240%, bounce rate -26pp) not just pageviews, (3) Brand investment: Tracks brand-aware prospect conversion (+24pp) not just impressions, (4) ROI-focused: Reports marketing-sourced revenue (¥385M, 43% of total), not just activities, (5) Closed-loop reporting: Tracks which SRLs became customers, feeds learnings back, (6) Channel optimization: Cuts low-ROI channels (display ads, events) based on ROAS data. She avoids: Vanity metrics (social media followers without engagement, pageviews without conversion, leads without quality), activity metrics ('we sent 50 emails!'), metrics without business tie-in. Her reports to CFO Raj and CEO Akiko focus on: Pipeline generated, revenue attributed, conversion rates, CAC, ROI - metrics that matter to business. This data-driven accountability is why she has credibility with finance and sales teams.",
+        "key_points": [
+          "Focus on quality metrics, not vanity metrics",
+          "MQL→SRL shift: Quality over volume",
+          "Content: Engagement metrics (time on page, bounce rate), not just views",
+          "Brand: Conversion impact (+24pp), not just impressions",
+          "Reports revenue attribution (¥385M, 43%)",
+          "Closed-loop: Tracks to customer outcome",
+          "Cuts channels based on ROI data",
+          "Avoids: Followers, pageviews, activity metrics without business tie-in",
+          "Data-driven accountability builds credibility"
+        ],
+        "sources": [
+          "decision_cases: DC_SARAH_001, DC_SARAH_003, DC_SARAH_004",
+          "documents/reports/2024-10-20_marketing_performance_q3.md (metrics throughout)",
+          "executive_profiles/exec_004_sarah_kim.json (data-driven approach)"
+        ],
+        "confidence_threshold": 0.85
+      }
+    }
+  ]

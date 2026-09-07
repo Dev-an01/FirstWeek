@@ -1,0 +1,39 @@
+id,name,title,company,email,role_type,department,location
+person_takeshi_yamamoto,Takeshi Yamamoto,CIO,MegaCorp Japan,takeshi.yamamoto@megacorp.jp,customer_contact,IT,Tokyo
+person_yuki_tanaka,Yuki Tanaka,VP Engineering,NexaTech Solutions,yuki.tanaka@nexatech.jp,employee,Engineering,Tokyo
+person_kenji_sato,Kenji Sato,VP Sales,NexaTech Solutions,kenji.sato@nexatech.jp,employee,Sales,Tokyo
+person_kenji_tanaka,Kenji Tanaka,VP Product,NexaTech Solutions,kenji.tanaka@nexatech.jp,employee,Product,Tokyo
+person_miho_suzuki,Miho Suzuki,VP Customer Success,NexaTech Solutions,miho.suzuki@nexatech.jp,employee,Customer Success,Tokyo
+person_mika_tanaka,Mika Tanaka,Head of People Ops,NexaTech Solutions,mika.tanaka@nexatech.jp,employee,People Operations,Tokyo
+person_hiroshi_yamada,Hiroshi Yamada,Former VP Engineering,WorkMax,hiroshi.yamada@workmax.com,former_employee,Engineering,Tokyo
+person_tomoko_sato,Tomoko Sato,Independent Director,Board of Directors,tomoko.sato@board-advisors.jp,board_member,Board,Tokyo
+person_david_chen,David Chen,Investor Director,Sequoia Capital,david.chen@sequoiacap.com,board_member,Board,San Francisco
+person_hiroshi_nakamura,Hiroshi Nakamura,Investor Director,SoftBank Vision Fund,hiroshi.nakamura@softbank.com,board_member,Board,Tokyo
+person_yuki_kimura,Yuki Kimura,Independent Director,Board of Directors,yuki.kimura@independent-board.jp,board_member,Board,Tokyo
+person_satoshi_ito,Satoshi Ito,Senior Engineer,NexaTech Solutions,satoshi.ito@nexatech.jp,employee,Engineering,Tokyo
+person_emi_nakamura,Emi Nakamura,Senior Product Designer,NexaTech Solutions,emi.nakamura@nexatech.jp,employee,Product,Tokyo
+person_takuya_yamamoto,Takuya Yamamoto,Engineering Manager,NexaTech Solutions,takuya.yamamoto@nexatech.jp,employee,Engineering,Tokyo
+person_mari_tanaka,Mari Tanaka,Product Marketing Manager,NexaTech Solutions,mari.tanaka@nexatech.jp,employee,Marketing,Tokyo
+person_daisuke_suzuki,Daisuke Suzuki,Account Executive,NexaTech Solutions,daisuke.suzuki@nexatech.jp,employee,Sales,Tokyo
+person_ayumi_kobayashi,Ayumi Kobayashi,Customer Success Manager,NexaTech Solutions,ayumi.kobayashi@nexatech.jp,employee,Customer Success,Tokyo
+person_ryota_matsuda,Ryota Matsuda,Senior Engineer,NexaTech Solutions,ryota.matsuda@nexatech.jp,employee,Engineering,Osaka
+person_natsuki_takahashi,Natsuki Takahashi,Finance Manager,NexaTech Solutions,natsuki.takahashi@nexatech.jp,employee,Finance,Tokyo
+person_haruki_sato,Haruki Sato,Marketing Manager,NexaTech Solutions,haruki.sato@nexatech.jp,employee,Marketing,Tokyo
+person_kenta_yoshida,Kenta Yoshida,SDR Lead,NexaTech Solutions,kenta.yoshida@nexatech.jp,employee,Sales,Tokyo
+person_mei_watanabe,Mei Watanabe,Head of Demand Gen,NexaTech Solutions,mei.watanabe@nexatech.jp,employee,Marketing,Tokyo
+person_shinji_yamada,Shinji Yamada,Engineering Manager,NexaTech Solutions,shinji.yamada@nexatech.jp,employee,Engineering,Tokyo
+person_akari_fujita,Akari Fujita,Product Manager,NexaTech Solutions,akari.fujita@nexatech.jp,employee,Product,Tokyo
+person_masato_kato,Masato Kato,Customer Success Lead,NexaTech Solutions,masato.kato@nexatech.jp,employee,Customer Success,Tokyo
+person_rina_nakajima,Rina Nakajima,Content Marketing Lead,NexaTech Solutions,rina.nakajima@nexatech.jp,employee,Marketing,Tokyo
+person_jun_ishikawa,Jun Ishikawa,Senior Account Executive,NexaTech Solutions,jun.ishikawa@nexatech.jp,employee,Sales,Tokyo
+person_sakura_mori,Sakura Mori,HR Business Partner,NexaTech Solutions,sakura.mori@nexatech.jp,employee,People Operations,Tokyo
+person_tatsuya_endo,Tatsuya Endo,Security Engineer,NexaTech Solutions,tatsuya.endo@nexatech.jp,employee,Engineering,Tokyo
+person_hana_kimura,Hana Kimura,Sales Operations Manager,NexaTech Solutions,hana.kimura@nexatech.jp,employee,Sales,Tokyo
+person_ryo_hayashi,Ryo Hayashi,DevOps Engineer,NexaTech Solutions,ryo.hayashi@nexatech.jp,employee,Engineering,Tokyo
+person_misaki_abe,Misaki Abe,UX Researcher,NexaTech Solutions,misaki.abe@nexatech.jp,employee,Product,Tokyo
+person_shota_ogawa,Shota Ogawa,Finance Analyst,NexaTech Solutions,shota.ogawa@nexatech.jp,employee,Finance,Tokyo
+person_yui_matsumoto,Yui Matsumoto,Recruiter,NexaTech Solutions,yui.matsumoto@nexatech.jp,employee,People Operations,Tokyo
+person_kazuki_inoue,Kazuki Inoue,Mobile Engineer,NexaTech Solutions,kazuki.inoue@nexatech.jp,employee,Engineering,Tokyo
+person_aoi_nakano,Aoi Nakano,Brand Manager,NexaTech Solutions,aoi.nakano@nexatech.jp,employee,Marketing,Tokyo
+person_takeshi_fujimoto,Takeshi Fujimoto,Solutions Architect,NexaTech Solutions,takeshi.fujimoto@nexatech.jp,employee,Sales,Tokyo
+person_nanami_saito,Nanami Saito,Executive Assistant,NexaTech Solutions,nanami.saito@nexatech.jp,employee,Executive,Tokyo

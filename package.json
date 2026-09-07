@@ -1,0 +1,16 @@
+{
+  "name": "firstweek",
+  "version": "1.0.0",
+  "description": "FirstWeek - an ai bot that acts on behalf of you in your absence",
+  "license": "ISC",
+  "author": "firstweek-team",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
+}

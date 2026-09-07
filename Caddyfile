@@ -1,0 +1,205 @@
+# Caddyfile for FirstWeek Production Deployment
+# Main domain - Frontend
+example.invalid, example.invalid, localhost, 127.0.0.1 {
+     # Use Cloudflare Origin Certificates
+    tls /certs/example.invalid.pem /certs/example.invalid.key
+    # API endpoints (for when example.invalid DNS isnt ready)
+    handle /api/users* {
+        reverse_proxy auth-service:3001
+    }
+
+    handle /api/companies* {
+        reverse_proxy auth-service:3001
+    }
+
+    handle /api/invite-codes* {
+        reverse_proxy auth-service:3001
+    }
+
+    handle /api/chat* {
+        reverse_proxy chat-service:3002
+    }
+
+    handle /api/conversations* {
+        reverse_proxy chat-service:3002
+    }
+
+    handle /api/recall* {
+        reverse_proxy recall-service:3003
+    }
+
+    # RAG API - rewrite /api/rag/* -> /api/v1/*
+    handle_path /api/rag/* {
+        uri strip_suffix /
+        rewrite * /api/v1{path}
+        reverse_proxy rag-api:8000
+
+    }
+
+    # RAG API - rewrite /api/rag -> /api/v1
+    handle /api/rag {
+        rewrite * /api/v1
+        reverse_proxy rag-api:8000
+
+    }
+
+    # Direct RAG API access
+    handle /api/v1* {
+        reverse_proxy rag-api:8000
+
+    }
+
+    handle /avatar* {
+        reverse_proxy avatar-interface:3004
+
+    }
+
+    handle /socket.io* {
+        reverse_proxy chat-service:3002
+
+    }
+
+    # Frontend (catch-all, must be last)
+    handle {
+        reverse_proxy frontend:5173
+    }
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        # Enable HSTS
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Prevent clickjacking
+        X-Frame-Options "SAMEORIGIN"
+        # Prevent MIME sniffing
+        X-Content-Type-Options "nosniff"
+        # Enable XSS protection
+        X-XSS-Protection "1; mode=block"
+        # Referrer policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    # Logs
+    log {
+        output file /var/log/caddy/example.invalid.log
+        format json
+    }
+}
+
+example.invalid {
+    tls /certs/example.invalid.pem /certs/example.invalid.key
+
+    # Proxy to Bridge Service on HOST machine (network_mode: host)
+    
+    # Audio Ingest (WebSocket) -> Host Port 3110
+    handle_path /audio* {
+        reverse_proxy host.docker.internal:3110
+    }
+
+    # Signal Server (Socket.io) -> Host Port 3111
+    handle_path /wrtc/* {
+        reverse_proxy host.docker.internal:3111
+    }
+
+    # Main Avatar Interface -> Container Name (assuming same network or valid DNS)
+    # If avatar-interface is ALSO on a different stack, you might need to use host.docker.internal:3004 too.
+    handle {
+        reverse_proxy avatar-interface:3004
+    }
+
+    encode gzip
+    log {
+        output file /var/log/caddy/example.invalid.log
+        format json
+    }
+}
+
+# API subdomain - Backend services
+example.invalid {
+    # Use Cloudflare Origin Certificates
+    tls /certs/example.invalid.pem /certs/example.invalid.key
+
+    # Auth service endpoints
+    handle /api/users* {
+        reverse_proxy auth-service:3001
+    }
+
+    handle /api/companies* {
+        reverse_proxy auth-service:3001
+    }
+
+    handle /api/invite-codes* {
+        reverse_proxy auth-service:3001
+    }
+
+    # Chat service endpoints
+    handle /api/chat* {
+        reverse_proxy chat-service:3002
+    }
+
+    handle /api/conversations* {
+        reverse_proxy chat-service:3002
+    }
+
+    # Recall service endpoints
+    handle /api/recall* {
+        reverse_proxy recall-service:3003
+    }
+
+    # RAG API endpoints
+    # RAG API - rewrite /api/rag/* -> /api/v1/*
+    handle_path /api/rag/* {
+        uri strip_suffix /
+        rewrite * /api/v1{path}
+        reverse_proxy rag-api:8000
+
+    }
+
+    # RAG API - rewrite /api/rag -> /api/v1
+    handle /api/rag {
+        rewrite * /api/v1
+        reverse_proxy rag-api:8000
+
+    }
+
+    # Direct RAG API access
+    handle /api/v1* {
+        reverse_proxy rag-api:8000
+
+    }
+
+    # Avatar interface
+    handle /avatar* {
+        reverse_proxy avatar-interface:3004
+
+    }
+
+    # WebSocket support for chat
+    handle /socket.io* {
+        reverse_proxy chat-service:3002
+
+    }
+
+    # Enable compression
+    encode gzip
+
+    # CORS headers
+    # CORS headers handled by backend services
+
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+    }
+
+    # Logs
+    log {
+        output file /var/log/caddy/example.invalid.log
+        format json
+    }
+}

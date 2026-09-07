@@ -1,0 +1,125 @@
+/* ==========================================
+   FirstWeek Interface - Professional Design
+   ========================================== */
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body - Dark Professional Theme */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+    background: #f8f8f8;
+    /* Pure black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    color: #e5e7eb;
+}
+
+
+/* ==========================================
+   Main Container - Centered Layout
+   ========================================== */
+.main-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* ==========================================
+   Avatar Section
+   ========================================== */
+.avatar-section {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-wrapper {
+    position: relative;
+    /* Full width, slight top/bottom margin */
+    width: 100vw;
+    height: 100vh;
+    /* Leave 3vh top and bottom */
+    max-width: none;
+    /* Remove width constraint */
+    border-radius: 0;
+    /* Remove border radius for cinematic look */
+    overflow: hidden;
+    background: #f8f8f8;
+    /* Black background for letterboxing */
+    box-shadow: none;
+    /* Remove shadow for seamless look */
+}
+
+/* Avatar Images */
+#avatar-img,
+#avatar-video-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Ensure video fits within the rectangle (letterboxing) */
+    object-fit: contain;
+}
+
+#avatar-img {
+    display: block;
+    z-index: 1;
+}
+
+#avatar-video-canvas {
+    display: none;
+    z-index: 2;
+    background: #f8f8f8;
+}
+
+#avatar-video-canvas.active {
+    display: block !important;
+}
+
+
+
+/* HIDE UNUSED ELEMENTS (Safe Mode: Hide via CSS, keep in DOM) */
+.console-section,
+.status-badge,
+#connection-status,
+.avatar-status-text,
+#avatar-status,
+.speaking-indicator,
+.debug-panel {
+    display: none !important;
+}
+
+/* ==========================================
+   Animations
+   ========================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-container {
+    animation: fadeIn 0.5s ease-out;
+}

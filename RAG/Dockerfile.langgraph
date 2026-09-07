@@ -1,0 +1,76 @@
+# Multi-stage build for LangGraph Studio
+# Reuses dependencies from main RAG application
+FROM python:3.11-slim as builder
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies for building
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    postgresql-client \
+    build-essential \
+    portaudio19-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install heavy ML dependencies FIRST (these rarely change, so cache them)
+# This layer will be cached and reused unless we explicitly change these versions
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir cmake && \
+    echo "Installing heavy ML dependencies (cached layer)..." && \
+    pip install --no-cache-dir \
+        torch==2.1.2 \
+        transformers==4.36.2 \
+        sentence-transformers==2.7.0 \
+        numpy==1.26.4 && \
+    echo "✓ Heavy ML dependencies installed"
+
+# Copy requirements for remaining dependencies
+COPY requirements.txt .
+
+# Install remaining dependencies (lighter, app-specific)
+RUN echo "Installing app-specific dependencies..." && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir psycopg2-binary asyncpg neo4j && \
+    echo "✓ All dependencies installed successfully"
+
+# Install LangGraph Studio dependencies
+RUN pip install --no-cache-dir 'langgraph-cli[inmem]'
+
+# Production stage
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Python packages from builder
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy application code
+COPY . .
+
+# Create non-root user for security
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
+# Expose LangGraph Studio port
+EXPOSE 8000
+
+# Health check for LangGraph Studio
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/ok || exit 1
+
+# Start LangGraph Studio
+CMD ["langgraph", "dev", "--host", "0.0.0.0", "--port", "8000", "--tunnel", "--no-browser"]

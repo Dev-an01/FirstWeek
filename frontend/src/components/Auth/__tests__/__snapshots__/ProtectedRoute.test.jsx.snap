@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProtectedRoute Snapshot Tests should match snapshot when authenticated 1`] = `
+<div
+  data-testid="protected-content"
+>
+  Protected Content
+</div>
+`;
+
+exports[`ProtectedRoute Snapshot Tests should match snapshot when loading 1`] = `
+<div
+  class="min-h-screen flex items-center justify-center bg-gray-50"
+>
+  <div
+    class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"
+  />
+</div>
+`;
+
+exports[`ProtectedRoute Snapshot Tests should match snapshot when redirecting 1`] = `
+<div
+  data-testid="navigate-mock"
+>
+  Redirecting to 
+  /login
+</div>
+`;

@@ -1,0 +1,407 @@
+{
+  "dashboard": {
+    "title": "AI Officer - Executive Overview",
+    "tags": ["ai-officer", "business", "executive"],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    },
+    "timepicker": {},
+    "panels": [
+      {
+        "id": 1,
+        "title": "Daily Active Users (DAU)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ai_officer_daily_active_users",
+            "legendFormat": "DAU"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "red"},
+                {"value": 5, "color": "yellow"},
+                {"value": 20, "color": "green"}
+              ]
+            },
+            "unit": "users"
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Monthly Active Users (MAU)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ai_officer_monthly_active_users",
+            "legendFormat": "MAU"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "red"},
+                {"value": 10, "color": "yellow"},
+                {"value": 50, "color": "green"}
+              ]
+            },
+            "unit": "users"
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "User Satisfaction Rate",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "ai_officer_user_satisfaction_rate",
+            "legendFormat": "Satisfaction %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 60, "color": "yellow"},
+                {"value": 75, "color": "green"}
+              ]
+            },
+            "min": 0,
+            "max": 100,
+            "unit": "percent"
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 12, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "7-Day Retention Rate",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "ai_officer_user_retention_rate",
+            "legendFormat": "Retention %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 50, "color": "yellow"},
+                {"value": 70, "color": "green"}
+              ]
+            },
+            "min": 0,
+            "max": 100,
+            "unit": "percent"
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "Total Queries (30 days)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(increase(ai_officer_http_requests_total{endpoint=\"/api/v1/chat\"}[30d]))",
+            "legendFormat": "Total Queries"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 6}
+      },
+      {
+        "id": 6,
+        "title": "Query Distribution by Path",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (path) (ai_officer_llm_requests_total)",
+            "legendFormat": "{{path}}"
+          }
+        ],
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 6, "y": 6}
+      },
+      {
+        "id": 7,
+        "title": "User Feedback",
+        "type": "bargauge",
+        "targets": [
+          {
+            "expr": "sum by (type) (ai_officer_user_feedback_total)",
+            "legendFormat": "{{type}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 6}
+      },
+      {
+        "id": 8,
+        "title": "Total Cost (30 days)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(increase(ai_officer_llm_cost_usd_total[30d]))",
+            "legendFormat": "Total Cost"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 100, "color": "yellow"},
+                {"value": 500, "color": "red"}
+              ]
+            },
+            "unit": "currencyUSD",
+            "decimals": 2
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 12}
+      },
+      {
+        "id": 9,
+        "title": "Daily Query Trend",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(ai_officer_http_requests_total{endpoint=\"/api/v1/chat\"}[1h]))",
+            "legendFormat": "Queries/sec"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Queries/sec"},
+          {"format": "short"}
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 6, "y": 14}
+      },
+      {
+        "id": 10,
+        "title": "Cost per Query",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(increase(ai_officer_llm_cost_usd_total[30d])) / sum(increase(ai_officer_llm_requests_total[30d]))",
+            "legendFormat": "Avg Cost/Query"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 0.05, "color": "yellow"},
+                {"value": 0.10, "color": "red"}
+              ]
+            },
+            "unit": "currencyUSD",
+            "decimals": 4
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 14}
+      },
+      {
+        "id": 11,
+        "title": "Quality Metrics - Citation Coverage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "avg(ai_officer_citation_coverage_percentage) by (executive_id)",
+            "legendFormat": "{{executive_id}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Coverage %", "min": 0, "max": 100},
+          {"format": "short"}
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 22}
+      },
+      {
+        "id": 12,
+        "title": "Quality Metrics - Factual Grounding",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "avg(ai_officer_factual_grounding_rate) by (executive_id)",
+            "legendFormat": "{{executive_id}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Grounding %", "min": 0, "max": 100},
+          {"format": "short"}
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 22}
+      },
+      {
+        "id": 13,
+        "title": "Response Time P95",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(ai_officer_http_request_duration_seconds_bucket{endpoint=\"/api/v1/chat\"}[5m])) by (le))",
+            "legendFormat": "P95 Latency"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 2, "color": "yellow"},
+                {"value": 5, "color": "red"}
+              ]
+            },
+            "unit": "s",
+            "decimals": 2
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 30}
+      },
+      {
+        "id": 14,
+        "title": "Error Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(ai_officer_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(ai_officer_http_requests_total[5m])) * 100",
+            "legendFormat": "Error Rate %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 1, "color": "yellow"},
+                {"value": 5, "color": "red"}
+              ]
+            },
+            "unit": "percent",
+            "decimals": 2
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 6, "y": 30}
+      },
+      {
+        "id": 15,
+        "title": "System Uptime",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg_over_time(up{job=\"ai-officer-api\"}[30d]) * 100",
+            "legendFormat": "Uptime %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "red"},
+                {"value": 99, "color": "yellow"},
+                {"value": 99.5, "color": "green"}
+              ]
+            },
+            "unit": "percent",
+            "decimals": 2
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 12, "y": 30}
+      },
+      {
+        "id": 16,
+        "title": "Total Tokens Used (30 days)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(increase(ai_officer_llm_tokens_used_total[30d]))",
+            "legendFormat": "Total Tokens"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {"h": 6, "w": 6, "x": 18, "y": 30}
+      }
+    ],
+    "schemaVersion": 27,
+    "style": "dark"
+  },
+  "overwrite": true
+}

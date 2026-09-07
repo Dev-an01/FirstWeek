@@ -1,0 +1,266 @@
+// backend/auth-service/shared/prisma/schema.prisma
+generator mainClient {
+  provider      = "prisma-client-js"
+  output        = "../lib/generated/client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"] // since we are using alpine builds, and prisma uses debian.
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================
+// User Model - Simple user information
+// =============================================
+model User {
+  id        String @id @default(cuid())
+  username  String @unique
+  email     String? @unique // optional since user wont sign-up using email, they will later verify the email.
+  firstName String
+  lastName  String
+  profilePic String?
+  title      String?  // Job title/designation (e.g., "CEO", "CTO", "VP Engineering")
+
+  // Authorization
+  role      UserRole @default(EMPLOYEE)
+
+  // Company membership (RBAC)
+  companyId         String?            // FK to company (NULL for GUEST/SUPER_ADMIN)
+  isCompanyVerified Boolean @default(false)  // Verified by COMPANY_ADMIN
+  verifiedAt        DateTime?
+  verifiedBy        String?            // User ID who verified this user
+
+  // Authentication
+  password      String
+  emailVerified Boolean @default(false)
+  emailVerifiedAt DateTime?
+  isActive      Boolean @default(true)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLoginAt DateTime?
+
+  // Relations
+  projectMemberships ProjectMember[]
+  sessions Session[]
+  emailVerifications EmailVerification[]
+  passwordResets PasswordReset[]
+  preferences UserPreferences?
+  company Company? @relation(fields: [companyId], references: [id])
+  createdInviteCodes InviteCode[] @relation("InviteCodeCreator")
+
+  // Indexes for performance
+  @@index([email])
+  @@index([username])
+  @@index([isActive])
+  @@index([createdAt])
+  @@index([emailVerified])
+  @@index([companyId])
+  @@unique([companyId, id])
+  @@index([isCompanyVerified])
+
+  @@map("users")
+}
+
+// =============================================
+// UserPreferences Model - User-specific settings for chat
+// =============================================
+model UserPreferences {
+  id        String @id @default(cuid())
+  userId    String @unique
+
+  // RAG & AI Preferences
+  defaultProfileId String? @default("exec_003_test") // Default executive AI persona
+  defaultTopK      Int     @default(5)                // Default number of documents to retrieve
+  defaultMinScore  Float   @default(0.15)              // Default similarity threshold
+
+  // UI Preferences
+  streamingEnabled Boolean @default(true)  // Enable word-by-word streaming
+  theme            String? @default("light") // UI theme (light/dark)
+  language         String? @default("en")    // Interface language
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes for performance
+  @@index([userId])
+
+  @@map("user_preferences")
+}
+
+// =============================================
+// Session Model - User authentication sessions
+// =============================================
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  refreshToken String?  @unique // FIXED: Made unique to allow findUnique queries
+  expiresAt    DateTime
+  ipAddress    String?
+  userAgent    String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Indexes for performance
+  @@index([userId])
+  @@index([token])
+  @@index([refreshToken])
+  @@index([expiresAt])
+  @@index([userId, expiresAt]) // Composite index for getUserSessions queries
+  
+  @@map("sessions")
+}
+
+model EmailVerification {
+  id        String   @id @default(cuid())
+  userId    String
+
+  email    String   @unique // Unique email for verification
+
+  otp       String
+  token     String?
+
+  isVerified Boolean @default(false)
+  attempts  Int @default(0) // Number of attempts for verification
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Indexes for performance
+  @@index([userId])
+  @@index([token])
+  @@index([email])
+  @@map("email_verifications")
+}
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  usedAt    DateTime?
+  attempts  Int      @default(0)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([userId])
+  @@index([email])
+  @@index([token])
+  @@index([expiresAt])
+  @@index([isUsed])
+  @@map("password_resets")
+}
+
+// =============================================
+// Company Model - For multi-tenant organization
+// =============================================
+model Company {
+  id             String   @id @default(cuid())
+  name           String
+  allowedDomains String[] // e.g., ["company.com", "company.co.jp"] for auto-registration
+  description    String?
+  website        String?
+  phone          String?
+  address        String?
+  isActive       Boolean  @default(true)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relations
+  projects       Project[]
+  users          User[]
+  inviteCodes    InviteCode[]
+  
+  @@index([name])
+  @@index([isActive])
+  @@map("companies")
+}
+
+// =============================================
+// InviteCode Model - For employee self-registration
+// =============================================
+model InviteCode {
+  id          String    @id @default(cuid())
+  code        String    @unique    // The invite code string
+  companyId   String                // Which company this code is for
+  createdById String                // COMPANY_ADMIN or SUPER_ADMIN who created it
+  
+  usageLimit  Int       @default(1) // How many times can be used
+  usageCount  Int       @default(0) // How many times used so far
+  expiresAt   DateTime?             // Optional expiration
+  isActive    Boolean   @default(true)
+  
+  createdAt   DateTime  @default(now())
+  
+  // Relations
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdBy   User      @relation("InviteCodeCreator", fields: [createdById], references: [id])
+  
+  @@index([code])
+  @@index([companyId])
+  @@index([isActive])
+  @@map("invite_codes")
+}
+
+// =============================================
+// Enums
+// =============================================
+
+// User roles for authorization and RBAC (hierarchical order)
+enum UserRole {
+  GUEST          // No company access, login only
+  EMPLOYEE       // Company member, can chat with executives (needs verification)
+  EXECUTIVE      // Higher privilege employee, linked to AI persona
+  COMPANY_ADMIN  // Manages company users, can verify/promote employees
+  SUPER_ADMIN    // Full system access, manages companies and assigns COMPANY_ADMINs
+}
+
+// FirstWeek reads require explicit project membership, including administrators.
+model Project {
+  id          String
+  companyId   String
+  name        String
+  description String @default("")
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  members     ProjectMember[]
+
+  @@id([companyId, id])
+  @@map("projects")
+}
+
+model ProjectMember {
+  companyId String
+  projectId String
+  userId    String
+  role      String @default("MEMBER")
+  createdAt DateTime @default(now())
+  project   Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
+  user      User @relation(fields: [companyId, userId], references: [companyId, id], onDelete: Cascade)
+
+  @@id([companyId, projectId, userId])
+  @@index([userId])
+  @@map("project_members")
+}

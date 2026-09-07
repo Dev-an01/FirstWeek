@@ -1,0 +1,166 @@
+# ============================================================================
+# Optimized Multi-Stage Dockerfile for RAG Service
+# Purpose: FastAPI-based RAG service with ML models (PyTorch, Whisper, Kokoro)
+# Improvements: Better layer caching, reduced image size, fixed redundancies
+# ============================================================================
+
+# =============================================================================
+# STAGE 1: BUILDER (Install all dependencies and download models)
+# =============================================================================
+
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    postgresql-client \
+    build-essential \
+    portaudio19-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install heavy ML dependencies FIRST (cached layer - rarely changes)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir cmake && \
+    echo "Installing heavy ML dependencies (cached layer)..." && \
+    pip install --no-cache-dir \
+        torch==2.4.0+cu121 \
+        --index-url https://download.pytorch.org/whl/cu121 && \
+    pip install --no-cache-dir \
+        transformers==4.46.0 \
+        sentence-transformers==3.3.0 \
+        numpy==1.26.4 && \
+    echo "✓ Heavy ML dependencies installed"
+
+# Copy and install app-specific dependencies
+COPY requirements.txt .
+RUN echo "Installing app-specific dependencies..." && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir psycopg2-binary asyncpg neo4j && \
+    echo "✓ App dependencies installed"
+
+# Download spaCy models
+RUN pip install --no-cache-dir \
+    https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl \
+    https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.7.1/en_core_web_lg-3.7.1-py3-none-any.whl
+
+# Install Kokoro TTS dependencies (moved from production stage)
+RUN echo "Installing Kokoro TTS with complete Japanese support..." && \
+    pip install --no-cache-dir \
+        kokoro>=0.9.4 \
+        soundfile>=0.12.1 \
+        pyopenjtalk>=0.3.0 \
+        fugashi>=1.3.0 \
+        unidic-lite>=1.0.8 \
+        jaconv>=0.3.0 \
+        mojimoji>=0.0.12 \
+        scipy>=1.10.0 \
+        num2words>=0.5.10 && \
+    echo "✓ Kokoro TTS installed"
+
+# Download ML models (Kokoro TTS + Whisper)
+# This is done in builder stage to allow parallel downloads
+RUN mkdir -p /app/models/kokoro/voices /app/models/whisper && \
+    echo "Downloading Kokoro models..." && \
+    curl -L -o /app/models/kokoro/kokoro-v1_0.pth \
+        "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/kokoro-v1_0.pth" && \
+    curl -L -o /app/models/kokoro/config.json \
+        "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/config.json" && \
+    curl -L -o /app/models/kokoro/voices/af_bella.pt \
+        "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/voices/af_bella.pt" && \
+    curl -L -o /app/models/kokoro/voices/af_heart.pt \
+        "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/voices/af_heart.pt" && \
+    curl -L -o /app/models/kokoro/voices/jf_alpha.pt \
+        "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/voices/jf_alpha.pt" && \
+    curl -L -o /app/models/kokoro/voices/jf_gongitsune.pt \
+        "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/voices/jf_gongitsune.pt" && \
+    echo "✓ Kokoro models downloaded"
+
+# Download Whisper model
+RUN echo "Downloading Whisper model..." && \
+    python3 -c "from faster_whisper import WhisperModel; model = WhisperModel('base', device='cpu', compute_type='int8', download_root='/app/models/whisper'); print('✓ Whisper model ready')"
+
+# =============================================================================
+# STAGE 2: PRODUCTION (Minimal runtime image)
+# =============================================================================
+
+FROM python:3.11-slim
+
+LABEL maintainer="firstweek-team"
+LABEL service="rag-api"
+LABEL description="RAG API with ML models for TTS/STT"
+
+WORKDIR /app
+
+# Install ONLY runtime dependencies (no build tools, no wget)
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    curl \
+    ffmpeg \
+    libsndfile1 \
+    libportaudio2 \
+    espeak-ng \
+    libespeak-ng1 \
+    espeak-ng-data \
+    gnupg2 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install cuDNN for GPU-accelerated STT
+# FIXED: Single cleanup, wget installed and removed in same layer
+RUN apt-get update && \
+    apt-get install -y wget && \
+    wget https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/cuda-keyring_1.1-1_all.deb && \
+    dpkg -i cuda-keyring_1.1-1_all.deb && \
+    apt-get update && \
+    apt-get install -y libcudnn9-cuda-12 && \
+    apt-get remove -y wget && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* cuda-keyring_1.1-1_all.deb && \
+    echo "✓ cuDNN 9 installed"
+
+# Set environment for cuDNN
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu
+
+# Create espeak-ng symlink
+RUN mkdir -p /usr/share && \
+    ln -sf /usr/lib/x86_64-linux-gnu/espeak-ng-data /usr/share/espeak-ng-data
+
+# Copy Python packages from builder (includes all deps + models)
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy downloaded models from builder
+COPY --from=builder /app/models /app/models
+
+# Copy application code
+COPY . .
+
+# Copy and prepare entrypoint script
+COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Initialize pyopenjtalk dictionary (optional, with error handling)
+RUN echo "Initializing pyopenjtalk..." && \
+    (python3 -c "import pyopenjtalk; pyopenjtalk.g2p('こんにちは')" && \
+    echo "✓ pyopenjtalk ready") || \
+    echo "⚠️  pyopenjtalk init failed (will retry at runtime)"
+
+# Create non-root user for security
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app && \
+    chown appuser:appuser /docker-entrypoint.sh
+
+USER appuser
+
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+
+# Start FastAPI application
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

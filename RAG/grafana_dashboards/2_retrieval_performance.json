@@ -1,0 +1,299 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "id": null,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "rate(ai_officer_retrieval_results_count_sum[5m]) / rate(ai_officer_retrieval_results_count_count[5m])",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Results",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 1000
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value"
+      },
+      "targets": [
+        {
+          "expr": "rate(ai_officer_vector_search_seconds_sum[5m]) / rate(ai_officer_vector_search_seconds_count[5m]) * 1000",
+          "refId": "A"
+        }
+      ],
+      "title": "Vector Search (ms)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_graph_query_seconds_sum[5m]) / rate(ai_officer_graph_query_seconds_count[5m]) * 1000",
+          "refId": "A"
+        }
+      ],
+      "title": "Graph Query (ms)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 4,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_memory_search_seconds_sum[5m]) / rate(ai_officer_memory_search_seconds_count[5m]) * 1000",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Search (ms)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2
+          },
+          "unit": "s"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_vector_search_seconds_sum[5m]) / rate(ai_officer_vector_search_seconds_count[5m])",
+          "legendFormat": "Vector",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(ai_officer_graph_query_seconds_sum[5m]) / rate(ai_officer_graph_query_seconds_count[5m])",
+          "legendFormat": "Graph",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(ai_officer_memory_search_seconds_sum[5m]) / rate(ai_officer_memory_search_seconds_count[5m])",
+          "legendFormat": "Memory",
+          "refId": "C"
+        },
+        {
+          "expr": "rate(ai_officer_fusion_seconds_sum[5m]) / rate(ai_officer_fusion_seconds_count[5m])",
+          "legendFormat": "Fusion",
+          "refId": "D"
+        }
+      ],
+      "title": "Component Latency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_retrieval_results_count_sum{source=\"vector\"}[5m])",
+          "legendFormat": "Vector",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(ai_officer_retrieval_results_count_sum{source=\"graph\"}[5m])",
+          "legendFormat": "Graph",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(ai_officer_retrieval_results_count_sum{source=\"memory\"}[5m])",
+          "legendFormat": "Memory",
+          "refId": "C"
+        }
+      ],
+      "title": "Results by Source",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "id": 7,
+      "options": {
+        "pieType": "donut"
+      },
+      "targets": [
+        {
+          "expr": "sum by (source) (ai_officer_retrieval_results_count_sum)",
+          "refId": "A"
+        }
+      ],
+      "title": "Results Distribution",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2
+          },
+          "unit": "s"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 8,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(ai_officer_vector_search_seconds_bucket[5m]))",
+          "legendFormat": "Vector P95",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, rate(ai_officer_graph_query_seconds_bucket[5m]))",
+          "legendFormat": "Graph P95",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.95, rate(ai_officer_memory_search_seconds_bucket[5m]))",
+          "legendFormat": "Memory P95",
+          "refId": "C"
+        }
+      ],
+      "title": "P95 Latencies",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "tags": [
+    "ai-officer",
+    "retrieval"
+  ],
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "title": "AI Officer - Retrieval Performance",
+  "uid": "ai-officer-retrieval",
+  "version": 0
+}

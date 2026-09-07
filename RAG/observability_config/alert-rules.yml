@@ -1,0 +1,120 @@
+# Prometheus Alert Rules
+# =======================
+# Based on Solution Manual targets
+
+groups:
+  - name: ai_officer_critical_alerts
+    interval: 30s
+    rules:
+      # Critical: High P95 Latency
+      - alert: HighP95Latency
+        expr: histogram_quantile(0.95, rate(ai_officer_http_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "P95 latency is above 5 seconds"
+          description: "P95 latency is {{ $value | humanizeDuration }} (target: <2s)"
+      
+      # Critical: High Error Rate
+      - alert: HighErrorRate
+        expr: (rate(ai_officer_http_requests_total{status=~"5.."}[5m]) / rate(ai_officer_http_requests_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error rate is above 5%"
+          description: "Error rate is {{ $value | humanizePercentage }}"
+      
+      # Critical: High Daily Cost
+      - alert: HighDailyCost
+        expr: increase(ai_officer_llm_cost_usd_total[24h]) > 200
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: "Daily LLM cost exceeds $200"
+          description: "Daily cost is ${{ $value | humanize }}"
+
+  - name: ai_officer_warning_alerts
+    interval: 60s
+    rules:
+      # Warning: Degraded Latency
+      - alert: DegradedLatency
+        expr: histogram_quantile(0.95, rate(ai_officer_http_request_duration_seconds_bucket[5m])) > 2.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "P95 latency is above 2.5 seconds"
+          description: "P95 latency is {{ $value | humanizeDuration }} (target: <2s)"
+      
+      # Warning: Low Cache Hit Rate
+      - alert: LowCacheHitRate
+        expr: ai_officer_cache_hit_rate < 0.4
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cache hit rate is below 40%"
+          description: "Cache hit rate is {{ $value | humanizePercentage }}"
+      
+      # Warning: High Memory Usage
+      - alert: HighMemoryUsage
+        expr: ai_officer_memory_usage_bytes / (1024 * 1024 * 1024) > 8
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Memory usage is above 8GB"
+          description: "Memory usage is {{ $value | humanize }}GB"
+
+      # Warning: LLM Cost Rate
+      - alert: HighLLMCostRate
+        expr: rate(ai_officer_llm_cost_usd_total[5m]) * 3600 > 1.0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "LLM costs exceed $1/hour"
+          description: "Current spending rate: ${{ $value | humanize }}/hour"
+
+      # Warning: High LLM Latency
+      - alert: HighLLMLatency
+        expr: histogram_quantile(0.95, rate(ai_officer_llm_latency_seconds_bucket[5m])) > 3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "P95 LLM latency exceeds 3 seconds"
+          description: "LLM latency is {{ $value | humanizeDuration }}"
+
+      # Warning: Service Down
+      - alert: ServiceDown
+        expr: up{job="ai-officer-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "AI Officer API is down"
+          description: "The API service has been down for 1 minute"
+
+      # Warning: No Requests
+      - alert: NoRequestsReceived
+        expr: rate(ai_officer_http_requests_total[5m]) == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No requests received in 10 minutes"
+          description: "No API requests for 10 minutes"
+
+      # Warning: High Token Usage Per Query
+      - alert: HighTokenUsagePerQuery
+        expr: rate(ai_officer_llm_tokens_used_total[5m]) / rate(ai_officer_llm_requests_total[5m]) > 5000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Average tokens per query exceeds 5000"
+          description: "Avg tokens/query: {{ $value | humanize }}"

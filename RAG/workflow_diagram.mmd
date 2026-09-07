@@ -1,0 +1,49 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	analyze_query(analyze_query)
+	route_query(route_query)
+	retrieve_unified_fast(retrieve_unified_fast)
+	generate_fast(generate_fast)
+	retrieve_unified_standard(retrieve_unified_standard)
+	retrieve_memory_standard(retrieve_memory_standard)
+	fuse_results_standard(fuse_results_standard)
+	rerank_results_standard(rerank_results_standard)
+	generate_standard(generate_standard)
+	retrieve_unified_agentic(retrieve_unified_agentic)
+	retrieve_memory_agentic(retrieve_memory_agentic)
+	fuse_results_agentic(fuse_results_agentic)
+	rerank_results_agentic(rerank_results_agentic)
+	react_think(react_think)
+	react_act(react_act)
+	react_observe(react_observe)
+	react_finalize(react_finalize)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> analyze_query;
+	analyze_query --> route_query;
+	fuse_results_agentic --> rerank_results_agentic;
+	fuse_results_standard --> rerank_results_standard;
+	react_act --> react_observe;
+	react_observe -. &nbsp;finalize&nbsp; .-> react_finalize;
+	react_observe -. &nbsp;continue&nbsp; .-> react_think;
+	react_think --> react_act;
+	rerank_results_agentic --> react_think;
+	rerank_results_standard --> generate_standard;
+	retrieve_memory_agentic --> fuse_results_agentic;
+	retrieve_memory_standard --> fuse_results_standard;
+	retrieve_unified_agentic --> retrieve_memory_agentic;
+	retrieve_unified_fast --> generate_fast;
+	retrieve_unified_standard --> retrieve_memory_standard;
+	route_query -. &nbsp;agentic&nbsp; .-> retrieve_unified_agentic;
+	route_query -. &nbsp;fast&nbsp; .-> retrieve_unified_fast;
+	route_query -. &nbsp;standard&nbsp; .-> retrieve_unified_standard;
+	generate_fast --> __end__;
+	generate_standard --> __end__;
+	react_finalize --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

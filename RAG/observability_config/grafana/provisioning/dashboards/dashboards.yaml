@@ -1,0 +1,14 @@
+# Grafana Dashboards Configuration
+# Auto-loads dashboards from directory
+
+apiVersion: 1
+
+providers:
+  - name: 'AI Officer Dashboards'
+    orgId: 1
+    folder: 'AI Officer'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

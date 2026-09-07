@@ -1,0 +1,1513 @@
+openapi: 3.0.3
+info:
+  title: FirstWeek - Complete API Documentation
+  description: |
+    # FirstWeek API
+
+    Complete API documentation for the FirstWeek project including:
+    - **Auth Service** (Port 3001) - User authentication and session management
+    - **Chat Service** (Port 3002) - Real-time messaging and conversation management
+    - **RAG API** (Port 8000) - Intelligent document retrieval and LLM responses
+
+    ## Architecture
+
+    ```
+    Frontend → Auth Service (JWT) → Chat Service ⇄ RAG API
+    ```
+
+    ## Authentication
+
+    Most endpoints require JWT authentication via cookies:
+    - **Cookie**: `firstweek_avatar_access_token` (httpOnly)
+    - **Header**: `Authorization: Bearer <token>` (alternative)
+
+    ### Getting Started
+
+    1. **Register**: `POST /api/users/register`
+    2. **Login**: `POST /api/users/login` → Receives JWT tokens in cookies
+    3. **Use Protected Endpoints**: Include cookies or Authorization header
+
+    ## Service Ports
+
+    - Auth Service: `http://localhost:3001`
+    - Chat Service: `http://localhost:3002`
+    - RAG API: `http://localhost:8000`
+
+  version: 1.0.0
+  contact:
+    name: FIRSTWEEK Team
+  license:
+    name: ISC
+
+servers:
+  - url: http://localhost:3001/api/users
+    description: Auth Service (Development)
+  - url: http://localhost:3002/api/chat
+    description: Chat Service (Development)
+  - url: http://localhost:8000/api/v1
+    description: RAG API (Development)
+  - url: https://api.example.invalid
+    description: Production
+
+tags:
+  - name: Authentication
+    description: User registration, login, and session management
+  - name: User Profile
+    description: User profile and account management
+  - name: Password Management
+    description: Password reset and change functionality
+  - name: Email Verification
+    description: Email verification with OTP
+  - name: Sessions
+    description: Active session management
+  - name: Conversations
+    description: Chat conversation CRUD operations
+  - name: Messages
+    description: Message sending and retrieval
+  - name: Preferences
+    description: User preference management
+  - name: RAG Query
+    description: Document retrieval without LLM
+  - name: RAG Chat
+    description: LLM-powered chat responses
+  - name: RAG Profiles
+    description: Executive profile management
+  - name: Health
+    description: Service health checks
+
+paths:
+  # ============================================================
+  # AUTH SERVICE ENDPOINTS
+  # ============================================================
+
+  /register:
+    post:
+      tags: [Authentication]
+      summary: Register new user
+      description: |
+        Create a new user account with role assignment.
+
+        **Default Role**: EMPLOYEE
+        **Available Roles**: GUEST, EMPLOYEE, EXECUTIVE, COMPANY_ADMIN, SUPER_ADMIN
+
+        **Returns**: User profile + JWT tokens in httpOnly cookies
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, username, firstName, lastName]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: employee@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  description: Must contain uppercase, lowercase, number, and special character
+                  example: SecurePass123!
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 30
+                  pattern: ^[a-zA-Z0-9_]+$
+                  example: john_doe
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                role:
+                  type: string
+                  enum: [GUEST, EMPLOYEE, EXECUTIVE, COMPANY_ADMIN, SUPER_ADMIN]
+                  default: EMPLOYEE
+                  example: EMPLOYEE
+                profilePic:
+                  type: string
+                  format: uri
+                  nullable: true
+      responses:
+        '201':
+          description: User registered successfully
+          headers:
+            Set-Cookie:
+              description: JWT tokens (access + refresh)
+              schema:
+                type: string
+                example: firstweek_avatar_access_token=eyJ...; HttpOnly; Secure; SameSite=Strict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /login:
+    post:
+      tags: [Authentication]
+      summary: Login user
+      description: |
+        Authenticate user with email/username and password.
+
+        **Returns**: User profile + JWT tokens in httpOnly cookies
+        **Token Lifespan**:
+        - Access token: 15 minutes
+        - Refresh token: 7 days
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [identifier, password]
+              properties:
+                identifier:
+                  type: string
+                  description: Email or username
+                  example: john_doe
+                password:
+                  type: string
+                  format: password
+                  example: SecurePass123!
+                rememberMe:
+                  type: boolean
+                  default: false
+                  description: Extend refresh token to 30 days
+      responses:
+        '200':
+          description: Login successful
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /logout:
+    post:
+      tags: [Authentication]
+      summary: Logout user
+      description: Invalidate current session and clear cookies
+      operationId: logoutUser
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Logout successful
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      description: Get new access token using refresh token from cookie
+      operationId: refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Refresh token (optional if in cookie)
+      responses:
+        '200':
+          description: Token refreshed successfully
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  accessToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /me:
+    get:
+      tags: [User Profile]
+      summary: Get current user profile
+      description: Retrieve authenticated user's profile information
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: User profile retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    put:
+      tags: [User Profile]
+      summary: Update user profile
+      description: Update current user's profile information
+      operationId: updateUserProfile
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                profilePic:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /change-password:
+    put:
+      tags: [Password Management]
+      summary: Change password
+      description: Change password for authenticated user
+      operationId: changePassword
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                  format: password
+                newPassword:
+                  type: string
+                  format: password
+                  minLength: 8
+      responses:
+        '200':
+          description: Password changed successfully
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /password/forgot:
+    post:
+      tags: [Password Management]
+      summary: Request password reset
+      description: Send password reset link to user's email
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Reset email sent (always returns success for security)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    example: If the email exists, a reset link has been sent
+
+  /password/reset:
+    post:
+      tags: [Password Management]
+      summary: Reset password
+      description: Reset password using token from email
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, newPassword]
+              properties:
+                token:
+                  type: string
+                  description: Reset token from email
+                newPassword:
+                  type: string
+                  format: password
+                  minLength: 8
+      responses:
+        '200':
+          description: Password reset successful
+        '400':
+          description: Invalid or expired token
+
+  /sessions:
+    get:
+      tags: [Sessions]
+      summary: Get active sessions
+      description: List all active sessions for current user
+      operationId: getUserSessions
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Sessions retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      sessions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Session'
+
+  /sessions/{sessionId}:
+    delete:
+      tags: [Sessions]
+      summary: Revoke session
+      description: Revoke a specific session (logout from that device)
+      operationId: revokeSession
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session revoked successfully
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  # ============================================================
+  # CHAT SERVICE ENDPOINTS
+  # ============================================================
+
+  /conversations:
+    get:
+      tags: [Conversations]
+      summary: Get user's conversations
+      description: |
+        Retrieve all conversations for authenticated user.
+
+        **Pagination**: Use limit & offset query parameters
+        **Sorting**: Sorted by lastMessageAt (most recent first)
+      operationId: getConversations
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: Conversations retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      conversations:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Conversation'
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags: [Conversations]
+      summary: Create conversation
+      description: Create a new conversation thread
+      operationId: createConversation
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  maxLength: 200
+                  example: New Chat
+      responses:
+        '201':
+          description: Conversation created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/Conversation'
+
+  /conversations/{id}:
+    get:
+      tags: [Conversations]
+      summary: Get conversation
+      description: Retrieve specific conversation with messages
+      operationId: getConversation
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+      responses:
+        '200':
+          description: Conversation retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/Conversation'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    patch:
+      tags: [Conversations]
+      summary: Update conversation
+      description: Update conversation title
+      operationId: updateConversation
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  maxLength: 200
+      responses:
+        '200':
+          description: Conversation updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/Conversation'
+
+    delete:
+      tags: [Conversations]
+      summary: Delete conversation
+      description: Delete conversation and all messages (cascade)
+      operationId: deleteConversation
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+      responses:
+        '200':
+          description: Conversation deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                      conversationId:
+                        type: string
+
+  /conversations/{id}/messages:
+    get:
+      tags: [Messages]
+      summary: Get conversation messages
+      description: Retrieve messages for a conversation (paginated)
+      operationId: getMessages
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Messages retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags: [Messages]
+      summary: Send message (HTTP fallback)
+      description: |
+        Send a message and get AI response via HTTP.
+
+        **Note**: For real-time messaging, use WebSocket instead.
+        This endpoint is provided as an HTTP fallback.
+
+        **Flow**:
+        1. Save user message
+        2. Call RAG API for AI response
+        3. Save assistant message
+        4. Return both messages
+      operationId: sendMessage
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ConversationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+                  maxLength: 10000
+                  example: What is our discount policy?
+                ragOptions:
+                  type: object
+                  properties:
+                    topK:
+                      type: integer
+                      default: 5
+                    minScore:
+                      type: number
+                      format: float
+                      default: 0.6
+                    profileId:
+                      type: string
+                      example: exec_003_test
+      responses:
+        '201':
+          description: Message sent and response generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      userMessage:
+                        $ref: '#/components/schemas/Message'
+                      assistantMessage:
+                        $ref: '#/components/schemas/Message'
+                      ragMetadata:
+                        type: object
+
+  /preferences:
+    get:
+      tags: [Preferences]
+      summary: Get user preferences
+      description: Retrieve user's RAG preferences
+      operationId: getPreferences
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Preferences retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/UserPreferences'
+
+    patch:
+      tags: [Preferences]
+      summary: Update preferences
+      description: Update user's RAG preferences
+      operationId: updatePreferences
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreferences'
+      responses:
+        '200':
+          description: Preferences updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/UserPreferences'
+
+  /rag/health:
+    get:
+      tags: [Health]
+      summary: RAG API health check
+      description: Check if RAG API is reachable
+      operationId: testRAGHealth
+      responses:
+        '200':
+          description: RAG API status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/HealthResponse'
+
+  /rag/query:
+    post:
+      tags: [RAG Query]
+      summary: Query documents (no LLM)
+      description: |
+        Retrieve relevant documents without LLM generation.
+
+        **Use Case**: Document search, fact-finding
+        **Returns**: Raw retrieval results with scores
+      operationId: testRAGQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                  example: What is our discount policy?
+                topK:
+                  type: integer
+                  default: 5
+                minScore:
+                  type: number
+                  format: float
+                  default: 0.6
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAGQueryResponse'
+
+  /rag/chat:
+    post:
+      tags: [RAG Query]
+      summary: Chat with LLM
+      description: |
+        Get natural language response with RAG + LLM.
+
+        **Use Case**: Conversational AI, decision support
+        **Returns**: Natural language answer with citations
+      operationId: testRAGChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                  example: Should we approve 15% discount for large clients?
+                profileId:
+                  type: string
+                  example: exec_003_test
+                topK:
+                  type: integer
+                  default: 5
+                minScore:
+                  type: number
+                  default: 0.6
+      responses:
+        '200':
+          description: Chat response with LLM
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAGChatResponse'
+
+  /rag/profiles:
+    get:
+      tags: [RAG Profiles]
+      summary: List executive profiles
+      description: Get all available executive personas for chat
+      operationId: getRAGProfiles
+      responses:
+        '200':
+          description: Profiles list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      profiles:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            count:
+                              type: integer
+
+  # ============================================================
+  # RAG API ENDPOINTS (Python FastAPI)
+  # ============================================================
+
+  /query:
+    post:
+      tags: [RAG Query]
+      summary: RAG document retrieval
+      description: |
+        **Main RAG Query Endpoint** - Returns retrieval results without LLM generation.
+
+        ## Flow
+        1. Extract entities from query (spaCy NER)
+        2. Vector search (PostgreSQL pgvector, cosine similarity)
+        3. Optional graph context (Neo4j, 3-hop max)
+        4. RBAC filtering based on user role
+        5. Return ranked results with scores and provenance
+
+        ## Performance
+        - Average: 45-95ms
+        - Vector search: ~45ms
+        - Graph context: ~95ms (if entities found)
+
+        ## Use Cases
+        - Document search and discovery
+        - Fact-finding queries
+        - Research and analysis
+      operationId: processQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAGQueryRequest'
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAGQueryResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /chat:
+    post:
+      tags: [RAG Chat]
+      summary: RAG chat with LLM integration
+      description: |
+        **Complete RAG + LLM Pipeline** - Returns natural language response.
+
+        ## Flow
+        1. Extract entities from query
+        2. Parallel retrieval (vector + graph + memory)
+        3. Result fusion with composite scoring
+        4. Adaptive reranking
+        5. LLM generation with executive personality
+        6. Citation extraction
+
+        ## LLM Paths (Auto-routed)
+        - **Fast** (<1.5s): Simple factual queries
+        - **Standard** (<2.5s): Decision/recommendation queries
+        - **Agentic** (<5s): Complex analysis with multi-step reasoning
+
+        ## Performance
+        - Average: 2-5 seconds
+        - Retrieval: ~280ms
+        - LLM: 2-4 seconds
+
+        ## Use Cases
+        - Conversational AI chat
+        - Executive decision support
+        - Policy interpretation
+      operationId: processChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAGChatRequest'
+      responses:
+        '200':
+          description: Chat response with LLM-generated answer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAGChatResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /health:
+    get:
+      tags: [Health]
+      summary: RAG API health check
+      description: Check RAG API service status and uptime
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /profiles:
+    get:
+      tags: [RAG Profiles]
+      summary: List executive profiles
+      description: Get all available executive personas
+      operationId: listProfiles
+      responses:
+        '200':
+          description: Profiles retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  profiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: akiko_tanaka
+                        name:
+                          type: string
+                          example: Akiko Tanaka
+                        title:
+                          type: string
+                          example: CEO
+                        department:
+                          type: string
+                        expertise:
+                          type: array
+                          items:
+                            type: string
+                  count:
+                    type: integer
+
+  /profiles/{profileId}:
+    get:
+      tags: [RAG Profiles]
+      summary: Get executive profile details
+      description: Retrieve complete profile data for specific executive
+      operationId: getProfile
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: akiko_tanaka
+      responses:
+        '200':
+          description: Profile retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  profile:
+                    type: object
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token in Authorization header
+
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: firstweek_avatar_access_token
+      description: JWT access token in httpOnly cookie
+
+  parameters:
+    ConversationId:
+      name: id
+      in: path
+      required: true
+      description: Conversation ID
+      schema:
+        type: string
+        pattern: ^[a-z0-9]+$
+        example: clx123abc456
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clx123abc456
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        profilePic:
+          type: string
+          format: uri
+          nullable: true
+        role:
+          type: string
+          enum: [GUEST, EMPLOYEE, EXECUTIVE, COMPANY_ADMIN, SUPER_ADMIN]
+        emailVerified:
+          type: boolean
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        lastLoginAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    UserResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        deviceInfo:
+          type: string
+        ipAddress:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        lastActivityAt:
+          type: string
+          format: date-time
+
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        lastMessageAt:
+          type: string
+          format: date-time
+          nullable: true
+        messageCount:
+          type: integer
+        lastMessage:
+          $ref: '#/components/schemas/Message'
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        conversationId:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        metadata:
+          type: object
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    UserPreferences:
+      type: object
+      properties:
+        defaultProfileId:
+          type: string
+          example: exec_003_test
+        defaultTopK:
+          type: integer
+          default: 5
+        defaultMinScore:
+          type: number
+          format: float
+          default: 0.6
+        language:
+          type: string
+          default: en
+        theme:
+          type: string
+          default: light
+
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        hasMore:
+          type: boolean
+
+    RAGQueryRequest:
+      type: object
+      required: [query, user_id]
+      properties:
+        query:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: What decisions did Raj Patel make about technical architecture?
+        user_id:
+          type: string
+          example: exec_001_test
+        user_role:
+          type: string
+          default: employee
+          enum: [guest, employee, manager, executive]
+        top_k:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 10
+        min_score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          default: 0.4
+        session_id:
+          type: string
+          nullable: true
+
+    RAGQueryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              rank:
+                type: integer
+              id:
+                type: string
+              title:
+                type: string
+              content:
+                type: string
+              score:
+                type: number
+                format: float
+              doc_type:
+                type: string
+              scope:
+                type: string
+              source_scores:
+                type: object
+                properties:
+                  vector:
+                    type: number
+                  graph:
+                    type: number
+                    nullable: true
+              provenance:
+                type: object
+                properties:
+                  found_via:
+                    type: string
+                  entities_matched:
+                    type: array
+                    items:
+                      type: string
+              metadata:
+                type: object
+        metadata:
+          type: object
+          properties:
+            total_results:
+              type: integer
+            results_returned:
+              type: integer
+            query_length:
+              type: integer
+            filters_applied:
+              type: object
+            performance_ms:
+              type: number
+            sources_used:
+              type: array
+              items:
+                type: string
+        request_id:
+          type: string
+
+    RAGChatRequest:
+      type: object
+      required: [query, user_id]
+      properties:
+        query:
+          type: string
+          example: Should we invest in building our own data center?
+        user_id:
+          type: string
+        user_role:
+          type: string
+          default: employee
+        profile_id:
+          type: string
+          default: akiko_tanaka
+        force_path:
+          type: string
+          enum: [fast, standard, agentic]
+          nullable: true
+        session_id:
+          type: string
+          nullable: true
+        top_k:
+          type: integer
+          default: 10
+        min_score:
+          type: number
+          default: 0.4
+
+    RAGChatResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        answer:
+          type: string
+          example: Based on our current strategic priorities...
+        citations:
+          type: array
+          items:
+            type: object
+            properties:
+              source:
+                type: string
+              raw_text:
+                type: string
+              position:
+                type: integer
+              context:
+                type: string
+        sources:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+          properties:
+            total_latency_ms:
+              type: number
+            llm_latency_ms:
+              type: number
+            retrieval_latency_ms:
+              type: number
+            path:
+              type: string
+            llm_model:
+              type: string
+            llm_provider:
+              type: string
+            llm_tokens:
+              type: object
+            profile_id:
+              type: string
+            results_used:
+              type: integer
+            citation_count:
+              type: integer
+            unique_sources:
+              type: integer
+        request_id:
+          type: string
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: healthy
+        version:
+          type: string
+        services:
+          type: object
+        uptime_seconds:
+          type: number
+          nullable: true
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
+
+  responses:
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Validation failed
+              code: VALIDATION_ERROR
+
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Authentication required
+              code: UNAUTHORIZED
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Resource not found
+              code: NOT_FOUND
+
+    ConflictError:
+      description: Resource conflict (duplicate)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Email already exists
+              code: CONFLICT
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Internal server error
+              code: INTERNAL_ERROR

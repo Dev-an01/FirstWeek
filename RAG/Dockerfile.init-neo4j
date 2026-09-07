@@ -1,0 +1,34 @@
+# ============================================================================
+# Dockerfile for Neo4j Initialization Container
+# Purpose: Pre-install dependencies to avoid downloading on every restart
+# ============================================================================
+
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        dos2unix \
+        bash \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip install --no-cache-dir \
+    neo4j==6.0.3 \
+    psycopg2-binary==2.9.11 \
+    python-dotenv==1.2.1 \
+    sentence-transformers==5.2.0 \
+    scikit-learn==1.8.0 \
+    opentelemetry-api==1.39.1 \
+    opentelemetry-sdk==1.39.1 \
+    redis==7.1.0 \
+    numpy \
+    PyYAML \
+    httpx \
+    prometheus-client \
+    psutil
+
+WORKDIR /app
+
+# The actual init script will be mounted via volume
+CMD ["bash", "-c", "echo 'Neo4j init container ready'"]

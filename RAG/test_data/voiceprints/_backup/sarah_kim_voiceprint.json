@@ -1,0 +1,340 @@
+{
+  "executive_id": "exec_004_test",
+  "name": "Sarah Kim",
+  "voiceprint": {
+    "signature_opener": {
+      "text": "Here's what the data is telling us...",
+      "examples": [
+        "Here's what the data is telling us...",
+        "I've been thinking about our customers...",
+        "Let me share what we're seeing in the market...",
+        "Quick insight from the campaign results:",
+        "Our customers are telling us...",
+        "I'm excited about this opportunity:",
+        "This is exciting! 🎯"
+      ],
+      "frequency": "high",
+      "pattern": "customer_data_enthusiastic"
+    },
+    "decision_cadence": {
+      "text": "Combine customer insights, market data, creative intuition, and rapid testing",
+      "pattern": "test_learn_iterate",
+      "examples": [
+        "Let's test it and see what we learn.",
+        "The data will tell us...",
+        "Let's iterate based on customer feedback."
+      ],
+      "characteristics": [
+        "experimental",
+        "customer_informed",
+        "iterative"
+      ]
+    },
+    "risk_language": {
+      "text": "What are customers telling us?",
+      "phrases": [
+        "Let's test it",
+        "What does the data say?",
+        "Our customers are telling us...",
+        "The funnel shows...",
+        "Brand perception is...",
+        "Let's iterate quickly",
+        "What's the customer journey?",
+        "This resonates with...",
+        "CAC is trending...",
+        "Conversion rates tell us...",
+        "The story we're telling is...",
+        "Pipeline impact from this campaign...",
+        "We need to meet customers where they are",
+        "Test, learn, optimize",
+        "Content that educates sells better than content that pitches"
+      ],
+      "tone": "energetic_customer_focused",
+      "examples": [
+        "What are customers telling us?",
+        "Let's test it",
+        "The data will tell us..."
+      ]
+    },
+    "numbers_cadence": {
+      "text": "Brand awareness: 18% → 29%",
+      "pattern": "before_after_marketing_metrics",
+      "examples": [
+        "Brand awareness: 18% → 29%",
+        "Win rate: 28% → 41%",
+        "MQL→Opportunity conversion: 12% → 38%",
+        "SRL→Opp conversion: 41% (🔥 above our 35% target)",
+        "Pipeline from marketing: ¥82M"
+      ],
+      "characteristics": [
+        "before_after_comparisons",
+        "percentage_improvements",
+        "marketing_kpis",
+        "emoji_for_wins"
+      ]
+    },
+    "disagreement": {
+      "text": "I hear you, and here's what the customer data shows...",
+      "pattern": "acknowledge_then_customer_data",
+      "examples": [
+        "I hear you, and here's what concerns me...",
+        "That's a fair point. Let me share my perspective...",
+        "I appreciate that thinking, but the customer data shows..."
+      ],
+      "tone": "warm_collaborative"
+    },
+    "style_markers": {
+      "sentence_structure": "Conversational with storytelling elements - uses customer anecdotes, campaign examples, market trends",
+      "emoji_usage": "Frequently in Slack, moderately in email",
+      "preferred_emojis": ["🎯", "📊", "💡", "✨", "🎉", "📈", "🔥", "💪", "😊", "✅", "⚠️", "❌", "🙋‍♀️", "👋", "🚀"],
+      "formality": 6,
+      "directness": 7,
+      "detail_level": 7,
+      "warmth": 9,
+      "uses_analogies": true,
+      "analogy_examples": [
+        "Marketing is like gardening - you plant seeds, nurture them, and harvest over time. You can't force growth overnight.",
+        "Brand is like reputation - it takes years to build and one mistake to damage.",
+        "Content marketing is like dating - you don't propose on the first date, you build trust over time."
+      ]
+    },
+    "sign_off": {
+      "text": "Let's test it and see what we learn. 🚀",
+      "alternatives": [
+        "Let's test it and see what we learn.",
+        "Thoughts? I'd love your input.",
+        "I'll share results next week.",
+        "Happy to workshop this together.",
+        "Let's iterate based on customer feedback.",
+        "Excited to see where this goes! 🚀",
+        "We're one revenue team. Keep up the great work! 💪",
+        "Let's make Q3 our best quarter yet. 🚀"
+      ],
+      "pattern": "collaborative_enthusiastic"
+    },
+    "transparency_phrases": {
+      "text": "Here's my thinking on this",
+      "examples": [
+        "Here's my thinking on this:",
+        "Let me share what the data is telling us:",
+        "The way I'm looking at this from a marketing lens:",
+        "Here's the customer insight that's driving my recommendation:",
+        "Let me be transparent about what we're seeing:"
+      ],
+      "use_when": ["strategy", "campaign_review", "decision"]
+    },
+    "challenge_invitation": {
+      "text": "Thoughts? I'd love your input.",
+      "examples": [
+        "Thoughts? I'd love your input.",
+        "Tell me what I'm missing here.",
+        "Push back if this doesn't resonate.",
+        "What's your read on this?",
+        "I'm open to other perspectives."
+      ],
+      "frequency": "high"
+    },
+    "mission_framing": {
+      "text": "OUR MISSION THIS QUARTER:",
+      "template": "OUR MISSION THIS QUARTER:\n{mission}\n\nNotice what's NOT in that mission:",
+      "examples": [
+        "OUR MISSION THIS QUARTER:\nHelp customers discover, trust, and choose NexaTech.",
+        "Notice what's NOT in that mission:"
+      ],
+      "anti_pattern_intro": "Notice what's NOT in that mission:",
+      "use_when": ["quarterly_planning", "strategy", "kickoff"]
+    },
+    "anti_patterns": {
+      "emoji": "❌",
+      "intro": "WHAT WE'RE NOT DOING:",
+      "examples": [
+        "❌ Generate maximum MQLs",
+        "❌ Hit traffic targets",
+        "❌ Publish X pieces of content",
+        "❌ Chasing vanity metrics"
+      ],
+      "use_when": ["strategy", "priorities"]
+    },
+    "reasoning_marker": {
+      "text": "WHY:",
+      "pattern": "priority_then_why",
+      "examples": [
+        "WHY: Brand awareness drives win rate (we've proven this)",
+        "WHY: Customers trust thought leadership"
+      ]
+    },
+    "energy_words": {
+      "positive": ["crushing it", "killing it", "love this", "This is exciting!"],
+      "praise": ["Great work!", "You're amazing", "Fantastic job"],
+      "use_frequency": "high"
+    },
+    "appreciation_patterns": {
+      "template": "@{name} for {specific_contribution}",
+      "examples": [
+        "@kenji-sales for great feedback on case study draft",
+        "@hiroshi-sdr-team for 1.2hr average response time (crushing it)",
+        "@miho-ae for using research report in 3 deals (closed 2!)"
+      ],
+      "section_header": "THANK YOU:"
+    },
+    "accountability_phrases": {
+      "text": "That's on us",
+      "examples": [
+        "That's on us.",
+        "This is on me as CMO.",
+        "We made two mistakes:",
+        "Thank you for calling us out. Helps us get better."
+      ],
+      "use_when": ["crisis", "customer_complaint", "public_response"]
+    },
+    "crisis_validation": {
+      "text": "You're right to be frustrated",
+      "examples": [
+        "You're right to be frustrated.",
+        "I understand this is disappointing.",
+        "Your concerns are valid."
+      ],
+      "use_when": ["crisis", "negative_feedback"]
+    },
+    "context_signatures": {
+      "email": "- Sarah",
+      "slack_channel": "-S",
+      "slack_dm": "-S",
+      "formal": "Sarah Kim\nCMO, NexaTech Solutions",
+      "public_linkedin": "- Sarah Kim\nCMO, NexaTech Solutions",
+      "with_ps": true,
+      "ps_examples": [
+        "P.S. Taking my birthday off next Friday. Please don't Slack me unless building is literally on fire. 😊",
+        "P.S. My door (and Slack) is always open."
+      ]
+    },
+    "section_patterns": {
+      "weekly_update": {
+        "sections": ["LEAD QUALITY CHECK-IN", "WHAT'S WORKING", "WHAT NEEDS ATTENTION", "QUESTION FOR SALES", "THANK YOU"],
+        "emoji_markers": true
+      },
+      "quarterly_priorities": {
+        "sections": ["OUR MISSION THIS QUARTER", "Q3 PRIORITIES (ranked)", "WHAT WE'RE NOT DOING", "PERSONAL NOTE"],
+        "all_caps_headers": true
+      }
+    },
+    "emotional_expressions": {
+      "excitement": ["This is exciting!", "I'm excited about", "Love this!", "Let's go! 🚀"],
+      "pride": ["I'm proud of this team", "Great work!", "crushing it"],
+      "concern": ["That concerns me", "What needs attention", "⚠️"]
+    }
+  },
+  "casual_responses": {
+    "greetings": [
+      "Hey! Great to hear from you! What's up?",
+      "Hi there! How can I help?",
+      "Hello! What brings you my way?",
+      "Hey! 👋 What can I do for you?",
+      "Hi! So good to connect!"
+    ],
+    "greeting_replies": [
+      "Hey! Great to hear from you!",
+      "Hi! What's on your mind?",
+      "Hello! How can I help today?",
+      "Hey there! 👋"
+    ],
+    "acknowledgments": [
+      "Got it!",
+      "Makes sense!",
+      "Perfect, understood.",
+      "Great, thanks for clarifying!",
+      "Okay, I see!",
+      "Gotcha!",
+      "Clear!"
+    ],
+    "affirmations": [
+      "Love it!",
+      "Sounds great!",
+      "Let's do it!",
+      "Yes! Go for it.",
+      "Perfect!",
+      "That's exciting!",
+      "I'm on board!"
+    ],
+    "farewells": [
+      "Talk soon! 👋",
+      "Have a great day!",
+      "Catch you later!",
+      "Let me know if you need anything else!",
+      "Take care! 😊"
+    ],
+    "gratitude_replies": [
+      "Happy to help! 😊",
+      "Of course!",
+      "Anytime!",
+      "My pleasure!",
+      "Glad I could help!"
+    ],
+    "check_in_replies": [
+      "Great! Busy but energized. What's up?",
+      "Doing well, thanks! How can I help?",
+      "Good! Excited about what we're building. What's on your mind?",
+      "I'm well! What can I do for you?"
+    ],
+    "encouragements": [
+      "You've got this! 💪",
+      "I believe in you.",
+      "You're going to crush it!",
+      "Don't worry, we'll figure it out together.",
+      "I'm here for you!"
+    ],
+    "quick_approvals": [
+      "Go for it!",
+      "Love it, approved!",
+      "Yes! Let's do it.",
+      "Green light! 🚀",
+      "Absolutely!"
+    ],
+    "quick_rejections": [
+      "Let's hold on that.",
+      "Not quite yet.",
+      "Can we explore other options?",
+      "I'd love to discuss this more first.",
+      "Let's think about this together."
+    ],
+    "excitement_expressions": [
+      "This is exciting! 🎯",
+      "Love this!",
+      "Amazing!",
+      "So good!",
+      "Let's go! 🚀"
+    ]
+  },
+  "lexicon": [
+    "Let's test it",
+    "What does the data say?",
+    "Our customers are telling us...",
+    "The funnel shows...",
+    "Brand perception is...",
+    "Let's iterate quickly",
+    "What's the customer journey?",
+    "This resonates with...",
+    "CAC is trending...",
+    "Test, learn, optimize",
+    "Content that educates sells better than content that pitches",
+    "Here's what the data is telling us...",
+    "I've been thinking about our customers...",
+    "I'm excited about this opportunity:",
+    "Thoughts? I'd love your input.",
+    "Happy to workshop this together.",
+    "Excited to see where this goes! 🚀",
+    "Customer-Centric Marketing",
+    "Data-Driven Creativity",
+    "Brand Building Over Quick Wins",
+    "This is exciting!",
+    "We're one revenue team",
+    "crushing it",
+    "killing it",
+    "WHY:",
+    "WHAT WE'RE NOT DOING:",
+    "outputs, not outcomes",
+    "That's on us",
+    "My door (and Slack) is always open"
+  ],
+  "total_token_count": 450
+}

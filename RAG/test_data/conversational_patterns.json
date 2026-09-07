@@ -1,0 +1,145 @@
+{
+  "description": "Conversational intent detection patterns. These can be loaded dynamically and updated without code changes.",
+  "version": "1.0.0",
+  "intent_patterns": {
+    "greeting": {
+      "description": "User says hello, hi, hey",
+      "patterns": [
+        "^(hi|hey|hello|good\\s*(morning|afternoon|evening)|howdy|hiya)[\\s!.,?]*$",
+        "^(hi|hey|hello)[\\s,]+.{0,20}$",
+        "^how\\s*(are\\s*you|is\\s*it\\s*going|you\\s*doing)[\\s!?]*$",
+        "^what'?s\\s*up[\\s!?]*$",
+        "^yo[\\s!]*$",
+        "^sup[\\s!?]*$"
+      ],
+      "confidence": 0.95,
+      "skip_retrieval": true,
+      "response_category": "greetings"
+    },
+    "small_talk": {
+      "description": "Casual conversation about day, weekend, etc.",
+      "patterns": [
+        "how\\s*was\\s*your\\s*(day|weekend|week|morning)",
+        "hope\\s*(you|your)",
+        "nice\\s*to\\s*(see|hear|talk)",
+        "long\\s*time\\s*no\\s*see",
+        "how\\s*have\\s*you\\s*been"
+      ],
+      "confidence": 0.80,
+      "skip_retrieval": true,
+      "response_category": "check_in_replies"
+    },
+    "farewell": {
+      "description": "User says goodbye",
+      "patterns": [
+        "^(bye|goodbye|see\\s*you|take\\s*care|have\\s*a\\s*good|later|ciao)[\\s!.,]*$",
+        "^(thanks?|thank\\s*you)[\\s,]+(bye|goodbye|see\\s*you)[\\s!.,]*$",
+        "talk\\s*(to\\s*you\\s*)?(soon|later)"
+      ],
+      "confidence": 0.90,
+      "skip_retrieval": true,
+      "response_category": "farewells"
+    },
+    "gratitude": {
+      "description": "User says thanks",
+      "patterns": [
+        "^(thanks?|thank\\s*you|appreciate\\s*it|thx)[\\s!.,]*$",
+        "^(thanks?|thank\\s*you)\\s*(so\\s*much|very\\s*much|a\\s*lot)?[\\s!.,]*$",
+        "^ty[\\s!.,]*$",
+        "^cheers[\\s!.,]*$"
+      ],
+      "confidence": 0.90,
+      "skip_retrieval": true,
+      "response_category": "gratitude_replies"
+    },
+    "acknowledgment": {
+      "description": "User acknowledges understanding - ok, got it, understood",
+      "patterns": [
+        "^(ok|okay|k|kk)[\\s!.,]*$",
+        "^(got\\s*it|gotcha|understood|i\\s*see)[\\s!.,]*$",
+        "^(ok|okay|yeah|yes|yep)[\\s,]*(got\\s*it|understood|makes\\s*sense|i\\s*see)[\\s!.,]*$",
+        "^(makes\\s*sense|that\\s*makes\\s*sense)[\\s!.,]*$",
+        "^(ohh?|ahh?|i\\s*get\\s*it)[\\s!.,]*$",
+        "^(cool|nice|great|perfect)[\\s!.,]*$",
+        "^(alright|all\\s*right|right)[\\s!.,]*$",
+        "^(noted|copy\\s*that|roger)[\\s!.,]*$",
+        "^(fair\\s*enough|fair)[\\s!.,]*$",
+        "^(hmm|hm)[\\s!.,]*$",
+        "^interesting[\\s!.,]*$"
+      ],
+      "confidence": 0.90,
+      "skip_retrieval": true,
+      "response_category": "acknowledgments"
+    },
+    "affirmation": {
+      "description": "User agrees or confirms - yes, sure, sounds good",
+      "patterns": [
+        "^(yes|yeah|yep|yup|sure)[\\s!.,]*$",
+        "^(sounds?\\s*good|looks?\\s*good)[\\s!.,]*$",
+        "^(absolutely|definitely|of\\s*course)[\\s!.,]*$",
+        "^(will\\s*do|on\\s*it|done)[\\s!.,]*$",
+        "^(agreed|i\\s*agree)[\\s!.,]*$",
+        "^(let'?s\\s*do\\s*it|go\\s*for\\s*it)[\\s!.,]*$",
+        "^(works|works\\s*for\\s*me)[\\s!.,]*$",
+        "^(fine|fine\\s*by\\s*me)[\\s!.,]*$"
+      ],
+      "confidence": 0.90,
+      "skip_retrieval": true,
+      "response_category": "affirmations"
+    },
+    "clarification": {
+      "description": "User asks for clarification - short questions that need follow-up",
+      "patterns": [
+        "^(what|why|how|when|where|who)\\??$",
+        "^(huh|what\\s*do\\s*you\\s*mean)\\??$",
+        "^(say\\s*again|repeat\\s*that|come\\s*again)\\??$"
+      ],
+      "confidence": 0.85,
+      "skip_retrieval": true,
+      "response_category": "clarifications"
+    },
+    "apology": {
+      "description": "User apologizes - sorry, my bad",
+      "patterns": [
+        "^(sorry|apologies|my\\s*bad|pardon)[\\s!.,?]*$",
+        "^(i'?m\\s*sorry|so\\s*sorry)[\\s!.,?]*$",
+        "^(oops|whoops|my\\s*mistake)[\\s!.,?]*$"
+      ],
+      "confidence": 0.90,
+      "skip_retrieval": true,
+      "response_category": "apology_replies"
+    },
+    "pause_stop": {
+      "description": "User wants to stop or pause the conversation",
+      "patterns": [
+        "^(stop|pause|wait|hold\\s*on|one\\s*sec)[\\s!.,?]*$",
+        "^(never\\s*mind|nevermind|nvm)[\\s!.,?]*$",
+        "^(forget\\s*it|skip\\s*it|leave\\s*it)[\\s!.,?]*$",
+        "^(that'?s\\s*all|that\\s*is\\s*all)[\\s!.,?]*$",
+        "^(i'?m\\s*done|done\\s*for\\s*now)[\\s!.,?]*$"
+      ],
+      "confidence": 0.90,
+      "skip_retrieval": true,
+      "response_category": "pause_replies"
+    },
+    "negation": {
+      "description": "User says no or disagrees",
+      "patterns": [
+        "^(no|nope|nah|not\\s*really)[\\s!.,?]*$",
+        "^(i\\s*don'?t\\s*think\\s*so)[\\s!.,?]*$",
+        "^(no\\s*thanks?|not\\s*now)[\\s!.,?]*$"
+      ],
+      "confidence": 0.85,
+      "skip_retrieval": true,
+      "response_category": "negation_replies"
+    }
+  },
+  "fallback_intent": "informational",
+  "fallback_confidence": 0.50,
+  "minimum_confidence_for_skip": 0.75,
+  "usage_notes": {
+    "pattern_format": "Python regex patterns with re.IGNORECASE",
+    "response_category": "Maps to casual_responses section in voiceprint",
+    "skip_retrieval": "If true, skip RAG and use personality-only response"
+  }
+}

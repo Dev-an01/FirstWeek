@@ -1,0 +1,44 @@
+{
+    "watch": [
+      ".",
+      ".env",
+      "src/**/*",
+      "routes/**/*",
+      "middleware/**/*",
+      "controllers/**/*",
+      "services/**/*",
+      "utils/**/*",
+      "repositories/**/*",
+      "models/**/*",
+      "config/**/*",
+      "shared/**/*"
+    ],
+    "ext": "js,mjs,json,ts",
+    "ignore": [
+      "node_modules/**/*",
+      "logs/**/*",
+      "coverage/**/*",
+      ".git/**/*",
+      "dist/**/*",
+      "build/**/*",
+      "*.test.js",
+      "*.spec.js",
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".nyc_output/**/*",
+      "shared/lib/generated/**/*"
+    ],
+    "exec": "node server.js",
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "restartable": "rs",
+    "colours": true,
+    "legacyWatch": false,
+    "delay": "1000",
+    "verbose": false,
+    "signal": "SIGTERM",
+    "stdout": true,
+    "runOnChangeOnly": false
+  }
+  

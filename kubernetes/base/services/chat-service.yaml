@@ -1,0 +1,159 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-service
+  namespace: firstweek
+  labels:
+    app: chat-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3002
+      targetPort: 3002
+      protocol: TCP
+      name: http
+  selector:
+    app: chat-service
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-service
+  namespace: firstweek
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chat-service
+  template:
+    metadata:
+      labels:
+        app: chat-service
+    spec:
+      initContainers:
+      - name: wait-for-dependencies
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          until nc -z avatar-user-db 5432; do
+            echo "Waiting for avatar-user-db..."
+            sleep 2
+          done
+          until nc -z auth-service 3001; do
+            echo "Waiting for auth-service..."
+            sleep 2
+          done
+          echo "Dependencies are ready!"
+      containers:
+      - name: chat-service
+        image: gcr.io/PROJECT_ID/chat-service:latest  # REPLACE PROJECT_ID
+        ports:
+        - containerPort: 3002
+          name: http
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: NODE_ENV
+        - name: CHAT_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: CHAT_SERVICE_PORT
+        - name: SERVICE_NAME
+          value: "chat-service"
+        - name: DATABASE_URL
+          value: "postgresql://$(DB_USER):$(DB_PASSWORD)@avatar-user-db:5432/$(CHAT_DB_NAME)"
+        - name: AUTH_DATABASE_URL
+          value: "postgresql://$(DB_USER):$(DB_PASSWORD)@avatar-user-db:5432/$(DB_NAME)"
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: DB_USER
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: DB_NAME
+        - name: CHAT_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: CHAT_DB_NAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: firstweek-secrets
+              key: DB_PASSWORD
+        - name: JWT_ACCESS_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: firstweek-secrets
+              key: JWT_ACCESS_SECRET
+        - name: JWT_REFRESH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: firstweek-secrets
+              key: JWT_REFRESH_SECRET
+        - name: FRONTEND_URL
+          valueFrom:
+            secretKeyRef:
+              name: firstweek-secrets
+              key: FRONTEND_URL
+        - name: AUTH_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: AUTH_SERVICE_URL
+        - name: RAG_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: RAG_API_URL
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: LOG_LEVEL
+        - name: ENABLE_REAL_STREAMING
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: ENABLE_REAL_STREAMING
+        command:
+        - sh
+        - -c
+        - |
+          echo '[chat-service] Running database migrations...'
+          npm run db:push
+          echo '[chat-service] Starting service...'
+          node server.js
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3

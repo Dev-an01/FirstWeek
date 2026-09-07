@@ -1,0 +1,289 @@
+{
+  "metadata": {
+    "file_version": "1.0",
+    "generated_date": "2025-10-21",
+    "total_departments": 8,
+    "total_employees": 280,
+    "purpose": "NexaTech organizational structure"
+  },
+  
+  "departments": [
+    {
+      "id": "dept_executive",
+      "name": "Executive",
+      "head_id": "exec_001_test",
+      "head_name": "Akiko Tanaka (CEO)",
+      "employee_count": 4,
+      "budget_annual": 80000000,
+      "direct_reports_to_ceo": [
+        "exec_002_test",
+        "exec_003_test",
+        "exec_004_test",
+        "person_kenji_sato",
+        "person_kenji_tanaka_product",
+        "person_miho_suzuki"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_engineering",
+      "name": "Engineering",
+      "head_id": "exec_003_test",
+      "head_name": "Yuki Nakamura (CTO)",
+      "employee_count": 45,
+      "budget_annual": 450000000,
+      "sub_teams": [
+        {
+          "name": "WorkFlow Team",
+          "manager_id": "person_em_hiroshi",
+          "size": 15,
+          "focus": "WorkFlow Pro product development"
+        },
+        {
+          "name": "TeamSync Team",
+          "manager_id": "person_em_kenji",
+          "size": 15,
+          "focus": "TeamSync product development"
+        },
+        {
+          "name": "TalentHub Team",
+          "manager_id": "exec_003_test",
+          "size": 10,
+          "focus": "TalentHub product development (CTO direct)"
+        },
+        {
+          "name": "Infrastructure Team",
+          "size": 5,
+          "focus": "DevOps, cloud infrastructure, security"
+        }
+      ],
+      "tech_stack": [
+        "Backend: Python, Go, Node.js",
+        "Frontend: React, TypeScript",
+        "Infrastructure: Kubernetes, Docker, Terraform",
+        "Databases: PostgreSQL, Redis, Elasticsearch",
+        "Cloud: AWS (primary)"
+      ],
+      "utilization": "80-85%",
+      "decision_cases_mentioned": [
+        "DC_YUKI_001",
+        "DC_YUKI_002",
+        "DC_YUKI_003",
+        "DC_YUKI_004",
+        "DC_RAJ_003"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_sales",
+      "name": "Sales",
+      "head_id": "person_kenji_sato",
+      "head_name": "Kenji Sato (VP Sales)",
+      "employee_count": 15,
+      "budget_annual": 180000000,
+      "sub_teams": [
+        {
+          "name": "Enterprise Sales",
+          "size": 8,
+          "focus": "Enterprise accounts (>500 employees)",
+          "quota_per_ae": 8000000
+        },
+        {
+          "name": "Mid-Market Sales",
+          "size": 7,
+          "focus": "Mid-market accounts (100-500 employees)",
+          "quota_per_ae": 6000000
+        }
+      ],
+      "performance_metrics": {
+        "average_quota_attainment": "85%",
+        "top_25_percent_attainment": "120%",
+        "bottom_25_percent_attainment": "60%",
+        "average_sales_cycle": "4.2 months (enterprise), 2.5 months (mid-market)"
+      },
+      "decision_cases_mentioned": [
+        "DC_AKIKO_001",
+        "DC_RAJ_001",
+        "DC_RAJ_002",
+        "DC_SARAH_003"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_marketing",
+      "name": "Marketing",
+      "head_id": "exec_004_test",
+      "head_name": "Sarah Kim (CMO)",
+      "employee_count": 22,
+      "budget_annual": 120000000,
+      "sub_teams": [
+        {
+          "name": "Demand Generation",
+          "size": 6,
+          "focus": "Lead generation, paid ads, ABM"
+        },
+        {
+          "name": "Brand & Content",
+          "size": 8,
+          "focus": "Content marketing, PR, thought leadership, research"
+        },
+        {
+          "name": "Product Marketing",
+          "size": 4,
+          "focus": "Positioning, launches, competitive intelligence"
+        },
+        {
+          "name": "Marketing Operations",
+          "size": 4,
+          "focus": "Marketing tech, analytics, attribution"
+        }
+      ],
+      "budget_allocation": {
+        "demand_generation": "70% (¥84M)",
+        "brand_building": "30% (¥36M)"
+      },
+      "decision_cases_mentioned": [
+        "DC_SARAH_001",
+        "DC_SARAH_002",
+        "DC_SARAH_003",
+        "DC_SARAH_004",
+        "DC_SARAH_005"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_customer_success",
+      "name": "Customer Success",
+      "head_id": "person_miho_suzuki",
+      "head_name": "Miho Suzuki (VP Customer Success)",
+      "employee_count": 18,
+      "budget_annual": 85000000,
+      "sub_teams": [
+        {
+          "name": "Enterprise CSM",
+          "size": 8,
+          "focus": "Strategic accounts",
+          "accounts_per_csm": "8-10"
+        },
+        {
+          "name": "Mid-Market CSM",
+          "size": 6,
+          "focus": "Mid-market accounts",
+          "accounts_per_csm": "20-25"
+        },
+        {
+          "name": "Support",
+          "size": 4,
+          "focus": "Tier 1-2 support, using Intercom"
+        }
+      ],
+      "metrics": {
+        "overall_nps": 70,
+        "gross_retention": "92%",
+        "net_retention": "112%",
+        "average_csat": 78
+      },
+      "decision_cases_mentioned": [
+        "DC_AKIKO_001",
+        "DC_AKIKO_005",
+        "DC_YUKI_002"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_product",
+      "name": "Product",
+      "head_id": "person_kenji_tanaka_product",
+      "head_name": "Kenji Tanaka (VP Product)",
+      "employee_count": 22,
+      "budget_annual": 95000000,
+      "sub_teams": [
+        {
+          "name": "Product Managers",
+          "size": 8,
+          "focus": "Product strategy, roadmap, feature definition"
+        },
+        {
+          "name": "Product Design",
+          "size": 10,
+          "focus": "UX/UI design, user research"
+        },
+        {
+          "name": "Product Operations",
+          "size": 4,
+          "focus": "Analytics, user research, A/B testing"
+        }
+      ],
+      "decision_cases_mentioned": [
+        "DC_AKIKO_002",
+        "DC_YUKI_004"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_finance",
+      "name": "Finance & Operations",
+      "head_id": "exec_002_test",
+      "head_name": "Raj Patel (CFO)",
+      "employee_count": 12,
+      "budget_annual": 55000000,
+      "sub_teams": [
+        {
+          "name": "Financial Planning & Analysis",
+          "size": 4,
+          "focus": "Budgeting, forecasting, board reporting"
+        },
+        {
+          "name": "Accounting",
+          "size": 5,
+          "focus": "Bookkeeping, financial close, compliance"
+        },
+        {
+          "name": "Finance Operations",
+          "size": 3,
+          "focus": "Collections, invoicing, vendor management"
+        }
+      ],
+      "decision_cases_mentioned": [
+        "DC_RAJ_001",
+        "DC_RAJ_002",
+        "DC_RAJ_003",
+        "DC_RAJ_004",
+        "DC_RAJ_005"
+      ],
+      "confidentiality": "internal"
+    },
+    {
+      "id": "dept_people_ops",
+      "name": "People Operations (HR)",
+      "head_id": "head_of_people",
+      "head_name": "Head of People",
+      "employee_count": 8,
+      "budget_annual": 42000000,
+      "focus": [
+        "Recruiting and hiring",
+        "Employee experience",
+        "Performance management",
+        "Learning and development",
+        "Compensation and benefits"
+      ],
+      "metrics": {
+        "annual_attrition": "8% (down from 12%)",
+        "time_to_hire": "45 days average",
+        "employee_satisfaction": "8.2/10"
+      },
+      "decision_cases_mentioned": [
+        "DC_AKIKO_003"
+      ],
+      "confidentiality": "internal"
+    }
+  ],
+  
+  "company_totals": {
+    "total_employees": 280,
+    "total_annual_budget": 1107000000,
+    "revenue_per_employee": 15000000,
+    "growth_rate_yoy": "24%",
+    "headcount_growth_plan": "+20% in 2025 (to 336 employees)"
+  }
+}

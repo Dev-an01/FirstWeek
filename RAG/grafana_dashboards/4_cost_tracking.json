@@ -1,0 +1,288 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "id": null,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(ai_officer_llm_cost_usd_total)",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Cost",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 20
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value"
+      },
+      "targets": [
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total[6h]) * 24",
+          "refId": "A"
+        }
+      ],
+      "title": "Daily Projection",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total[24h]) * 30",
+          "refId": "A"
+        }
+      ],
+      "title": "Monthly Projection",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 4,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total[1h]) / rate(ai_officer_llm_requests_total[1h])",
+          "refId": "A"
+        }
+      ],
+      "title": "Cost/Query",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "targets": [
+        {
+          "expr": "increase(ai_officer_llm_cost_usd_total[1h])",
+          "legendFormat": "Hourly Cost",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total[5m]) * 3600",
+          "legendFormat": "Current Rate",
+          "refId": "B"
+        }
+      ],
+      "title": "Cost Trend",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "pieType": "pie"
+      },
+      "targets": [
+        {
+          "expr": "sum by (path) (ai_officer_llm_cost_usd_total)",
+          "refId": "A"
+        }
+      ],
+      "title": "Cost by Path",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 7,
+      "options": {
+        "pieType": "donut"
+      },
+      "targets": [
+        {
+          "expr": "sum by (model) (ai_officer_llm_cost_usd_total)",
+          "refId": "A"
+        }
+      ],
+      "title": "Cost by Model",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "id": 8,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total{path=\"fast\"}[5m]) / rate(ai_officer_llm_requests_total{path=\"fast\"}[5m])",
+          "legendFormat": "Fast",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total{path=\"standard\"}[5m]) / rate(ai_officer_llm_requests_total{path=\"standard\"}[5m])",
+          "legendFormat": "Standard",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(ai_officer_llm_cost_usd_total{path=\"agentic\"}[5m]) / rate(ai_officer_llm_requests_total{path=\"agentic\"}[5m])",
+          "legendFormat": "Agentic",
+          "refId": "C"
+        }
+      ],
+      "title": "Cost per Query by Path",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 9,
+      "targets": [
+        {
+          "expr": "rate(ai_officer_llm_tokens_used_total[5m]) / rate(ai_officer_llm_requests_total[5m])",
+          "legendFormat": "Tokens/Query",
+          "refId": "A"
+        }
+      ],
+      "title": "Token Efficiency",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": [
+    "ai-officer",
+    "cost"
+  ],
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "title": "AI Officer - Cost Tracking",
+  "uid": "ai-officer-cost",
+  "version": 0
+}

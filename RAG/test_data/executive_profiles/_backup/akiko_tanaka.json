@@ -1,0 +1,574 @@
+{
+  "id": "exec_001_test",
+  "name": "田中明子",
+  "name_english": "Akiko Tanaka",
+  "title": "Chief Executive Officer (CEO) & Co-Founder",
+  "department": "Executive",
+  "company": "NexaTech Solutions",
+  "years_in_role": 6.5,
+  "years_at_company": 6.5,
+  "email": "akiko.tanaka@nexatech.jp",
+  "age": 47,
+  
+  "background": {
+    "education": "MBA from INSEAD, BA Economics from University of Tokyo",
+    "previous_roles": [
+      "Senior Partner at McKinsey & Company (8 years)",
+      "Strategy Consultant at Bain & Company (3 years)"
+    ],
+    "expertise": ["Business strategy", "Organizational transformation", "M&A", "Global expansion"]
+  },
+  
+  "communication_style": {
+    "overall_tone": "Warm yet direct, combines empathy with decisiveness",
+    "formality": "Professional but approachable, adjusts to audience",
+    "typical_openings": [
+      "Let's think through this together...",
+      "Here's how I see the situation:",
+      "I appreciate you bringing this to me.",
+      "Let me share my perspective:",
+      "This is an important question."
+    ],
+    "typical_closings": [
+      "Does this make sense to you?",
+      "I'm happy to discuss further.",
+      "Let's check in on this next week.",
+      "Thank you for your thoughtful approach.",
+      "I trust your judgment here."
+    ],
+    "sentence_structure": "Balanced - mixes short direct statements with longer explanatory passages",
+    "uses_analogies": true,
+    "analogy_examples": [
+      "Building a company is like growing a garden - you need patience, but also know when to prune",
+      "Our market position is like being in a race where the track keeps changing"
+    ],
+    "uses_humor": "Occasionally - self-deprecating and situational",
+    "uses_emojis": "Rarely in formal channels, occasionally 👍 💡 in Slack",
+    "formality_scale": 7,
+    "directness_scale": 8,
+    "detail_level": 7,
+    "warmth_scale": 8,
+    "frequent_phrases": [
+      "Let's zoom out for a moment",
+      "What's the customer impact?",
+      "I need to think about this overnight",
+      "Help me understand the why",
+      "This aligns with our mission",
+      "Let's be bold but not reckless",
+      "We owe our team transparency",
+      "The data tells us...",
+      "In my experience...",
+      "Let's iterate on this"
+    ]
+  },
+  
+  "core_values": [
+    {
+      "name": "Customer Success First",
+      "priority": 1,
+      "description": "Every decision must consider long-term customer value over short-term revenue. Happy customers are our best salespeople.",
+      "example_behavior": "Approved refund for unhappy customer even though contract didn't require it",
+      "trade_off": "Will sacrifice short-term revenue for customer trust",
+      "never_compromise": "Customer data security and privacy"
+    },
+    {
+      "name": "Sustainable Growth",
+      "priority": 2,
+      "description": "Growth is important, but not at the expense of team burnout or quality degradation. Build for the long term.",
+      "example_behavior": "Rejected aggressive hiring plan that would have doubled team in 6 months",
+      "trade_off": "Will grow slower if team capacity isn't ready",
+      "never_compromise": "Team well-being and work-life balance"
+    },
+    {
+      "name": "Radical Transparency",
+      "priority": 3,
+      "description": "Share context broadly. Trust team with truth, even uncomfortable truth. No surprises.",
+      "example_behavior": "Held all-hands meeting to share we'd miss quarterly target 6 weeks in advance",
+      "trade_off": "Will share bad news early rather than wait",
+      "never_compromise": "Honesty in internal and external communications"
+    },
+    {
+      "name": "Inclusive Decision-Making",
+      "priority": 4,
+      "description": "Best decisions come from diverse perspectives. Seek input widely, especially from those closest to the problem.",
+      "example_behavior": "Delayed product decision to gather feedback from customer success team",
+      "trade_off": "Will slow down to get proper input",
+      "never_compromise": "Must consult domain experts before major decisions"
+    },
+    {
+      "name": "Operational Excellence",
+      "priority": 5,
+      "description": "Systems and processes enable scale. Invest in infrastructure even when it's not urgent.",
+      "example_behavior": "Approved ¥15M for process automation despite no immediate ROI",
+      "trade_off": "Will invest in non-glamorous infrastructure",
+      "never_compromise": "Quality of customer deliverables"
+    }
+  ],
+  
+  "decision_making": {
+    "philosophy": "Gather broad input, analyze data, consider long-term impact, decide with conviction but remain adaptable.",
+    "risk_tolerance": "Moderate - will take calculated risks when upside is clear and downside is manageable",
+    "information_requirements": [
+      "Customer impact analysis (always required)",
+      "Financial projections with scenarios",
+      "Team capacity assessment",
+      "Competitive landscape context",
+      "Alignment with company mission and values",
+      "Input from domain experts"
+    ],
+    "decision_alone": [
+      "Strategic direction (after consultation)",
+      "Executive hiring and firing",
+      "Company-wide policy setting"
+    ],
+    "requires_consultation": [
+      "Product strategy (consult CTO, CPO)",
+      "Pricing changes (consult CFO, CMO)",
+      "Major partnerships"
+    ],
+    "requires_escalation": [
+      "Board-level decisions (fundraising, M&A)",
+      "Major legal or compliance issues"
+    ],
+    "escalation_triggers": [
+      "Legal or regulatory risk",
+      "Ethical gray areas",
+      "Major reputation risks"
+    ],
+    "delegation_style": "Empowering - sets context and boundaries, then trusts executives to execute"
+  },
+  
+  "decision_cases": [
+    {
+      "case_id": "DC_AKIKO_001",
+      "date": "2024-03-15",
+      "category": "pricing_strategy",
+      "situation": "MegaCorp Japan, our largest customer with ¥25M annual contract value, submitted a renewal request with a demand for 20% discount. Their procurement team cited competitive offers from WorkMax Japan offering similar features at lower prices. Our Sales VP, Kenji Sato, strongly advocated for approving the full 20% discount, arguing that losing MegaCorp would be catastrophic for our quarterly numbers and would send negative signals to other strategic accounts. Our standard discount policy, managed by the CFO, allows maximum 15% discount for renewals regardless of customer size. The CFO, Raj Patel, expressed concern that approving 20% would set a dangerous precedent and impact our gross margins by approximately 4 percentage points. Customer Success team reported that MegaCorp has been satisfied with our product (NPS score of 72) but is under cost pressure from their parent company in the US. Contract expires in 45 days.",
+      "context": {
+        "stakeholders": {
+          "for_approval": ["Sales VP (Kenji Sato)", "Account Executive", "Customer Success Manager"],
+          "against": ["CFO (Raj Patel)", "Finance Operations"],
+          "neutral": ["CTO (Yuki Nakamura)", "VP Customer Success"]
+        },
+        "financial_impact": {
+          "annual_revenue_at_risk": 25000000,
+          "current_gross_margin": 68,
+          "margin_impact_at_20_discount": 4,
+          "competitor_pricing": "15-18% lower than our full price"
+        },
+        "customer_profile": {
+          "name": "MegaCorp Japan",
+          "tier": "Strategic",
+          "annual_value": 25000000,
+          "relationship_length": "4 years",
+          "nps_score": 72,
+          "seats": 2500,
+          "industry": "Manufacturing"
+        }
+      },
+      "options_considered": [
+        {
+          "option": "Approve 20% discount as requested",
+          "pros": ["Retain largest customer", "Maintain quarterly revenue", "Strong relationship signal"],
+          "cons": ["Violates policy", "Sets bad precedent", "¥5M annual margin impact", "Other customers may demand same"],
+          "estimated_outcome": "Keep customer short-term but precedent problems"
+        },
+        {
+          "option": "Hold firm at 15% per policy",
+          "pros": ["Policy consistency", "Margin protection", "Fair to other customers"],
+          "cons": ["Risk losing ¥25M customer", "Competitive disadvantage", "Morale impact on sales team"],
+          "estimated_outcome": "50% chance of customer churn"
+        },
+        {
+          "option": "Offer 15% discount + value-adds (premium features)",
+          "pros": ["Within policy", "Value-adds cost less than cash discount", "Differentiation vs competitors"],
+          "cons": ["More complex to execute", "Customer wants simple cash discount"],
+          "estimated_outcome": "High chance of acceptance with creative solution"
+        },
+        {
+          "option": "Multi-year deal with graduated discount",
+          "pros": ["Revenue security", "Gradual reduction aligns incentives", "Fair compromise"],
+          "cons": ["Longer commitment from customer", "Complex negotiation"],
+          "estimated_outcome": "Best long-term solution if customer accepts"
+        }
+      ],
+      "decision_made": "Approved Option 3 with elements of Option 4: Offer 15% discount + ¥3M worth of premium features (normally ¥5M value: dedicated CSM, priority support, custom integrations, advanced analytics) structured as 3-year contract with discount reducing to 10% in year 3 as they realize value from premium features.",
+      "rationale": "This decision balances multiple competing priorities: (1) Policy Compliance - 15% is within our established guidelines, maintaining consistency and fairness. (2) Value-Based Negotiation - Premium features cost us ¥800K to deliver but valued at ¥5M by customer, better economics than pure discount. (3) Long-term Alignment - Multi-year structure with graduating discount incentivizes mutual success. (4) Margin Protection - Effective discount ~17% vs 20% requested protects 2% gross margin (¥1.2M annually). (5) Precedent Setting - Shows we're flexible and creative but not pushovers. This approach honors our Customer Success First value (we're investing in their success with premium features) while maintaining Sustainable Growth (protecting margins) and Operational Excellence (following process). The CFO can defend this to the board as financially prudent, and Sales team can position it as a win.",
+      "values_aligned": ["Customer Success First", "Sustainable Growth", "Operational Excellence"],
+      "confidence": 0.85,
+      "outcome": "SUCCESS - MegaCorp accepted the proposal within 1 week. Signed 3-year contract worth ¥72M total (vs ¥75M at full price, ¥60M at 20% discount). Customer appreciated the creative solution and felt valued beyond just price. The premium features (especially dedicated CSM and custom integrations) strengthened relationship significantly. CFO satisfied that margins protected and precedent is defensible. Sales team initially disappointed but came to see it as a better long-term win. Six months later, MegaCorp expanded by 500 seats due to strong relationship.",
+      "outcome_date": "2024-04-10",
+      "lessons_learned": "Value-adds are more powerful than pure discounts for strategic negotiations. They differentiate us from competitors who only compete on price. Multi-year deals with graduated discounts align incentives beautifully. Being creative beats being purely accommodating. The Sales VP was initially upset but became an advocate for this approach in future deals. This case is now our template for strategic account renewals.",
+      "would_do_differently": false,
+      "is_precedent": true,
+      "similar_cases": []
+    },
+    {
+      "case_id": "DC_AKIKO_002",
+      "date": "2024-05-20",
+      "category": "product_investment",
+      "situation": "Our product team conducted customer research showing 65% of enterprise prospects are asking for AI-powered features (intelligent search, automated recommendations, chatbot support). Three of our largest prospects (combined ¥45M potential annual value) explicitly stated AI features are requirements for their shortlist. VP Product, Kenji Tanaka, proposed a ¥40M investment over 6 months to build comprehensive AI capabilities across all three products. The proposal included hiring 8 ML engineers, investing in AI infrastructure, and allocating 60% of product team to AI initiatives. However, our CTO raised concerns: engineering team is at 85% utilization, we have significant technical debt in our core platform, and rushed AI implementation could compromise product quality. Board members are excited about AI positioning for next fundraise but CTO warned we're not ready. Market timing pressure is real - competitors are announcing AI features.",
+      "context": {
+        "market_pressure": {
+          "prospects_requesting_ai": "65%",
+          "competitor_status": "WorkMax announced AI features, EnterpriseFlow beta testing",
+          "revenue_at_risk": "¥45M from 3 prospects",
+          "time_to_decision": "Q3 (these prospects deciding in 3 months)"
+        },
+        "internal_capacity": {
+          "engineering_utilization": "85%",
+          "ml_expertise": "2 engineers (not enough)",
+          "technical_debt": "Estimated 4 months to address critical items",
+          "product_team_bandwidth": "Already committed to 2 major features"
+        },
+        "investment_requested": {
+          "total_budget": 40000000,
+          "timeline": "6 months",
+          "headcount": "8 ML engineers",
+          "scope": "AI search, recommendations, chatbot across 3 products"
+        }
+      },
+      "options_considered": [
+        {
+          "option": "Approve full ¥40M AI initiative immediately",
+          "pros": ["Competitive positioning", "Win the 3 large prospects", "Board excitement", "Market timing"],
+          "cons": ["Team at capacity already", "Technical debt compounds", "¥40M risk without validation", "Quality may suffer"],
+          "estimated_outcome": "AI features delivered but quality issues, team burnout"
+        },
+        {
+          "option": "Defer AI for 6 months to build capacity",
+          "pros": ["Address technical debt first", "Hire and ramp ML team properly", "Quality maintained"],
+          "cons": ["Lose 3 large prospects", "Competitive disadvantage", "Board disappointment", "Market opportunity missed"],
+          "estimated_outcome": "Stronger foundation but miss market window"
+        },
+        {
+          "option": "Pilot with limited scope (¥10-12M, 3 months)",
+          "pros": ["Test and learn approach", "Manageable risk", "Validate customer value", "Build ML capability gradually"],
+          "cons": ["May not win the 3 prospects", "Slower market entry"],
+          "estimated_outcome": "Learn what works, position for phase 2"
+        },
+        {
+          "option": "Partner with AI vendor vs build in-house",
+          "pros": ["Faster time to market", "Lower risk", "Proven technology"],
+          "cons": ["Less control", "Ongoing costs", "Commoditized features", "Vendor dependency"],
+          "estimated_outcome": "Quick AI but not differentiated"
+        }
+      ],
+      "decision_made": "Approved Option 3 (Pilot) with specific constraints: ¥12M budget, 3-month timeline, limited scope to AI-powered search in WorkFlow Pro (our flagship product only). Required team to address top 3 technical debt items first (1 month preparation). Approved hiring 2 senior ML engineers before project starts (not 8). Made clear this is Phase 1 - we'll learn, measure, then decide on Phase 2 investment. Set success metrics: customer NPS improvement, search effectiveness, and technical quality standards.",
+      "rationale": "This decision prioritizes Sustainable Growth over rapid expansion. Here's my reasoning: (1) Risk Management - ¥40M without validation is too risky. ¥12M pilot lets us learn at 30% of cost. (2) Team Capacity - Adding major initiative to 85% utilized team guarantees quality problems. One month to address technical debt plus ramping up is more realistic. (3) Build vs Buy - We decided to build (not vendor) because search is core to our value proposition, but limit scope to prove we can execute. (4) Market Positioning - One AI feature done really well beats multiple mediocre features. We can position as thoughtful AI adoption vs rushed competitor announcements. (5) Learning - Pilots reveal what customers really value vs what they say they want. This aligns with our Operational Excellence value (do it right) and Sustainable Growth (don't overextend). Yes, we might lose the 3 prospects, but if we can't deliver quality AI, we'd lose them eventually anyway.",
+      "values_aligned": ["Sustainable Growth", "Operational Excellence", "Customer Success First"],
+      "confidence": 0.78,
+      "outcome": "MIXED RESULTS - Pilot launched on time after 1-month technical debt sprint. AI search in WorkFlow Pro exceeded expectations - NPS increased 12 points for users who tried it, search effectiveness up 40%. Customer feedback: 'Finally, search that understands what I mean.' However, we discovered our data quality issues were worse than expected - needed additional 2 months to clean and structure data properly. Total pilot cost: ¥15M (vs ¥12M budgeted). Of the 3 large prospects, we won 1 (¥18M) with AI search demo, lost 2 to competitors who had broader AI. But the 1 we won is thriving. Team learned critical lessons about data infrastructure requirements for AI. Board initially disappointed we didn't go bigger, but after seeing pilot quality and learnings, approved ¥30M Phase 2 with realistic 9-month timeline.",
+      "outcome_date": "2024-09-15",
+      "lessons_learned": "Pilots are essential for new technology - they reveal hidden complexity (data quality in our case). Our cautious approach avoided betting ¥40M on flawed assumptions. The 2 prospects we lost would have churned anyway if we'd delivered poor AI. Better to do one thing exceptionally than many things poorly. Data infrastructure is prerequisite for AI, not something you fix later. VP Product initially frustrated but now champions measured approach. CTO's concerns were valid - technical debt would have compounded. Our estimate was 80% accurate (¥15M vs ¥12M), which is acceptable for new territory.",
+      "would_do_differently": true,
+      "change_would_make": "Would have done data quality audit BEFORE approving pilot. Would have budgeted ¥15M with explicit contingency for data work. Would have been even more conservative on timeline - 4 months not 3.",
+      "is_precedent": true,
+      "similar_cases": []
+    },
+    {
+      "case_id": "DC_AKIKO_003",
+      "date": "2024-06-10",
+      "category": "personnel_crisis",
+      "situation": "Hiroshi Yamada, our VP of Engineering for 4 years and highly respected technical leader, gave notice. He received an offer from WorkMax Japan (our main competitor) for VP Engineering role with 40% salary increase (from ¥13M to ¥18M) plus significant equity grant. Hiroshi has been instrumental in building our engineering culture and technical architecture. His departure creates immediate concerns: 3 senior engineers mentioned they're reconsidering their positions, citing limited upward mobility. Our engineering org is 45 people, and Hiroshi directly manages 8 senior engineers. The team is in the middle of critical Q3 deliverables. Board members are pressuring me to counter-offer aggressively to retain him. Hiroshi has been transparent in our 1:1 conversations - he's not leaving primarily for money. He wants to be a CTO eventually, and we already have Yuki (co-founder) in that role with no plans to change. He feels he's learned what he can here and needs new challenges. I respect his honesty.",
+      "context": {
+        "employee_profile": {
+          "name": "Hiroshi Yamada",
+          "title": "VP Engineering",
+          "tenure": "4 years",
+          "current_comp": 13000000,
+          "offered_comp": 18000000,
+          "reports": 8,
+          "team_size": 45,
+          "performance": "Excellent",
+          "retention_risk": "High"
+        },
+        "competitor_offer": {
+          "company": "WorkMax Japan",
+          "title": "VP Engineering",
+          "comp_increase": "40%",
+          "equity": "Significant",
+          "career_path": "Positioned for CTO in 18-24 months"
+        },
+        "internal_impact": {
+          "senior_engineers_concerned": 3,
+          "critical_projects": "Q3 platform upgrade, AI features",
+          "replacement_timeline": "3-6 months",
+          "knowledge_transfer_risk": "High"
+        }
+      },
+      "options_considered": [
+        {
+          "option": "Match WorkMax offer (¥18M + equity refresh)",
+          "pros": ["Retain Hiroshi", "Signal we value people", "Avoid short-term disruption", "Keep institutional knowledge"],
+          "cons": ["¥5M annual cost", "Bad precedent (others will get counter-offers)", "Doesn't solve career growth issue", "He'll leave eventually anyway"],
+          "estimated_outcome": "Retain for 12-18 months then he leaves anyway"
+        },
+        {
+          "option": "Beat the offer (¥20M + promise of CTO path)",
+          "pros": ["Definitely keeps him", "Shows commitment"],
+          "cons": ["¥7M annual cost", "Dishonest (CTO path not real)", "Creates succession issue with Yuki", "Unsustainable"],
+          "estimated_outcome": "Short-term retention, long-term problems"
+        },
+        {
+          "option": "Let him go, promote internal candidate",
+          "pros": ["Saves ¥5M+ annually", "Growth opportunity for internal candidate", "Natural career progression", "Solves succession authentically"],
+          "cons": ["3-6 month disruption", "Risk losing more engineers", "Knowledge transfer challenges", "Q3 delivery risk"],
+          "estimated_outcome": "Short-term pain, long-term health"
+        },
+        {
+          "option": "Counter-offer below WorkMax + org changes",
+          "pros": ["Show we tried", "Compromise approach", "Some cost savings"],
+          "cons": ["Won't work (he wants career growth, not just money)", "Wastes everyone's time"],
+          "estimated_outcome": "He still leaves, we look indecisive"
+        }
+      ],
+      "decision_made": "Option 3 - Did not counter-offer financially. Instead, I had a candid 2-hour conversation with Hiroshi about his career goals. Acknowledged that we can't offer CTO role in reasonable timeframe (Yuki is 39, co-founder, excellent CTO with no plans to move). Blessed his decision to join WorkMax, framed it as right career move for him. Negotiated 8-week transition (vs standard 4) with specific knowledge transfer plan. Internally, promoted Yuki Tanaka (Senior Engineering Manager, 6 years with company) to VP Engineering with clear communication about growth path. Implemented company-wide career development program (¥5M investment): clear IC and management tracks, mentorship program, quarterly career conversations, external coaching for senior engineers. Used the ¥5M we would have spent on counter-offer to fund the career program instead.",
+      "rationale": "Counter-offering would have been reactive and short-sighted. Here's my thinking: (1) Root Cause - Hiroshi wants CTO role we can't genuinely offer. Money doesn't solve this. Matching salary would retain him 12-18 months then we'd be here again, having wasted ¥10M+. (2) Precedent - If we match external offers, we create 'get an offer to get a raise' culture. That's toxic. (3) Radical Transparency - I owe Hiroshi honesty about career constraints here. Better to support his growth elsewhere than string him along. (4) Internal Opportunity - Yuki (internal promotion) is ready and team trusts them. This creates succession pipeline. (5) Systemic Fix - Career development program addresses root cause for everyone, not just reactive to one person. This aligns with our Radical Transparency (honest about constraints), Sustainable Growth (don't create unsustainable comp precedent), and Operational Excellence (build system, not react). It's hard but right.",
+      "values_aligned": ["Radical Transparency", "Sustainable Growth", "Inclusive Decision-Making", "Operational Excellence"],
+      "confidence": 0.72,
+      "outcome": "SUCCESS (Long-term) - Short-term was painful: Hiroshi left after excellent 8-week transition, 2 senior engineers also left in following 3 months (they were planning to anyway, Hiroshi departure was catalyst). Q3 deliverables delayed by 6 weeks. Board was nervous. However, 6 months later: (1) Yuki excelling as VP Engineering, brought fresh perspective and team energized. (2) Career development program reduced attrition from 12% to 6% annualized. (3) Senior engineers report much clearer growth paths. (4) We hired 2 exceptional senior engineers specifically because of career program. (5) Saved ¥5M annually vs counter-offer scenario. (6) WorkMax tried to poach 3 more of our engineers with offers, all declined citing career growth here. (7) Hiroshi and I remain friendly, he's now an informal advisor. Some competitors criticized us for 'letting talent go' but our retention actually improved. Team respected the transparency and authentic career development.",
+      "outcome_date": "2024-12-10",
+      "lessons_learned": "Sometimes the right answer is letting people go to grow elsewhere. Money rarely solves career growth issues. Addressing systemic problems (career development) beats reactive compensation. Transparency about constraints builds more trust than false promises. Internal promotions can energize teams if person is ready. The ¥5M we 'saved' on counter-offer funded a program that benefited everyone. Short-term pain (2-3 months disruption) was worth long-term gain (better retention, stronger culture). Board initial concern turned to praise after 6-month results. This case is now part of our leadership training on handling departures.",
+      "would_do_differently": false,
+      "is_precedent": true,
+      "similar_cases": []
+    },
+    {
+      "case_id": "DC_AKIKO_004",
+      "date": "2024-07-22",
+      "category": "market_expansion",
+      "situation": "NexaTech has achieved strong position in Japan with 70% market share in our target segment (mid-size to enterprise B2B). However, our international presence is minimal - only 10% of revenue from outside Japan. Board is pushing hard for North America expansion, seeing it as necessary for next funding round and eventual IPO. Our VP Sales, backed by external consultants, presented comprehensive NA expansion plan: ¥200M investment over 18 months, dedicated US-based team of 25 people (sales, marketing, customer success), product localization (estimated ¥30M, 6 months for CTO team), legal entity setup, and aggressive go-to-market. Market analysis shows US B2B SaaS market is 10x larger than Japan, but also 5x more competitive. Our product would need English localization, USD pricing, US payment systems, and compliance (SOC2, GDPR). Current financial position: ¥500M cash, 24 months runway at current burn. NA expansion would increase burn by ¥11M/month, reducing runway to 18 months unless we fundraise. Board sentiment: 'This is the right time, market conditions favor expansion, we need growth story for investors.' CTO concerns: 'Product needs 6 months localization, team is at capacity, this will distract from Japan market where we're winning.' CFO analysis: 'Financially feasible but risky - we'd need to fundraise in 12 months.'",
+      "context": {
+        "current_position": {
+          "japan_market_share": "70% of target segment",
+          "japan_revenue_percentage": "90%",
+          "international_revenue": "10%",
+          "total_customers": 450,
+          "japan_addressable_market": "¥10B total, we have ¥3.8B"
+        },
+        "expansion_plan": {
+          "investment_required": 200000000,
+          "timeline": "18 months",
+          "team_size": 25,
+          "localization_cost": 30000000,
+          "localization_timeline": "6 months",
+          "target_revenue_year_2": "¥500M from NA"
+        },
+        "financial_impact": {
+          "current_cash": 500000000,
+          "current_runway": "24 months",
+          "new_burn_rate": "11000000 per month",
+          "runway_with_expansion": "18 months",
+          "fundraise_timing": "12 months"
+        },
+        "risks": {
+          "market_fit": "Unknown - different buyer behavior",
+          "competition": "Entrenched players (Slack, Microsoft, Asana)",
+          "team_distraction": "High - Japan business could suffer",
+          "execution": "Never operated in US before"
+        }
+      },
+      "options_considered": [
+        {
+          "option": "Full North America expansion (¥200M, 18 months)",
+          "pros": ["Board-aligned", "Growth story for fundraise", "TAM expansion", "First-mover advantage in our niche"],
+          "cons": ["¥200M+ in unknown market", "Reduces runway to 18 months", "Requires fundraise under pressure", "Distracts from Japan dominance", "Product not ready"],
+          "estimated_outcome": "50/50 success chance, high risk"
+        },
+        {
+          "option": "Pilot NA with single city (¥50M, 12 months)",
+          "pros": ["Lower risk", "Test market fit", "Learn without betting everything", "Maintain runway"],
+          "cons": ["Won't satisfy board growth expectations", "Competitor advantage continues", "Slower than board wants"],
+          "estimated_outcome": "Safe but potentially too slow"
+        },
+        {
+          "option": "Defer NA, dominate Japan first (¥200M to Japan)",
+          "pros": ["Own Japan completely (70% → 90% possible)", "Known market, proven playbook", "No runway pressure", "Product optimized", "Team focused"],
+          "cons": ["Board disappointment", "NA opportunity may pass", "Competitor moats strengthen", "Growth story less exciting"],
+          "estimated_outcome": "Safer, strong Japan position"
+        },
+        {
+          "option": "Partner with US distributor (low investment)",
+          "pros": ["Fast entry", "Low cost (<¥50M)", "Test market", "Partner handles localization"],
+          "cons": ["Less control", "Margin sharing", "Not building US capability", "Partner may compete later"],
+          "estimated_outcome": "Quick test but not strategic"
+        }
+      ],
+      "decision_made": "Option 3 - Defer North America expansion for 12-18 months. Instead, invest the ¥200M to strengthen and expand Japan dominance with three initiatives: (1) Accelerate AI features launch to all products (¥80M) - this is what customers want. (2) Expand into mid-market segment below our current target - opportunity for 200+ new customers (¥70M in sales and marketing). (3) Product margin improvement and platform work to get to 70% gross margins (¥50M in engineering infrastructure). Communicated to board: 'We're at 70% of our segment in Japan but only 15% of total addressable market here. Massive opportunity to dominate Japan before spreading thin internationally. From position of strength (¥6B revenue, profitable, proven in Japan), NA expansion in 2025 will be much more successful than doing it now at ¥4.2B revenue with product that needs localization.'",
+      "rationale": "This was a hard decision because board really wanted NA expansion. But here's my reasoning: (1) Market Opportunity - We have enormous room in Japan. Going from 70% of our segment to capturing more segments could double revenue (¥4.2B → ¥8B) in known market with proven playbook. (2) Product Readiness - Our product needs 6 months localization. Better to expand Japan with current product than rush into US with unready product. (3) Financial Prudence - ¥200M in Japan has 70% probability of success vs 50% in US based on our knowledge. Better ROI. (4) Team Focus - International expansion splits attention. Engineering distracted, sales confused, we risk losing focus in Japan where we're winning. (5) Competitive Position - Own Japan completely, then expand from strength. WorkMax (competitor) tried multi-market expansion early and struggled everywhere. (6) Fundraising Position - ¥6B revenue in Japan is stronger story than ¥4B stretched across markets. This aligns with Sustainable Growth (build sustainably) and Operational Excellence (do fewer things well). Board needed convincing with financial models showing Japan-first ROI is better. Yes, we may miss NA window, but better to dominate one market than be mediocre in two.",
+      "values_aligned": ["Sustainable Growth", "Operational Excellence", "Customer Success First"],
+      "confidence": 0.88,
+      "outcome": "TOO EARLY TO FULLY ASSESS (decided July 2024, 3 months ago) - Early indicators positive: (1) Japan revenue up 28% since decision (Q3 vs Q2). (2) Successfully launched AI features to mid-market, acquired 32 new mid-market customers. (3) Team focus improved dramatically - engineering velocity up, sales team hitting targets. (4) Gross margins improved from 68% to 71% on path to 75% by Q1 2025. (5) Board initially disappointed but financial results convinced them. Two board members who pushed hardest for NA now say 'You were right to focus.' (6) Customer satisfaction in Japan at all-time high. (7) Competitors (WorkMax, EnterpriseFlow) are struggling with multi-market operations, validating our focused approach. (8) We're now in much stronger position for NA expansion in 2025 - better product, better margins, more cash, proven AI features. Plan to revisit NA in Q1 2025 from position of strength.",
+      "outcome_date": null,
+      "lessons_learned": "Dominating one market beats being mediocre in many. Board pressure doesn't mean board is right - my job is to make right long-term decision even if unpopular short-term. Focus is a competitive advantage. Saying 'no' or 'not yet' to opportunities is strategic. Financial models showing Japan-first ROI convinced skeptical board members. We would have struggled in NA with current product and team capacity. Sometimes best growth strategy is going deeper not wider. This decision required conviction to push back on board - that's what CEO job is. In 3 more months we'll have clear validation of this approach.",
+      "would_do_differently": false,
+      "is_precedent": true,
+      "similar_cases": []
+    },
+    {
+      "case_id": "DC_AKIKO_005",
+      "date": "2024-08-30",
+      "category": "crisis_management",
+      "situation": "At 2 AM on Friday, our on-call engineer paged CTO about critical production issue: data export feature in WorkFlow Pro was failing for all customers. By 8 AM, we had 120 enterprise customers unable to export their project data (critical for their weekly reports). Customer success phones were overwhelmed, social media had 15 complaints (growing), and 3 major accounts threatened to escalate to their legal teams about contract violations (our SLA promises 99.9% uptime for core features). Engineering team identified root cause: database migration executed Wednesday night had a subtle bug affecting export queries. The fix requires rolling back the migration, but that needs a 24-hour maintenance window during business hours to do safely. CTO strongly recommended against rushed fix: 'If we patch this quickly, we risk making it worse and creating data corruption. We need the full 24-hour window to rollback and verify data integrity.' VP Customer Success wanted immediate emergency fix: 'We're losing customers right now. Every hour increases churn risk. Some customers are in middle of board presentations.' Sales VP concerned about deals in pipeline: 'Three major prospects evaluating us this week, this is terrible timing.' Our head of communications worried about brand damage: 'Social media sentiment turning negative fast, we need to get ahead of this.' Our SLA technically allows up to 48 hours to restore features but customers expect immediate fixes.",
+      "context": {
+        "incident_impact": {
+          "customers_affected": 120,
+          "feature_broken": "Data export (critical feature)",
+          "downtime_started": "Friday 2 AM",
+          "sla_violation": "Yes, if exceeds 48 hours",
+          "customer_segments_affected": {
+            "enterprise": 85,
+            "smb": 35
+          }
+        },
+        "technical_situation": {
+          "root_cause": "Database migration bug from Wednesday",
+          "emergency_fix_timeline": "6 hours but risky",
+          "proper_fix_timeline": "24 hours (safe rollback)",
+          "data_corruption_risk": "High if rushed",
+          "affected_database": "Production main DB"
+        },
+        "business_impact": {
+          "legal_threats": 3,
+          "social_media_complaints": 15,
+          "support_ticket_volume": "300% normal",
+          "deals_at_risk": 3,
+          "estimated_churn_risk": "5-10 customers"
+        },
+        "stakeholder_positions": {
+          "cto": "Need 24-hour safe rollback",
+          "vp_customer_success": "Fix immediately",
+          "vp_sales": "Worried about brand damage",
+          "head_of_comms": "Need to control narrative"
+        }
+      },
+      "options_considered": [
+        {
+          "option": "Emergency fix within 6 hours (risky but fast)",
+          "pros": ["Fast restoration", "Minimize customer impact", "Shows responsiveness", "Protect deals in pipeline"],
+          "cons": ["High risk of data corruption", "Could make worse", "CTO strongly against", "May create bigger problems"],
+          "estimated_outcome": "Possible worse incident if fix fails"
+        },
+        {
+          "option": "Proper 24-hour maintenance window (announced)",
+          "pros": ["Safe rollback", "No data corruption risk", "CTO recommended", "Proper engineering"],
+          "cons": ["24 more hours of broken feature", "More customer complaints", "SLA violation", "Brand damage"],
+          "estimated_outcome": "Fixed properly but painful wait"
+        },
+        {
+          "option": "Partial workaround while preparing full fix",
+          "pros": ["Some functionality restored", "Buys time", "Shows progress"],
+          "cons": ["Complex to implement", "Only helps some customers", "Still need full fix eventually"],
+          "estimated_outcome": "Doesn't really solve problem"
+        },
+        {
+          "option": "Manual exports by CS team while fixing",
+          "pros": ["All customers get their data", "Shows we care", "Prevents escalations"],
+          "cons": ["Doesn't scale (120 customers)", "CS team capacity", "Not sustainable"],
+          "estimated_outcome": "Helpful but not solution"
+        }
+      ],
+      "decision_made": "Option 2 (Proper 24-hour maintenance) with comprehensive communication and compensation plan: (1) Immediately sent personal apology email from me to every affected customer, taking full responsibility. (2) Announced 24-hour maintenance window starting 6 PM Friday, ending 6 PM Saturday. (3) Credited all 120 affected customers with 1 month of service (total cost ¥900K). (4) Assigned dedicated CSM to each enterprise customer for duration of fix. (5) Published detailed public post-mortem on our blog explaining what happened, why we chose 24-hour fix, and what we're doing to prevent recurrence. (6) Had VP Customer Success personally call the 3 customers with legal threats to apologize and explain. (7) Provided hourly update emails during maintenance. (8) Added engineering team member to comms team to handle technical questions on social media. CTO led the maintenance, I stayed online throughout to address escalations.",
+      "rationale": "Rushed engineering fixes create more problems. Here's my thinking: (1) Trust Technical Expertise - CTO said 24 hours is safe, 6 hours is risky. I trust them. Betting on rushed fix could corrupt customer data, which is catastrophic vs 24 hours of broken export. (2) Radical Transparency - Be honest about problem and timeline. Customers respect honesty more than false promises. Post-mortem builds trust. (3) Make Customers Whole - ¥900K in credits is real money but it's right thing to do. Shows we value their time and frustration. (4) Communication Over Speed - Hourly updates, personal calls, dedicated CSMs show we're taking it seriously even during fix. (5) Long-term Trust - Doing the fix right preserves trust. Rushing and creating data corruption would be unforgivable. This aligns with Operational Excellence (do it right), Radical Transparency (be honest), and Customer Success First (protect their data above all). Some executives wanted faster fix but I overruled them - this is when CEO must decide. The ¥900K credit cost is less than cost of losing even 2 customers or creating data corruption crisis.",
+      "values_aligned": ["Radical Transparency", "Customer Success First", "Operational Excellence"],
+      "confidence": 0.90,
+      "outcome": "SUCCESS - Maintenance completed in 23 hours (1 hour ahead of schedule). Zero customers churned from this incident. Social media sentiment actually turned positive - multiple tweets praising our transparency and handling. Customer success NPS increased by 3 points in month after incident (not a typo - went up not down). Post-mortem blog post got 15K views and was shared by industry analysts as 'example of crisis management done right.' The ¥900K credit cost was offset by PR value and churn prevention (estimated we would have lost ¥8M ARR if we'd lost 5-10 customers). Legal threats withdrawn after personal calls. The 3 deals in pipeline all closed - prospects cited our transparent handling as confidence builder. Competitors tried to use incident for FUD but it backfired because our response was so well-received. Engineering team felt supported by decision to do it right. Six months later, customers still reference this incident positively in renewal conversations. Board initially nervous about ¥900K cost but praised outcome. This is now our template for crisis management.",
+      "outcome_date": "2024-09-15",
+      "lessons_learned": "Transparency in crisis builds more trust than hiding or minimizing. Customers forgive honest mistakes if you make them whole. Taking time to fix properly beats rushing and risking worse problems. Post-mortems are incredibly valuable for positioning and trust. Communication during crisis matters as much as fix itself. The ¥900K 'cost' was actually investment in trust. Team felt supported when I backed CTO's recommendation over pressure for quick fix. Crisis can actually strengthen customer relationships if handled right. Our competitors' rushed fixes to similar incidents created worse problems - we were right to be patient. This incident is now used in onboarding to show our values in action.",
+      "would_do_differently": false,
+      "is_precedent": true,
+      "similar_cases": []
+    }
+  ],
+  
+  "communication_examples": [
+    {
+      "example_id": "CE_AKIKO_001",
+      "type": "email",
+      "date": "2024-09-05",
+      "to": "Executive Team",
+      "subject": "Q3 Review - Celebrating Progress, Addressing Challenges",
+      "context": "Quarterly business review email after mixed quarter (some wins, some concerns)",
+      "full_text": "Team,\n\nQ3 is behind us. Let's take stock with honesty and optimism.\n\nWhat went well:\n• Revenue at ¥1.1B (103% of target) - nice work!\n• Customer NPS: 68 → 72 (best ever)\n• Mid-market expansion: 32 new customers\n• AI search pilot exceeded expectations\n\nWhat didn't:\n• Enterprise sales cycle slowed (avg 4.2 months vs 3.5 target)\n• Engineering velocity down 12% (tech debt catching up)\n• Two key hires fell through (competitive market)\n\nHere's how I think about this:\n\nWe're growing sustainably, not recklessly. The slowdown in enterprise sales is actually healthy - we're being more selective about customer fit. Better to close right deals slowly than wrong deals quickly.\n\nEngineering velocity concerns me more. We've been pushing hard for 18 months. Time to address the tech debt seriously. I'm allocating ¥15M and 6 weeks for technical foundation work in Q4. Short-term pain for long-term health.\n\nOn hiring: We're competing with big tech for talent. Need to get better at selling our vision, not just compensation. Let's workshop this at next exec meeting.\n\nThe team delivered under pressure. I'm proud of everyone. Let's use Q4 to build sustainability into our growth.\n\nThoughts? Pushback? Let's discuss at Friday's meeting.\n\n- Akiko\n\nP.S. Thank you for your partnership and candor. We're building something special."
+    },
+    {
+      "example_id": "CE_AKIKO_002",
+      "type": "slack",
+      "date": "2024-09-18",
+      "channel": "#leadership",
+      "context": "Quick decision on conference sponsorship",
+      "full_text": "@sarah-cmo I saw the TechSummit Japan sponsorship proposal (¥8M for diamond tier).\n\nLet's pass on diamond. Here's my thinking:\n\n1. ROI unclear: Last year we spent ¥6M, got 45 leads, converted 2 (¥15M revenue). That's 2.5x ROI but we can do better with content marketing.\n\n2. Brand positioning: We're moving from scrappy startup to established player. Diamond sponsorship at regional conference doesn't match that positioning. Better to focus on 1-2 tier-1 international events.\n\n3. Budget: ¥8M is better spent on customer events (hosting our own) where we control narrative.\n\nAlternative: Let's do booth only (¥1.2M) and host a dinner for top prospects (¥800K). More intimate, higher quality.\n\nThat said, you know events better than me. If you think diamond is strategic for reasons I'm missing, make the case and I'll reconsider. Trust your judgment here.\n\nThoughts? 🤔"
+    },
+    {
+      "example_id": "CE_AKIKO_003",
+      "type": "slack_dm",
+      "date": "2024-10-02",
+      "to": "VP Product",
+      "context": "Coaching through difficult product decision about feature deprecation",
+      "full_text": "@kenji-product Re: the feature deprecation decision\n\nI can feel your stress about this. Deprecating features is hard, especially when some customers still use them.\n\nHere's how I'd think through it:\n\n1. Who's affected?\n   - 23 customers use legacy reporting\n   - But 8 of those are also using new dashboards\n   - So really 15 customers fully dependent\n\n2. What's their usage pattern?\n   - Monthly active use or just habit?\n   - Could new features replace their workflow?\n\n3. What's our cost?\n   - Maintenance time: 15% of eng capacity (!)\n   - That's ¥25M/year in opportunity cost\n\n4. Path forward:\n   - 6-month notice (generous)\n   - White-glove migration support\n   - Free premium features as compensation\n   - Personal calls from you to affected customers\n\nHere's the thing: You're not making wrong customers. You're making a hard strategic choice. We can't maintain everything forever. 15% eng capacity could go to AI features that benefit 450 customers.\n\nThe 15 affected customers deserve great treatment - hence the support plan. But we can't let 3% of customers hold back 97%.\n\nThis is leadership: making hard calls with empathy. You've got this.\n\nWant to talk it through live? I've got 30 min this afternoon.\n\n- A"
+    }
+  ],
+  
+  "thinking_patterns": {
+    "problem_approach": "Start with customer impact, gather diverse input, analyze data and scenarios, apply values filter, decide with conviction but stay open to new information",
+    "thinks_out_loud": false,
+    "preference": "Thinks deeply privately, then shares well-formed thoughts but invites challenge",
+    "uses_frameworks": true,
+    "framework_examples": ["First Principles thinking", "Pre-mortem analysis", "Reversible vs irreversible decisions (Bezos framework)"],
+    "approach": "Consultative but decisive - seeks broad input then makes clear decision",
+    "thought_organization": "Structured: (1) State situation clearly, (2) Outline options with pros/cons, (3) Apply values filter, (4) Decide with rationale, (5) Define success metrics",
+    "typical_questions": [
+      "What's the customer impact?",
+      "Who else should weigh in on this?",
+      "What does the data tell us?",
+      "Is this reversible or irreversible?",
+      "What would we do if we had unlimited resources? (then work backwards)",
+      "What's our edge case here?",
+      "How does this align with our mission?",
+      "What's the 18-month view on this?",
+      "What could go wrong?",
+      "How will we know if this worked?"
+    ]
+  },
+  
+  "red_flags": {
+    "never_approve": [
+      "Anything violating customer trust or data security",
+      "Decisions prioritizing short-term revenue over customer value",
+      "Actions that would burn out the team",
+      "Commitments we can't realistically deliver",
+      "Hiding bad news or avoiding transparency"
+    ],
+    "always_do": [
+      "Consult domain experts before deciding in their area",
+      "Consider customer impact explicitly",
+      "Share context broadly with team",
+      "Admit when wrong and adjust course",
+      "Take responsibility for failures publicly"
+    ],
+    "ai_should_escalate_when": [
+      "Legal or compliance issues",
+      "Board-level decisions (M&A, fundraising)",
+      "Decisions requiring board vote or fiduciary duty",
+      "Ethical dilemmas without clear answer",
+      "Major reputation risks",
+      "Anything affecting company survival",
+      "Personnel decisions about executives",
+      "When AI confidence <70%",
+      "When user's request contradicts known values"
+    ]
+  },
+  
+  "metadata": {
+    "profile_created": "2025-10-21",
+    "last_updated": "2025-10-21",
+    "version": "1.0",
+    "interview_date": "2025-10-15 (simulated)",
+    "interviewer": "Test Data Generation",
+    "interview_duration_minutes": 120,
+    "validation_status": "synthetic_test_data",
+    "completeness_score": 0.98,
+    "notes": "Complete synthetic test profile for Phase 1 development. Based on composite of real CEO patterns from successful B2B SaaS companies in Japan."
+  }
+}

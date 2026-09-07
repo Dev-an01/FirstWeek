@@ -1,0 +1,118 @@
+# Node.js
+**/node_modules
+**/.env
+**/dist
+**/.vscode
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+# Only ignore Python lib directories, not all lib/
+RAG/lib/
+RAG/lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+*.out
+*.err
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Project specific
+embedding_generation.log
+validation_report.json
+image.png
+cleanup.ps1
+
+# Environment
+.env
+.env.local
+
+# Test data (large files, can be regenerated)
+test_data/documents/*.pdf
+test_data/documents/*.txt
+test_data/**/*.csv
+
+# Temporary test files (kept in root during development)
+test_*.py
+check_*.py
+debug_*.py
+validate_*.py
+investigate_*.py
+live_demo_*.py
+*_PROOF.py
+
+# Temporary markdown files
+temp.md
+improvement_listy.md
+task_list.md
+COMPREHENSIVE_*.md
+INTEGRATION_*.md
+MEMORY_FIX_*.md
+# Prisma generated clients (auto-generated, don't commit)
+**/generated/client
+**/generated/authClient
+**/lib/generated
+backend/**/shared/lib/generated/
+.mcp.json
+
+# Credentials & secrets
+Assets/
+*.pem
+*.key
+
+# Directories to ignore
+.claude/
+certs/
+.env.bak
+.gstack/
+.impeccable/
+
+# Private generated FirstWeek index
+.firstweek/
+
+# FirstWeek regression tests are intentional source files
+!RAG/firstweek/test_*.py

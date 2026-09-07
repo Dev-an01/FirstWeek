@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: firstweek
+  labels:
+    app: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5173
+      targetPort: 5173
+      protocol: TCP
+      name: http
+  selector:
+    app: frontend
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: firstweek
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      initContainers:
+      - name: wait-for-services
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          until nc -z auth-service 3001; do
+            echo "Waiting for auth-service..."
+            sleep 2
+          done
+          until nc -z chat-service 3002; do
+            echo "Waiting for chat-service..."
+            sleep 2
+          done
+          until nc -z rag-api 8000; do
+            echo "Waiting for rag-api..."
+            sleep 2
+          done
+          echo "All backend services are ready!"
+      containers:
+      - name: frontend
+        image: gcr.io/PROJECT_ID/frontend:latest  # REPLACE PROJECT_ID
+        ports:
+        - containerPort: 5173
+          name: http
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: NODE_ENV
+        - name: VITE_API_BASE_URL
+          value: "/api"
+        - name: AUTH_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: AUTH_SERVICE_URL
+        - name: CHAT_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: CHAT_SERVICE_URL
+        - name: RAG_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: firstweek-config
+              key: RAG_API_URL
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5173
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5173
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3

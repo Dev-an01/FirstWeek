@@ -1,0 +1,43 @@
+id,name,type,industry,size,region,relationship,arr,customer_since,description
+company_megacorp,MegaCorp Japan,customer,Manufacturing,Enterprise,Japan,Strategic Account,25000000,2021-03-15,Largest customer - manufacturing automation
+company_techflow,TechFlow Solutions,customer,Technology,Mid-Market,Japan,Active Customer,5500000,2022-08-10,SaaS company using WorkFlow Pro
+company_innovate,Innovate Systems,customer,Technology,Mid-Market,Japan,Active Customer,4800000,2023-01-20,Software development company
+company_globalcorp,GlobalCorp KK,customer,Financial Services,Enterprise,Japan,Strategic Account,18000000,2020-11-05,Financial services firm
+company_fintech,FinTech Solutions Inc,customer,Financial Services,Enterprise,Japan,Active Customer,18000000,2024-06-15,Recently acquired - large FinTech company
+company_healthtech,HealthTech Partners,customer,Healthcare,Mid-Market,Japan,Active Customer,6200000,2023-05-12,Healthcare technology provider
+company_retailpro,RetailPro Japan,customer,Retail,Mid-Market,Japan,Active Customer,5800000,2022-12-03,Retail management software
+company_logistics,Logistics Solutions KK,customer,Logistics,Mid-Market,Japan,Active Customer,4500000,2023-03-18,Supply chain management
+company_mediahouse,MediaHouse Tokyo,customer,Media,Mid-Market,Japan,Active Customer,3900000,2023-07-22,Digital media company
+company_edutech,EduTech Japan,customer,Education,Mid-Market,Japan,Active Customer,3200000,2023-09-14,Education technology platform
+company_workmax,WorkMax,competitor,Technology,Enterprise,Global,Primary Competitor,,,Enterprise collaboration platform - market leader
+company_enterpriseflow,EnterpriseFlow,competitor,Technology,Enterprise,Global,Competitor,,,Enterprise workflow automation platform
+company_teamhub,TeamHub,competitor,Technology,Mid-Market,Global,Competitor,,,Team collaboration software
+company_projectpro,ProjectPro,competitor,Technology,Mid-Market,Global,Competitor,,,Project management tool
+company_aws,Amazon Web Services,vendor,Technology,Enterprise,Global,Strategic Vendor,,,Cloud infrastructure provider
+company_google_cloud,Google Cloud,vendor,Technology,Enterprise,Global,Vendor,,,Cloud services provider
+company_stripe,Stripe,vendor,Technology,Enterprise,Global,Strategic Vendor,,,Payment processing platform
+company_intercom,Intercom,vendor,Technology,Mid-Market,Global,Vendor,,,Customer support platform (selected)
+company_zendesk,Zendesk,vendor,Technology,Mid-Market,Global,Former Vendor,,,Customer support platform (replaced)
+company_freshdesk,Freshdesk,vendor,Technology,Mid-Market,Global,Evaluated Vendor,,,Customer support platform (not selected)
+company_salesforce,Salesforce,vendor,Technology,Enterprise,Global,Vendor,,,CRM platform
+company_hubspot,HubSpot,vendor,Technology,Mid-Market,Global,Vendor,,,Marketing automation platform
+company_sendgrid,SendGrid,vendor,Technology,Mid-Market,Global,Vendor,,,Email delivery service
+company_mixpanel,Mixpanel,vendor,Technology,Mid-Market,Global,Vendor,,,Product analytics platform
+company_cloudflare,Cloudflare,vendor,Technology,Mid-Market,Global,Vendor,,,CDN and security services
+company_datadog,Datadog,vendor,Technology,Mid-Market,Global,Vendor,,,Monitoring and observability
+company_github,GitHub,vendor,Technology,Enterprise,Global,Vendor,,,Code repository and CI/CD
+company_figma,Figma,vendor,Technology,Mid-Market,Global,Vendor,,,Design collaboration tool
+company_notion,Notion,vendor,Technology,Mid-Market,Global,Internal Use,,,Documentation platform
+company_slack,Slack,vendor,Technology,Enterprise,Global,Internal Use,,,Team communication
+company_zoom,Zoom,vendor,Technology,Enterprise,Global,Vendor,,,Video conferencing
+company_1password,1Password,vendor,Technology,Mid-Market,Global,Vendor,,,Password management
+company_sequoia,Sequoia Capital,investor,Venture Capital,N/A,Global,Series A Investor,,,Lead investor in Series A
+company_softbank,SoftBank Vision Fund,investor,Venture Capital,N/A,Global,Series B Investor,,,Lead investor in Series B
+company_mori_hamada,Mori Hamada & Matsumoto,partner,Legal Services,N/A,Japan,Legal Counsel,,,General corporate legal services
+company_deloitte,Deloitte Tohmatsu,partner,Professional Services,N/A,Japan,Financial Auditor,,,Annual financial audit
+company_kpmg,KPMG,partner,Professional Services,N/A,Japan,Security Auditor,,,SOC 2 audit and security services
+company_jtp,Japan Tech Partners,partner,Technology,Mid-Market,Japan,Reseller Partner,,,Resells NexaTech products to enterprise
+company_accenture,Accenture Japan,partner,Consulting,Enterprise,Japan,Implementation Partner,,,Helps enterprise customers implement NexaTech
+company_nttdata,NTT DATA,partner,Technology,Enterprise,Japan,Strategic Partner,,,System integrator partner
+company_recruit,Recruit Holdings,prospect,Human Resources,Enterprise,Japan,Sales Pipeline,,,Large HR company - sales opportunity
+company_rakuten,Rakuten Group,prospect,E-commerce,Enterprise,Japan,Sales Pipeline,,,E-commerce giant - enterprise prospect
