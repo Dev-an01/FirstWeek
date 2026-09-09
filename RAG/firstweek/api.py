@@ -63,9 +63,31 @@ class ChatMessage(BaseModel):
     content: str = Field(min_length=1, max_length=4000)
 
 
+class MaintainedResponsibility(BaseModel):
+    id: str = Field(min_length=1, max_length=80)
+    name: str = Field(min_length=1, max_length=120)
+    description: str = Field(default='', max_length=2000)
+    status: Literal['ACTIVE', 'BLOCKED', 'DONE']
+    owner: str | None = Field(default=None, max_length=240)
+    updatedAt: str | None = Field(default=None, max_length=64)
+
+
+class ManagedSource(BaseModel):
+    id: str = Field(min_length=1, max_length=100)
+    documentId: str = Field(pattern=r'^m-[a-f0-9-]{36}$')
+    heading: str = Field(min_length=1, max_length=200)
+    content: str = Field(min_length=1, max_length=1400)
+    projectId: str = Field(min_length=1, max_length=80)
+    updatedAt: str = Field(max_length=64)
+
+
 class Question(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
     history: list[ChatMessage] = Field(default_factory=list, max_length=6)
+    projectName: str | None = Field(default=None, max_length=120)
+    hasCuratedKnowledge: bool = True
+    responsibilities: list[MaintainedResponsibility] = Field(default_factory=list, max_length=100)
+    managedSources: list[ManagedSource] = Field(default_factory=list, max_length=8)
 
 
 @lru_cache(maxsize=1)
@@ -84,15 +106,28 @@ def ask(company_id: str, project_id: str, body: Question):
         raise HTTPException(422, 'Enter a question')
     semantic = os.environ.get('FIRSTWEEK_SEMANTIC') == 'true'
     try:
-        model = embedding_model() if semantic else None
-        with database() as db:
+        if body.hasCuratedKnowledge:
+          model = embedding_model() if semantic else None
+          with database() as db:
             context = project(db, company_id, project_id)
             # Recent questions resolve follow-ups; history never grants scope or becomes evidence.
             recent = [m.content for m in body.history if m.role == 'user'][-2:]
             retrieval_query = (question + '\n' + '\n'.join(recent))[:2000]
             sources = search(db, company_id, project_id, retrieval_query, limit=8, model=model)
+        else:
+            if not body.projectName:
+                raise HTTPException(422, 'Project name is required without curated knowledge')
+            context, sources = {'name': body.projectName}, []
     except (ImportError, ValueError, RuntimeError):
         raise HTTPException(503, 'Semantic retrieval is unavailable; check the model and index configuration')
+    maintained = [{'id': r.id, 'kind': 'responsibility', 'documentId': None,
+      'heading': f'Maintained responsibility: {r.name}',
+      'content': f'Status: {r.status}. Owner: {r.owner or "Unassigned"}. {r.description}',
+      'projectId': project_id, 'updatedAt': r.updatedAt} for r in body.responsibilities]
+    if any(s.projectId != project_id for s in body.managedSources):
+        raise HTTPException(422, 'Managed evidence must belong to the selected project')
+    managed = [{**s.model_dump(), 'kind': 'document'} for s in body.managedSources]
+    sources = maintained + managed + sources
     generate = os.environ.get('FIRSTWEEK_GENERATE') == 'true'
     if not sources and not generate:
         return {'answer': 'I could not find evidence for that in this project. Try a more specific question or ask a project maintainer to add a source.',

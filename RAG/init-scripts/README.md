@@ -1,5 +1,7 @@
 # Database Initialization Scripts
 
+> Bundled persona initialization is retired. Normal Compose startup no longer seeds a profile. The old loader scripts, init/reset Compose commands, and quick-start menu stop before database changes. Use [the FirstWeek runbook](../../docs/firstweek/RUNBOOK.md) for current private workspace setup. The instructions below are historical and are not supported setup steps.
+
 This directory contains scripts for setting up and managing the PostgreSQL and Neo4j databases with sample executive data.
 
 ## Quick Start for Teammates

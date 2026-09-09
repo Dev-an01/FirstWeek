@@ -4,8 +4,15 @@ const rateLimit = require('express-rate-limit');
 const { prisma } = require('../shared/lib/prisma');
 const { requireAuth } = require('../middleware/authMiddleware');
 const { findProjectMembership } = require('../services/projectAccess');
+const { createProject, manageProject } = require('../services/projectAdministration');
+const { listResponsibilities, saveResponsibility, deleteResponsibility } = require('../services/projectResponsibilities');
+const { listDocuments, readDocument, createDocument, deleteDocument, searchDocuments } = require('../services/projectDocuments');
 
 const router = express.Router();
+const responsibilityPayload = items => items.slice(0, 100).map(item => ({ id: item.id, name: item.name,
+  description: item.description, status: item.status,
+  owner: item.owner ? `${item.owner.firstName} ${item.owner.lastName} (@${item.owner.username})` : null,
+  ownerUserId: item.ownerUserId, updatedAt: item.updatedAt.toISOString() }));
 router.use(requireAuth);
 router.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');
@@ -21,17 +28,56 @@ router.get('/projects', async (req, res) => {
     include: { project: true },
     orderBy: { project: { name: 'asc' } },
   });
-  return res.json({ projects: memberships.map(({ project, role }) => ({ ...project, membershipRole: role })) });
+  return res.json({ canCreate: req.user.role === 'COMPANY_ADMIN', projects: memberships.map(({ project, role }) => ({ ...project, membershipRole: role })) });
 });
+
+function managementWrite(req, res, next) {
+  const expectedOrigin = process.env.FIRSTWEEK_ORIGIN || `${req.protocol}://${req.get('host')}`;
+  if (req.get('origin') !== expectedOrigin || req.get('sec-fetch-site') === 'cross-site') {
+    return res.status(403).json({ error: 'Open this workspace in its original browser tab and try again.' });
+  }
+  if (!req.is('application/json')) return res.status(415).json({ error: 'Send a JSON request.' });
+  return next();
+}
+const mutation = (handler) => async (req, res, next) => {
+  try { return res.status(req.method === 'POST' ? 201 : 200).json(await handler(req)); }
+  catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    if (error.code === 'P2002') return res.status(409).json({ error: 'This project membership already exists.' });
+    if (error.code === 'P2025') return res.status(404).json({ error: 'Project resource not found.' });
+    return next(error);
+  }
+};
+router.post('/projects', managementWrite, mutation(req => createProject(prisma, req.user, req.body)));
 
 router.use('/projects/:projectId', async (req, res, next) => {
   const membership = await findProjectMembership(prisma, req.user, req.params.projectId);
   if (!membership) return res.status(404).json({ error: 'Project resource not found.' });
   req.firstweekProject = membership.project;
+  req.firstweekMembershipRole = membership.role;
   return next();
 });
 
-async function forward(req, res, suffix, data) {
+router.patch('/projects/:projectId', managementWrite, mutation(req =>
+  manageProject(prisma, req.user, req.params.projectId, 'settings', req.body)));
+router.post('/projects/:projectId/members', managementWrite, mutation(req =>
+  manageProject(prisma, req.user, req.params.projectId, 'add', req.body)));
+router.patch('/projects/:projectId/members/:userId', managementWrite, mutation(req =>
+  manageProject(prisma, req.user, req.params.projectId, 'role', req.body, req.params.userId)));
+router.delete('/projects/:projectId/members/:userId', managementWrite, mutation(req =>
+  manageProject(prisma, req.user, req.params.projectId, 'remove', req.body, req.params.userId)));
+router.get('/projects/:projectId/responsibilities', async (req, res, next) => {
+  try { return res.json({ responsibilities: await listResponsibilities(prisma, req.user, req.params.projectId) }); }
+  catch (error) { return error.status ? res.status(error.status).json({ error: error.message }) : next(error); }
+});
+router.post('/projects/:projectId/responsibilities', managementWrite, mutation(req =>
+  saveResponsibility(prisma, req.user, req.params.projectId, req.body)));
+router.patch('/projects/:projectId/responsibilities/:responsibilityId', managementWrite, mutation(req =>
+  saveResponsibility(prisma, req.user, req.params.projectId, req.body, req.params.responsibilityId)));
+router.delete('/projects/:projectId/responsibilities/:responsibilityId', managementWrite, mutation(req =>
+  deleteResponsibility(prisma, req.user, req.params.projectId, req.params.responsibilityId)));
+
+async function forward(req, res, suffix, data, transform = value => value, documentsSnapshot) {
   const token = process.env.FIRSTWEEK_SERVICE_TOKEN || '';
   if (token.length < 32) return res.status(503).json({ error: 'Project knowledge is not configured yet.' });
   const project = req.firstweekProject;
@@ -45,7 +91,17 @@ async function forward(req, res, suffix, data) {
     if (!await findProjectMembership(prisma, req.user, project.id)) {
       return res.status(404).json({ error: 'Project resource not found.' });
     }
-    return res.json(result.data);
+    if (data?.responsibilities) {
+      const current = await listResponsibilities(prisma, req.user, project.id);
+      if (JSON.stringify(responsibilityPayload(current)) !== JSON.stringify(data.responsibilities)) {
+        return res.status(409).json({ error: 'Project responsibilities changed while answering. Please ask again.' });
+      }
+    }
+    if (documentsSnapshot && JSON.stringify(await listDocuments(prisma, req.user, project.id)) !== documentsSnapshot) {
+      return res.status(409).json({ error: 'Project documents changed while loading. Please try again.' });
+    }
+    return res.json(transform(suffix === '' ? { ...result.data, name: project.name, summary: project.description,
+      membershipRole: req.firstweekMembershipRole } : result.data));
   } catch (error) {
     if (error.response?.status === 404) return res.status(404).json({ error: 'Project knowledge has not been indexed yet.' });
     return res.status(503).json({ error: 'Project knowledge is unavailable. Please try again shortly.' });
@@ -56,7 +112,7 @@ router.get('/projects/:projectId/members', async (req, res) => {
   const members = await prisma.projectMember.findMany({
     where: { companyId: req.firstweekProject.companyId, projectId: req.firstweekProject.id,
       user: { isActive: true, isCompanyVerified: true } },
-    select: { userId: true, role: true, user: { select: { firstName: true, lastName: true, title: true } } },
+    select: { userId: true, role: true, user: { select: { username: true, firstName: true, lastName: true, title: true } } },
   });
   if (!await findProjectMembership(prisma, req.user, req.firstweekProject.id)) {
     return res.status(404).json({ error: 'Project resource not found.' });
@@ -64,16 +120,33 @@ router.get('/projects/:projectId/members', async (req, res) => {
   return res.json({ members: members.map(({ user, ...membership }) => ({ ...membership, ...user })) });
 });
 
-router.get('/projects/:projectId', (req, res) => forward(req, res, ''));
-router.get('/projects/:projectId/documents/:documentId', (req, res) => {
+router.get('/projects/:projectId', async (req, res, next) => {
+  const project = req.firstweekProject;
+  try {
+    const managed = await listDocuments(prisma, req.user, project.id);
+    if (project.hasCuratedKnowledge === false) return res.json({ id: project.id, name: project.name,
+    summary: project.description, membershipRole: req.firstweekMembershipRole,
+    stack: [], documents: managed, architecture: null, knowledgeStatus: managed.length ? 'managed' : 'empty' });
+    return forward(req, res, '', undefined, value => ({ ...value, documents: [...(value.documents || []), ...managed] }), JSON.stringify(managed));
+  } catch (error) { return next(error); }
+});
+router.post('/projects/:projectId/documents', managementWrite, mutation(req =>
+  createDocument(prisma, req.user, req.params.projectId, req.body)));
+router.get('/projects/:projectId/documents/:documentId', async (req, res, next) => {
+  if (/^m-[0-9a-f-]{36}$/.test(req.params.documentId)) {
+    try { return res.json(await readDocument(prisma, req.user, req.params.projectId, req.params.documentId)); }
+    catch (error) { return error.status ? res.status(error.status).json({ error: error.message }) : next(error); }
+  }
   if (!/^[a-f0-9]{32}$/.test(req.params.documentId)) return res.status(404).json({ error: 'Project resource not found.' });
   return forward(req, res, `/documents/${req.params.documentId}`);
 });
+router.delete('/projects/:projectId/documents/:documentId', managementWrite, mutation(req =>
+  deleteDocument(prisma, req.user, req.params.projectId, req.params.documentId)));
 router.post('/projects/:projectId/ask', rateLimit({
   windowMs: 60 * 1000, max: 12, keyGenerator: (req) => req.user.id,
   standardHeaders: true, legacyHeaders: false,
   message: { error: 'Question limit reached. Try again in a minute.' },
-}), (req, res) => {
+}), async (req, res, next) => {
   const question = req.body?.question;
   if (typeof question !== 'string' || !question.trim() || question.length > 2000) {
     return res.status(400).json({ error: 'Enter a question between 1 and 2000 characters.' });
@@ -84,8 +157,18 @@ router.post('/projects/:projectId/ask', rateLimit({
     typeof message.content !== 'string' || !message.content.trim() || message.content.length > 4000)) {
     return res.status(400).json({ error: 'Conversation context is invalid. Start a new conversation.' });
   }
-  return forward(req, res, '/ask', { question: question.trim(),
-    history: history.map(({ role, content }) => ({ role, content })) });
+  try {
+    const responsibilities = await listResponsibilities(prisma, req.user, req.params.projectId);
+    const documentsSnapshot = JSON.stringify(await listDocuments(prisma, req.user, req.params.projectId));
+    const recent = history.filter(message => message.role === 'user').slice(-2).map(message => message.content);
+    const managedSources = await searchDocuments(prisma, req.user, req.params.projectId, [question, ...recent].join('\n').slice(0, 2000));
+    if (req.firstweekProject.hasCuratedKnowledge === false && !responsibilities.length && !managedSources.length) return res.json({
+      answer: 'No matching evidence was found. Try a more specific question or ask a maintainer to add a source.', sources: [], mode: 'no-evidence', retrieval: 'none' });
+    return forward(req, res, '/ask', { question: question.trim(), projectName: req.firstweekProject.name,
+      hasCuratedKnowledge: req.firstweekProject.hasCuratedKnowledge,
+      responsibilities: responsibilityPayload(responsibilities), managedSources,
+      history: history.map(({ role, content }) => ({ role, content })) }, undefined, documentsSnapshot);
+  } catch (error) { return next(error); }
 });
 router.use((error, req, res, next) => {
   if (res.headersSent) return next(error);

@@ -31,12 +31,6 @@ Production publishing and external messaging are separate external actions: prep
 
 Reuse React/Vite, Express auth, Prisma/PostgreSQL, FastAPI and existing embeddings/provider clients. Avoid routing private data through legacy unscoped chat/retrieval. Authorization derives from server identity, never body scope. Keep private content out of bundles, logs and public APIs. Use additive migrations; no database reset. Managed ingestion needs durable state separate from destructive curated rebuilds. Prefer bounded synchronous ingestion only if it is genuinely safe at the supported size, otherwise explicit jobs and recovery. Reuse established FirstWeek/Impeccable design patterns.
 
-## Three-agent workflow
+## Implementation workflow
 
-Exactly three agents: coder, reviewer, tracker. The primary assistant coordinates the user and performs independent read-only integration checks. Only the coding agent changes application code, tests, migrations, configuration, scripts and implementation documentation after this planning bootstrap.
-
-The reviewer and tracker NEVER edit code, tests, migrations, configuration, generated artifacts, or implementation documents. Their only writable file is TRACK.md. Neither runs autofix, formatters, code generation, builds that mutate the repository, or migrations. Reviewer inspects feasibility, correctness, security, errors and evidence; tracker owns scheduling and status, not code fixes.
-
-Tracker chooses a bounded task, records assignment and acceptance criteria in TRACK.md, and sends it to coder. Coder implements/tests, sends a report to reviewer and tracker with changed files, decisions, evidence, limitations and suggested next work. Reviewer appends a dated review section to TRACK.md (findings, severity, reproduction/evidence, required mitigation, verdict) and informs tracker. Tracker records the verdict, assigns fixes to coder or advances to the next task. Coder never bypasses a failed review. Only tracker marks tasks accepted after reviewer acceptance.
-
-TRACK.md has a single-writer handoff: tracker releases it to reviewer for review entries, then reviewer releases it back. Coder sends reports by agent message and never edits TRACK.md. Each cycle preserves an append-only decision/finding log alongside a current completed/remaining task table. No agent spawns extra agents.
+The primary assistant implements and verifies each bounded task. One reviewer agent independently inspects correctness, security, errors and evidence without editing application code. The primary assistant applies review fixes and records task status and review findings in TRACK.md. A task advances only after reviewer acceptance.

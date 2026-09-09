@@ -19,6 +19,7 @@ Object.assign(process.env, {
   DATABASE_URL: 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo',
   JWT_ACCESS_SECRET: config.accessSecret, JWT_REFRESH_SECRET: config.refreshSecret,
   FIRSTWEEK_SERVICE_TOKEN: config.serviceToken, FIRSTWEEK_RAG_URL: 'http://127.0.0.1:8003',
+  FIRSTWEEK_ORIGIN: process.env.FIRSTWEEK_ORIGIN || 'http://127.0.0.1:5173',
   NODE_ENV: 'development', LOG_LEVEL: 'warn', COOKIE_DOMAIN: '',
   GMAIL_ADDRESS: '', GMAIL_PASSWORD: '', ONBOARDING_SERVICE_URL: 'http://127.0.0.1:8002',
 });
@@ -43,13 +44,12 @@ async function main() {
   await prisma.project.updateMany({ where: { companyId: 'local-workspace', id: { in: manifest.retiredProjectIds || [] } }, data: { isActive: false } });
   for (const project of manifest.projects) {
     await prisma.project.upsert({ where: { companyId_id: { companyId: 'local-workspace', id: project.id } },
-      create: { companyId: 'local-workspace', id: project.id, name: project.name, description: project.summary },
-      update: { name: project.name, description: project.summary, isActive: true } });
-    await prisma.projectMember.upsert({ where: { companyId_projectId_userId: { companyId: 'local-workspace', projectId: project.id, userId: user.id } },
-      create: { companyId: 'local-workspace', projectId: project.id, userId: user.id, role: 'MAINTAINER' }, update: {} });
+      create: { companyId: 'local-workspace', id: project.id, name: project.name, description: project.summary,
+        members: { create: { userId: user.id, role: 'MAINTAINER' } } },
+      update: {} });
   }
   const app = express();
-  app.use(express.json({ limit: '100kb' }));
+  app.use(express.json({ limit: '2mb' }));
   app.use(cookieParser());
   // This local host exposes only login/session and FirstWeek routes, not mail or avatar integrations.
   const controller = require('../backend/auth-service/controllers/userController');

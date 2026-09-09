@@ -55,7 +55,6 @@ class ProfileIDValidator:
         'exec_002_test',  # Raj Patel (CFO)
         'exec_003_test',  # Yuki Nakamura (CTO)
         'exec_004_test',  # Sarah Kim (CMO)
-        'sample_profile',  # Sample Executive (FIRSTWEEK CEO)
     }
 
     # Legacy ID mapping for backwards compatibility
@@ -65,8 +64,6 @@ class ProfileIDValidator:
         'raj_patel': 'exec_002_test',
         'yuki_nakamura': 'exec_003_test',
         'sarah_kim': 'exec_004_test',
-        'sample': 'sample_profile',
-        'sample': 'sample_profile',
     }
 
     @classmethod

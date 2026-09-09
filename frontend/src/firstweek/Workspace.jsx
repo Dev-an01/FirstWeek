@@ -13,6 +13,8 @@ import {
   MessageSquare,
   Search,
   ShieldCheck,
+  Trash2,
+  Upload,
   X,
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
@@ -20,6 +22,7 @@ import { firstweekApi } from './api';
 import './firstweek.css';
 import { Brand } from './Brand';
 import { Architecture } from './Architecture';
+import { ProjectForm, MemberAdministration, ResponsibilityAdministration } from './ProjectAdministration';
 
 const tabs = [
   ['overview', 'Overview'],
@@ -27,6 +30,7 @@ const tabs = [
   ['ask', 'Ask FirstWeek'],
   ['knowledge', 'Knowledge'],
   ['team', 'People'],
+  ['settings', 'Settings'],
 ];
 const date = (value) =>
   value
@@ -54,6 +58,7 @@ function Notice({ children, error = false, onRetry }) {
 }
 
 const markdownComponents = {
+  img: function SourceImage({ alt }) { return <span>{alt || 'Embedded image omitted'}</span>; },
   a: function SourceLink({ children }) {
     return <span>{children}</span>;
   },
@@ -80,8 +85,51 @@ function Markdown({ children }) {
   );
 }
 
-function ProjectList({ projects, loading, error, onRetry, basePath }) {
+function KnowledgeAdministration({ project, client, onChanged, onOpen }) {
+  const [file, setFile] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState('');
+  const upload = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!file) return;
+    setBusy(true); setMessage('');
+    try {
+      if (file.size > 256 * 1024) throw new Error('Choose a text file no larger than 256 KB.');
+      const content = new TextDecoder('utf-8', { fatal: true }).decode(await file.arrayBuffer());
+      await client.uploadDocument(project.id, { filename: file.name, content });
+      setFile(null); form.reset(); setMessage('Source uploaded and indexed.'); onChanged();
+    } catch (error) { setMessage(error.message); }
+    finally { setBusy(false); }
+  };
+  const remove = async (document) => {
+    if (!confirm(`Delete “${document.title}” from this project?`)) return;
+    setBusy(true); setMessage('');
+    try { await client.deleteDocument(project.id, document.id); setMessage('Source deleted.'); onChanged(); }
+    catch (error) { setMessage(error.message); }
+    finally { setBusy(false); }
+  };
+  return <section className="fw-main-section">
+    <h2>The project, in writing.</h2>
+    <p className="fw-muted">Open a source to see the context behind an answer.</p>
+    {project.membershipRole === 'MAINTAINER' && <form className="fw-upload" onSubmit={upload}>
+      <label><Upload size={18} /> Add a text source<input type="file" accept=".md,.txt,text/markdown,text/plain" required disabled={busy} onChange={event => setFile(event.target.files[0] || null)} /></label>
+      <small>Markdown or plain text, up to 256 KB. The source stays inside this project.</small>
+      <button className="fw-primary" disabled={busy || !file}>{busy ? 'Working…' : 'Upload and index'}</button>
+    </form>}
+    {message && <Notice error={!/uploaded|deleted/.test(message)}>{message}</Notice>}
+    <div className="fw-knowledge-list">{project.documents.map(doc => (
+      <div className="fw-knowledge-row" key={doc.id}>
+        <button onClick={() => onOpen(doc.id)}><FileText size={23} /><span><strong>{doc.title}</strong><small>{doc.managed ? 'Managed source' : 'Source snapshot'} · {date(doc.snapshot_at)}</small></span><ArrowRight size={18} /></button>
+        {doc.managed && project.membershipRole === 'MAINTAINER' && <button className="fw-icon-button" aria-label={`Delete ${doc.title}`} disabled={busy} onClick={() => remove(doc)}><Trash2 size={17} /></button>}
+      </div>))}</div>
+    {!project.documents.length && <Notice>No sources have been indexed for this project yet.</Notice>}
+  </section>;
+}
+
+function ProjectList({ projects, loading, error, onRetry, basePath, client, canCreate, onCreated }) {
   const [filter, setFilter] = useState('');
+  const [creating, setCreating] = useState(false);
   const shown = projects.filter((p) =>
     `${p.name} ${p.description}`.toLowerCase().includes(filter.toLowerCase())
   );
@@ -113,6 +161,8 @@ function ProjectList({ projects, loading, error, onRetry, basePath }) {
           />
         </label>
       </div>
+      {canCreate && !creating && <button className="fw-primary fw-create-project" onClick={() => setCreating(true)}>Create project</button>}
+      {canCreate && creating && <ProjectForm client={client} onSaved={onCreated} onCancel={() => setCreating(false)} />}
       {loading ? (
         <Notice>Loading your project memberships…</Notice>
       ) : error ? (
@@ -235,7 +285,7 @@ function SourcePanel({ project, selected, onSelect, onClose, client }) {
                   Source snapshot · {date(state.doc.snapshot_at)}
                 </p>
                 <Markdown>{state.doc.content}</Markdown>
-                <details className="fw-evidence">
+                {!!state.doc.evidence?.length && <details className="fw-evidence">
                   <summary>Repository evidence</summary>
                   {state.doc.evidence?.map((e) => (
                     <p key={e.path}>
@@ -243,7 +293,7 @@ function SourcePanel({ project, selected, onSelect, onClose, client }) {
                       <small>SHA-256 {e.sha256?.slice(0, 12)}</small>
                     </p>
                   ))}
-                </details>
+                </details>}
               </>
             )
           )}
@@ -405,13 +455,10 @@ function Ask({ project, client, onSource }) {
               )}
               <div className="fw-citations">
                 {turn.sources.map((source, i) => (
-                  <button
-                    key={`${source.id}-${i}`}
-                    onClick={() => onSource(source.documentId)}
-                  >
+                  <button key={`${source.id}-${i}`} onClick={() => source.documentId && onSource(source.documentId)} className={!source.documentId ? 'fw-responsibility-citation' : undefined}>
                     <span>{i + 1}</span>
-                    {source.heading}
-                    <ArrowRight size={13} />
+                    <span>{source.heading}{!source.documentId && <small>{source.content} · Maintained {date(source.updatedAt)}</small>}</span>
+                    {source.documentId && <ArrowRight size={13} />}
                   </button>
                 ))}
               </div>
@@ -493,68 +540,8 @@ function Ask({ project, client, onSource }) {
   );
 }
 
-function People({ project, client }) {
-  const [state, setState] = useState({ loading: true });
-  useEffect(() => {
-    const controller = new AbortController();
-    client
-      .members(project.id, controller.signal)
-      .then((data) => {
-        if (!controller.signal.aborted) setState(data);
-      })
-      .catch((error) => {
-        if (!controller.signal.aborted) setState({ error: error.message });
-      });
-    return () => controller.abort();
-  }, [project.id, client]);
-  return (
-    <section className="fw-main-section">
-      <h2>The people behind the project.</h2>
-      <p className="fw-muted">
-        Membership tells you who is here. Responsibilities need to be confirmed
-        by a maintainer.
-      </p>
-      {state.loading ? (
-        <Notice>Loading project members…</Notice>
-      ) : state.error ? (
-        <Notice error>{state.error}</Notice>
-      ) : (
-        <div className="fw-people">
-          {state.members?.length ? (
-            state.members.map((m) => (
-              <div key={m.userId}>
-                <span className="fw-project-initial">
-                  {m.firstName?.slice(0, 1)}
-                  {m.lastName?.slice(0, 1)}
-                </span>
-                <span>
-                  <strong>
-                    {m.firstName} {m.lastName}
-                  </strong>
-                  <small>{m.title || 'Project member'}</small>
-                </span>
-                <span className="fw-muted">
-                  {m.role === 'MAINTAINER' ? 'Maintainer' : 'Member'}
-                </span>
-              </div>
-            ))
-          ) : (
-            <Notice>No member details are available.</Notice>
-          )}
-        </div>
-      )}
-      <div className="fw-note">
-        <h3>Who owns what?</h3>
-        <p>
-          Area ownership has not been recorded yet. FirstWeek won’t infer
-          responsibilities from commit history or job titles.
-        </p>
-      </div>
-    </section>
-  );
-}
 
-function ProjectDetail({ id, view, basePath, client }) {
+function ProjectDetail({ id, view, basePath, client, onChanged }) {
   const [state, setState] = useState({ loading: true });
   const [selected, setSelected] = useState(null);
   const [revision, setRevision] = useState(0);
@@ -590,7 +577,9 @@ function ProjectDetail({ id, view, basePath, client }) {
       </div>
     );
   const { project } = state;
-  const active = tabs.some(([key]) => key === view) ? view : 'overview';
+  const availableTabs = tabs.filter(([key]) => key !== 'settings' || project.membershipRole === 'MAINTAINER');
+  const active = availableTabs.some(([key]) => key === view) ? view : 'overview';
+  const refresh = () => { setSelected(null); setRevision(n => n + 1); onChanged(); };
   return (
     <>
       <header className="fw-project-header">
@@ -615,7 +604,7 @@ function ProjectDetail({ id, view, basePath, client }) {
         )}
       </header>
       <nav className="fw-tabs" aria-label="Project sections">
-        {tabs.map(([key, label]) => (
+        {availableTabs.map(([key, label]) => (
           <NavLink
             aria-current={active === key ? 'page' : undefined}
             className={active === key ? 'fw-tab-active' : ''}
@@ -633,30 +622,16 @@ function ProjectDetail({ id, view, basePath, client }) {
           ) : active === 'architecture' ? (
             <Architecture project={project} onSource={setSelected} />
           ) : active === 'team' ? (
-            <People project={project} client={client} />
+            <><MemberAdministration project={project} client={client} onChanged={refresh} /><ResponsibilityAdministration project={project} client={client} /></>
+          ) : active === 'settings' ? (
+            <section className="fw-main-section"><ProjectForm project={project} client={client} onSaved={refresh} /></section>
           ) : active === 'knowledge' ? (
+            <KnowledgeAdministration project={project} client={client} onChanged={refresh} onOpen={setSelected} />
+          ) : project.knowledgeStatus === 'empty' ? (
             <section className="fw-main-section">
-              <h2>The project, in writing.</h2>
-              <p className="fw-muted">
-                Open a source to see the context behind an answer.
-              </p>
-              <div className="fw-knowledge-list">
-                {project.documents.map((doc) => (
-                  <button key={doc.id} onClick={() => setSelected(doc.id)}>
-                    <FileText size={23} />
-                    <span>
-                      <strong>{doc.title}</strong>
-                      <small>Source snapshot · {date(doc.snapshot_at)}</small>
-                    </span>
-                    <ArrowRight size={18} />
-                  </button>
-                ))}
-              </div>
-              {!project.documents.length && (
-                <Notice>
-                  No sources have been indexed for this project yet.
-                </Notice>
-              )}
+              <h2>Your project is ready for its first sources.</h2>
+              <p className="fw-lead">Add your team through People. Project documentation has not been indexed yet, so FirstWeek cannot answer questions about this project’s work.</p>
+              <Link className="fw-primary" to={`${basePath}/${id}/team`}>Open project people <ArrowRight size={17} /></Link>
             </section>
           ) : (
             <section className="fw-main-section">
@@ -759,7 +734,7 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
       .projects(controller.signal)
       .then((data) => {
         if (!controller.signal.aborted)
-          setState({ projects: data.projects, loading: false });
+          setState({ projects: data.projects, canCreate: data.canCreate, loading: false });
       })
       .catch((error) => {
         if (!controller.signal.aborted)
@@ -871,6 +846,7 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
             view={view}
             basePath={basePath}
             client={client}
+            onChanged={() => setRevision(n => n + 1)}
           />
         ) : (
           <ProjectList
@@ -879,6 +855,9 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
             error={state.error}
             basePath={basePath}
             onRetry={() => setRevision((n) => n + 1)}
+            client={client}
+            canCreate={!preview && state.canCreate}
+            onCreated={project => { setRevision(n => n + 1); navigate(`${basePath}/${project.id}`); }}
           />
         )}
       </main>

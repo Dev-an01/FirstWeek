@@ -56,7 +56,6 @@ data:
   AUDIO_QUEUE_METRICS: "false"
   DEFAULT_TTS_PROVIDER: "chirp3_instant"
   GCP_PROJECT_ID: ""
-  AUTO_LOAD_DATA: "true"
   SKIP_EMBEDDINGS: "false"
 
   # Chat Service

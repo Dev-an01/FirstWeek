@@ -446,7 +446,6 @@ services:
       GCP_PROJECT_ID: ${GCP_PROJECT_ID:-}
 
       # Auto-load data on first startup
-      AUTO_LOAD_DATA: ${AUTO_LOAD_DATA:-true}
       SKIP_EMBEDDINGS: ${SKIP_EMBEDDINGS:-false}
     volumes:
       - ./RAG:/app:cached
@@ -474,34 +473,7 @@ services:
         sleep 5 &&
 
         # Check if data exists, auto-load if empty
-        if [ "$${AUTO_LOAD_DATA}" = "true" ]; then
-          echo "🔍 Checking if database has data..." &&
-          DATA_COUNT=$(PGPASSWORD=$${POSTGRES_PASSWORD} psql -h rag-postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -t -c "SELECT COUNT(*) FROM executive_profiles" 2>/dev/null | tr -d " ") &&
-
-          if [ "$${DATA_COUNT}" = "0" ] || [ -z "$${DATA_COUNT}" ]; then
-            echo "📦 Database is empty - auto-loading sample data..." &&
-
-            # Step 1: Load PostgreSQL data
-            echo "  [1/3] Loading PostgreSQL data..." &&
-            python /app/init-scripts/load_postgres_data.py --docker --confirm &&
-
-            # Step 2: Load Neo4j data
-            echo "  [2/3] Loading Neo4j data..." &&
-            python /app/init-scripts/load_neo4j_data.py --docker --confirm &&
-
-            # Step 3: Generate embeddings (unless skipped)
-            if [ "$${SKIP_EMBEDDINGS}" != "true" ]; then
-              echo "  [3/3] Generating embeddings..." &&
-              python /app/init-scripts/generate_embeddings.py --docker
-            else
-              echo "  [3/3] Skipping embeddings (SKIP_EMBEDDINGS=true)"
-            fi &&
-
-            echo "✅ Auto-load complete!"
-          else
-            echo "✓ Database has data ($${DATA_COUNT} executive profiles) - skipping auto-load"
-          fi
-        fi &&
+        # Private knowledge is initialized explicitly through FirstWeek.
 
         # Start the API server
         echo "🎨 Starting FastAPI server..." &&
@@ -773,7 +745,7 @@ services:
         condition: service_healthy
     command: >
       sh -c "
-        echo '🚀 Resetting databases and loading fresh data...' &&
+        echo 'Bundled persona initialization is retired. Use docs/firstweek/RUNBOOK.md.' >&2; exit 1;
 
         # Install PostgreSQL client
         apt-get update && apt-get install -y --no-install-recommends postgresql-client &&
@@ -838,7 +810,7 @@ services:
         condition: service_completed_successfully
     command: >
       sh -c "
-        echo '🚀 Loading sample executive profile data...' &&
+        echo 'Bundled persona initialization is retired. Use docs/firstweek/RUNBOOK.md.' >&2; exit 1;
 
         # Install PostgreSQL client for pg_isready
         apt-get update && apt-get install -y --no-install-recommends postgresql-client &&

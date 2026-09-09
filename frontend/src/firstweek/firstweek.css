@@ -124,10 +124,18 @@ html:has(.fw-app), body:has(.fw-app), html:has(.fw-login), body:has(.fw-login) {
 .fw-evidence p { margin-top: 16px; overflow-wrap: anywhere; }
 .fw-evidence small { display: block; color: var(--fw-muted); margin-top: 5px; }
 .fw-knowledge-list { margin-top: 28px; }
-.fw-knowledge-list button { width: 100%; display: flex; text-align: left; align-items: center; gap: 15px; background: none; padding: 22px 0; border: 0; border-top: 1px solid var(--fw-line); }
+.fw-knowledge-row { display: flex; align-items: center; border-top: 1px solid var(--fw-line); }
+.fw-knowledge-list .fw-knowledge-row > button:first-child { flex: 1; display: flex; text-align: left; align-items: center; gap: 15px; background: none; padding: 22px 0; border: 0; }
 .fw-knowledge-list button span { flex: 1; }
 .fw-knowledge-list strong { font-size: 14px; font-weight: 550; }
 .fw-knowledge-list small { display: block; font-size: 11px; color: var(--fw-muted); margin-top: 5px; }
+.fw-upload { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: end; margin-top: 26px; padding: 20px; border: 1px solid var(--fw-line); border-radius: 10px; background: #f8faf6; }
+.fw-upload label { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; }
+.fw-upload input { display: block; max-width: 100%; margin-left: 8px; font-size: 11px; }
+.fw-upload small { color: var(--fw-muted); font-size: 10px; }
+.fw-upload label { flex-wrap: wrap; grid-column: 1 / -1; }
+.fw-upload input { flex-basis: 100%; min-width: 0; margin-left: 0; }
+@media (max-width: 600px) { .fw-upload { grid-template-columns: minmax(0, 1fr); } }
 .fw-people { margin-top: 30px; }
 .fw-people > div { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--fw-line); padding: 20px 0; }
 .fw-people > div > span:nth-child(2) { flex: 1; }
@@ -214,3 +222,16 @@ html:has(.fw-app), body:has(.fw-app), html:has(.fw-login), body:has(.fw-login) {
 .fw-component-notes dl > div { margin-top: 15px; }
 .fw-component-notes dt { font-weight: 700; }
 .fw-component-notes dd { margin: 4px 0 0; color: var(--fw-muted); }
+.fw-admin-form { display: grid; gap: 16px; max-width: 620px; margin: 24px 0 32px; }
+.fw-admin-form h2, .fw-admin-form h3, .fw-admin-form p { margin: 0; }
+.fw-admin-form label { display: grid; gap: 7px; font-size: 14px; }
+.fw-admin-form input, .fw-admin-form textarea, .fw-admin-form select, .fw-member-list select { padding: 12px; border: 1px solid #dce3df; border-radius: 7px; background: #fff; color: #18362f; font: inherit; min-width: 0; max-width: 100%; }
+.fw-admin-form textarea { resize: vertical; }
+.fw-admin-form > button { justify-self: start; }
+.fw-admin-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.fw-member-list { padding: 0; list-style: none; }
+.fw-member-list li { display: flex; gap: 18px; justify-content: space-between; align-items: center; border-bottom: 1px solid #dce3df; padding: 20px 0; flex-wrap: wrap; }
+.fw-member-identity { display: grid; gap: 4px; overflow-wrap: anywhere; }
+.fw-create-project { margin-bottom: 24px; }
+.fw-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 600px) { .fw-member-list li { align-items: flex-start; flex-direction: column; } .fw-admin-form { max-width: 100%; } }

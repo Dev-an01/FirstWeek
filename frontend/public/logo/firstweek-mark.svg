@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">FirstWeek</title>
+  <rect width="64" height="64" rx="15" fill="#173c35"/>
+  <path d="M17 18.5 31.5 12 47 18.5 32 25 17 18.5Z" fill="#d5ee85"/>
+  <path d="M17 29 31.5 22.5 47 29 32 35.5 17 29Z" fill="#9fc4ae"/>
+  <path d="M17 39.5 31.5 33 47 39.5 32 46 17 39.5Z" fill="#fff"/>
+</svg>

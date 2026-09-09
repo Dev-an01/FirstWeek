@@ -14,7 +14,7 @@ A default administrator account is created when seeding the database:
 
 ```
 Username: admin
-Email: admin@FirstWeek.com
+Email: admin@example.invalid
 Password: Admin@123456
 Role: EXECUTIVE
 ```
@@ -614,7 +614,7 @@ Retrieves all users in the system. **Requires EXECUTIVE role** (administrator pr
       {
         "id": "clx1...",
         "username": "admin",
-        "email": "admin@FirstWeek.com",
+        "email": "admin@example.invalid",
         "firstName": "System",
         "lastName": "Administrator",
         "role": "EXECUTIVE",

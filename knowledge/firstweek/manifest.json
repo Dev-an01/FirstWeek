@@ -23,15 +23,15 @@
       "evidence": [
         {
           "path": "FirstWeek/README.md",
-          "sha256": "66159b3b0af450bd6e9a482f22ffaac25329c6dc3fa4c0eb57be4ae6b60f750a"
+          "sha256": "35ffac8a8c036684248fa03fbeb9d3384729dfa0446107b2d3049a7623996104"
         },
         {
           "path": "FirstWeek/frontend/src/firstweek/Workspace.jsx",
-          "sha256": "1c6dfc547e0685837de9cf4f43bb1baa95349602eb992bf8ebd30c61ab379e70"
+          "sha256": "d41826b0636ccf27160b6696111c54d76db00509af6b620d1131a45e02addeb5"
         },
         {
           "path": "FirstWeek/backend/auth-service/routes/firstweekRoutes.js",
-          "sha256": "53ebf1c6df151fd218da72d72a30af26aa2cd631ca8c70535c9b90c8668a3f23"
+          "sha256": "e88b2c15fc1f61b07f565bfab7dadd0e070300759854f2fe4d68d93e861667a4"
         },
         {
           "path": "FirstWeek/RAG/firstweek/api.py",
@@ -43,7 +43,7 @@
         },
         {
           "path": "FirstWeek/backend/auth-service/shared/prisma/schema.prisma",
-          "sha256": "eb2ff8aec982c15243880e8357e08e47e85ee8bd88187b083969e05caee4b9dd"
+          "sha256": "940c772314f6370421107ac61f4036a6a336497b5bb8d2f061359f24594c2ffb"
         }
       ],
       "architecture": {
@@ -568,7 +568,6 @@
     }
   ],
   "retiredProjectIds": [
-    "FirstWeek",
     "wasmedge",
     "random-exp",
     "oopscpp",

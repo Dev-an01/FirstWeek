@@ -23,7 +23,7 @@ Complete authentication service with:
 ## Authentication
 
 Most endpoints require JWT authentication via cookies or Authorization header:
-- **Cookie**: \`firstweek_avatar_access_token\` (httpOnly, secure)
+- **Cookie**: \`firstweek_access_token\` (httpOnly, secure)
 - **Header**: \`Authorization: Bearer <token>\`
 
 ## Getting Started
@@ -91,7 +91,7 @@ Most endpoints require JWT authentication via cookies or Authorization header:
         cookieAuth: {
           type: "apiKey",
           in: "cookie",
-          name: "firstweek_avatar_access_token",
+          name: "firstweek_access_token",
           description: "JWT access token in httpOnly cookie",
         },
       },

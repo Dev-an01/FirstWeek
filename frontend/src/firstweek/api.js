@@ -1,16 +1,15 @@
 import { useAuthStore } from '../store/authStore';
 
 const base = import.meta.env.VITE_FIRSTWEEK_API_URL || '/api/firstweek';
-async function request(path, { signal, question, history = [] } = {}) {
+async function request(path, { signal, question, history = [], method = 'GET', data } = {}) {
+  if (question !== undefined) { method = 'POST'; data = { question, history }; }
   const response = await fetch(`${base}${path}`, {
-    method: question === undefined ? 'GET' : 'POST',
+    method,
     credentials: 'include',
     cache: 'no-store',
     signal,
     headers: { 'Content-Type': 'application/json' },
-    ...(question === undefined
-      ? {}
-      : { body: JSON.stringify({ question, history }) }),
+    ...(data === undefined ? {} : { body: JSON.stringify(data) }),
   });
   if (response.status === 401) {
     useAuthStore.setState({ user: null, isAuthenticated: false });
@@ -30,6 +29,17 @@ async function request(path, { signal, question, history = [] } = {}) {
 }
 const prefix = (id) => `/projects/${encodeURIComponent(id)}`;
 export const firstweekApi = {
+  createProject: (data) => request('/projects', { method: 'POST', data }),
+  updateProject: (id, data) => request(prefix(id), { method: 'PATCH', data }),
+  addMember: (id, data) => request(`${prefix(id)}/members`, { method: 'POST', data }),
+  changeMember: (id, userId, role) => request(`${prefix(id)}/members/${encodeURIComponent(userId)}`, { method: 'PATCH', data: { role } }),
+  removeMember: (id, userId) => request(`${prefix(id)}/members/${encodeURIComponent(userId)}`, { method: 'DELETE', data: {} }),
+  responsibilities: (id, signal) => request(`${prefix(id)}/responsibilities`, { signal }),
+  createResponsibility: (id, data) => request(`${prefix(id)}/responsibilities`, { method: 'POST', data }),
+  updateResponsibility: (id, responsibilityId, data) => request(`${prefix(id)}/responsibilities/${encodeURIComponent(responsibilityId)}`, { method: 'PATCH', data }),
+  deleteResponsibility: (id, responsibilityId) => request(`${prefix(id)}/responsibilities/${encodeURIComponent(responsibilityId)}`, { method: 'DELETE', data: {} }),
+  uploadDocument: (id, data) => request(`${prefix(id)}/documents`, { method: 'POST', data }),
+  deleteDocument: (id, documentId) => request(`${prefix(id)}/documents/${encodeURIComponent(documentId)}`, { method: 'DELETE', data: {} }),
   projects: (signal) => request('/projects', { signal }),
   project: (id, signal) => request(prefix(id), { signal }),
   document: (id, documentId, signal) =>

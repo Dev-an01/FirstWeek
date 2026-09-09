@@ -88,12 +88,8 @@ class ProfileIDMapper:
             Database ID (passed through as-is for onboarding executives)
 
         Examples:
-            >>> ProfileIDMapper.to_database_id("sample")
-            "sample_profile"
-            >>> ProfileIDMapper.to_database_id("exec_001_test")
-            "sample_profile"  # Legacy IDs redirect to sample
-            >>> ProfileIDMapper.to_database_id("akshay_behl_n66x")
-            "akshay_behl_n66x"  # Onboarding IDs pass through
+            >>> ProfileIDMapper.to_database_id("workspace_profile")
+            'workspace_profile'
         """
         if not profile_id:
             raise ValueError("An explicit profile ID is required")
@@ -106,7 +102,7 @@ class ProfileIDMapper:
         if profile_id in cls.DB_TO_FRIENDLY:
             return profile_id
 
-        # Check friendly name mapping (includes legacy exec_* redirects)
+        # Check explicitly registered friendly names.
         db_id = cls.FRIENDLY_TO_DB.get(profile_id.lower())
         if db_id:
             if profile_id != db_id:

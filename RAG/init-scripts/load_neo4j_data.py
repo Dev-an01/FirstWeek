@@ -11,6 +11,8 @@ Usage:
     python load_neo4j_data.py --confirm   # Skip confirmation prompt
 """
 
+raise SystemExit("Bundled persona seeding was retired. Use the FirstWeek runbook in docs/firstweek/ instead; no database changes were made.")
+
 import sys
 import os
 import io

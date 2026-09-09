@@ -8,6 +8,20 @@ from .index import DEFAULT_INDEX
 
 
 class APITests(TestCase):
+    def test_managed_only_evidence_and_scope_validation(self):
+        source = {'id': 'managed:0', 'documentId': 'm-00000000-0000-0000-0000-000000000001',
+                  'heading': 'Launch', 'content': 'The beacon is copper-lantern-73.',
+                  'projectId': 'new-project', 'updatedAt': '2026-09-09T00:00:00Z'}
+        body = {'question': 'What is the beacon?', 'projectName': 'New project',
+                'hasCuratedKnowledge': False, 'managedSources': [source]}
+        with patch('RAG.firstweek.api.embedding_model', side_effect=AssertionError('No curated index needed')):
+            response = self.client.post('/internal/firstweek/local-workspace/new-project/ask', headers=self.headers, json=body)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('copper-lantern-73', response.json()['answer'])
+        self.assertEqual(response.json()['sources'][0]['documentId'], source['documentId'])
+        source['projectId'] = 'another-project'
+        self.assertEqual(self.client.post('/internal/firstweek/local-workspace/new-project/ask', headers=self.headers, json=body).status_code, 422)
+
     def setUp(self):
         self.environment=patch.dict(os.environ, {
             'FIRSTWEEK_SERVICE_TOKEN':'test-only-token-with-at-least-32-characters',
@@ -51,6 +65,18 @@ class APITests(TestCase):
         self.assertEqual(response.json()['mode'],'no-evidence')
         for question in ['', '   ', 'a'*2001, 7]:
             self.assertEqual(self.client.post(self.base+'/ask',headers=self.headers,json={'question':question}).status_code,422)
+
+    def test_maintained_only_project_returns_responsibility_provenance(self):
+        response=self.client.post('/internal/firstweek/local-workspace/new-project/ask',headers=self.headers,json={
+            'question':'Who owns deployments?', 'projectName':'New project', 'hasCuratedKnowledge':False,
+            'responsibilities':[{'id':'r-1','name':'Deployments','description':'Own release readiness',
+              'status':'ACTIVE','owner':'Ada Member (@ada)','updatedAt':'2026-09-08T00:00:00Z'}]})
+        self.assertEqual(response.status_code,200)
+        data=response.json()
+        self.assertEqual(data['mode'],'source-excerpts')
+        self.assertEqual(data['sources'][0]['kind'],'responsibility')
+        self.assertIsNone(data['sources'][0]['documentId'])
+        self.assertIn('Ada Member',data['answer'])
 
     def test_missing_index_is_recoverable(self):
         with patch.dict(os.environ,{'FIRSTWEEK_INDEX_PATH':'/tmp/firstweek-nonexistent-db.sqlite3'}):

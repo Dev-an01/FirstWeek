@@ -242,13 +242,49 @@ model Project {
   name        String
   description String @default("")
   isActive    Boolean @default(true)
+  hasCuratedKnowledge Boolean @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   members     ProjectMember[]
+  responsibilities ProjectResponsibility[]
+  documents   ProjectDocument[]
 
   @@id([companyId, id])
   @@map("projects")
+}
+
+model ProjectDocument {
+  companyId  String
+  projectId  String
+  id         String
+  title      String
+  filename   String
+  mediaType  String
+  content    String
+  sha256     String
+  byteSize   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  project    Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
+  chunks     ProjectDocumentChunk[]
+
+  @@id([companyId, projectId, id])
+  @@index([companyId, projectId, createdAt])
+  @@map("project_documents")
+}
+
+model ProjectDocumentChunk {
+  companyId  String
+  projectId  String
+  documentId String
+  position   Int
+  heading    String
+  content    String
+  document   ProjectDocument @relation(fields: [companyId, projectId, documentId], references: [companyId, projectId, id], onDelete: Cascade)
+
+  @@id([companyId, projectId, documentId, position])
+  @@map("project_document_chunks")
 }
 
 model ProjectMember {
@@ -259,8 +295,38 @@ model ProjectMember {
   createdAt DateTime @default(now())
   project   Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
   user      User @relation(fields: [companyId, userId], references: [companyId, id], onDelete: Cascade)
+  responsibilityAssignments ResponsibilityAssignment[]
 
   @@id([companyId, projectId, userId])
   @@index([userId])
   @@map("project_members")
+}
+
+model ProjectResponsibility {
+  companyId  String
+  projectId  String
+  id         String
+  name       String
+  description String @default("")
+  status     String @default("ACTIVE")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  project    Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
+  assignment ResponsibilityAssignment?
+
+  @@id([companyId, projectId, id])
+  @@map("project_responsibilities")
+}
+
+model ResponsibilityAssignment {
+  companyId       String
+  projectId       String
+  responsibilityId String
+  ownerUserId     String
+  responsibility ProjectResponsibility @relation(fields: [companyId, projectId, responsibilityId], references: [companyId, projectId, id], onDelete: Cascade)
+  owner           ProjectMember @relation(fields: [companyId, projectId, ownerUserId], references: [companyId, projectId, userId], onDelete: Cascade)
+
+  @@id([companyId, projectId, responsibilityId])
+  @@index([companyId, projectId, ownerUserId])
+  @@map("responsibility_assignments")
 }

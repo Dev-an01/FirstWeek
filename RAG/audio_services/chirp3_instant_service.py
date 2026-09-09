@@ -2,8 +2,8 @@
 Google Chirp 3 Instant TTS Service with TRUE Streaming
 Follows Kokoro TTS language selection pattern exactly
 
-Supports per-executive voice cloning keys loaded from DB with LRU cache,
-falling back to default sample keys from Assets/ when unavailable.
+Supports per-executive voice cloning keys loaded from DB with LRU cache.
+Missing voice keys fail closed; there is no bundled persona fallback.
 """
 
 import json
@@ -80,7 +80,7 @@ class GoogleChirp3InstantService(BaseTTSService):
         """Initialize Chirp 3 Instant service with pre-existing voice keys"""
 
         # GCP Configuration
-        self.project_id = os.getenv('GCP_PROJECT_ID', 'firstweek-ai-firstweek')
+        self.project_id = os.getenv('GCP_PROJECT_ID')
 
         # Initialize GCP TTS client using Application Default Credentials (ADC)
         # The client will automatically find credentials from:
@@ -127,35 +127,6 @@ class GoogleChirp3InstantService(BaseTTSService):
         logger.info(f"✅ Chirp 3 Instant initialized")
         logger.info(f"🔑 Loaded default languages: {list(self.voice_keys.keys())}")
 
-    def _load_voice_keys(self):
-        """Load pre-existing voice cloning keys from Assets folder"""
-
-        # Path to Assets folder (relative to this file: RAG/audio_services/ -> RAG/)
-        assets_dir = Path(__file__).parent.parent / 'Assets'
-
-        # Load English voice key
-        en_key_file = assets_dir / 'custom_voice_key.txt'
-        if en_key_file.exists():
-            with open(en_key_file, 'r') as f:
-                self.voice_keys['en-US'] = f.read().strip()
-            logger.info(f"📁 Loaded English voice key ({len(self.voice_keys['en-US'])} chars)")
-        else:
-            logger.warning(f"⚠️ English voice key not found: {en_key_file}")
-
-        # Load Japanese voice key
-        jp_key_file = assets_dir / 'custom_voice_key_jp.txt'
-        if jp_key_file.exists():
-            with open(jp_key_file, 'r') as f:
-                self.voice_keys['ja-JP'] = f.read().strip()
-            logger.info(f"📁 Loaded Japanese voice key ({len(self.voice_keys['ja-JP'])} chars)")
-        else:
-            logger.warning(f"⚠️ Japanese voice key not found: {jp_key_file}")
-
-        if not self.voice_keys:
-            raise TTSServiceError(
-                f"No voice keys found in {assets_dir}. "
-                "Expected: custom_voice_key.txt, custom_voice_key_jp.txt"
-            )
 
     def _contains_japanese(self, text: str) -> bool:
         """
@@ -229,10 +200,10 @@ class GoogleChirp3InstantService(BaseTTSService):
         """Get voice key for an executive, with LRU cache and DB fallback.
 
         Priority:
-        1. No executive_id -> return default sample key
+        1. No executive_id -> no voice key
         2. LRU cache hit -> return cached key for language
         3. Cache miss -> load from DB, cache, return key
-        4. Executive has no key for language -> fall back to default
+        4. Executive has no key for language -> no voice key
         """
         if not executive_id:
             return self.voice_keys.get(language_code)
@@ -453,9 +424,7 @@ class GoogleChirp3InstantService(BaseTTSService):
             TTSServiceError: Always raises, as keys are pre-loaded
         """
         raise TTSServiceError(
-            "Voice cloning keys already exist in Assets/ folder "
-            "(custom_voice_key.txt, custom_voice_key_jp.txt). "
-            "Voice registration not needed for this implementation."
+            "Register an executive voice through the onboarding service before synthesis."
         )
 
     def get_service_info(self) -> Dict[str, Any]:

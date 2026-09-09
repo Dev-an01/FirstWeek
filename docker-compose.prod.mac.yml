@@ -374,7 +374,6 @@ services:
       GCP_VIDEO_SERVICE_URL: ${GCP_VIDEO_SERVICE_URL:-}
       GCP_VIDEO_EXECUTIVE_ID: ${GCP_VIDEO_EXECUTIVE_ID:-anand_idle_v2}
       GCP_PROJECT_ID: ${GCP_PROJECT_ID:-}
-      AUTO_LOAD_DATA: ${AUTO_LOAD_DATA:-true}
       SKIP_EMBEDDINGS: ${SKIP_EMBEDDINGS:-false}
     volumes:
       # Mount all code directories (read-only for safety)
@@ -418,34 +417,7 @@ services:
         echo "PostgreSQL is ready" &&
         echo "Neo4j is ready (verified by Docker health check)" &&
         sleep 5 &&
-        if [ "$${AUTO_LOAD_DATA}" = "true" ]; then
-          echo "🔍 Checking if database has data..." &&
-          DATA_COUNT=$(PGPASSWORD=$${POSTGRES_PASSWORD} psql -h rag-postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -t -c "SELECT COUNT(*) FROM executive_profiles" 2>/dev/null | tr -d " ") &&
-
-          if [ "$${DATA_COUNT}" = "0" ] || [ -z "$${DATA_COUNT}" ]; then
-            echo "📦 Database is empty - auto-loading sample data..." &&
-
-            # Step 1: Load PostgreSQL data
-            echo "  [1/3] Loading PostgreSQL data..." &&
-            python /app/init-scripts/load_postgres_data.py --docker --confirm &&
-
-            # Step 2: Load Neo4j data
-            echo "  [2/3] Loading Neo4j data..." &&
-            python /app/init-scripts/load_neo4j_data.py --docker --confirm &&
-
-            # Step 3: Generate embeddings (unless skipped)
-            if [ "$${SKIP_EMBEDDINGS}" != "true" ]; then
-              echo "  [3/3] Generating embeddings..." &&
-              python /app/init-scripts/generate_embeddings.py --docker
-            else
-              echo "  [3/3] Skipping embeddings (SKIP_EMBEDDINGS=true)"
-            fi &&
-
-            echo "✅ Auto-load complete!"
-          else
-            echo "✓ Database has data ($${DATA_COUNT} executive profiles) - skipping auto-load"
-          fi
-        fi &&
+        # Private knowledge is initialized explicitly through FirstWeek.
         echo "<� Starting FastAPI server..." &&
         uvicorn api.main:app --host 0.0.0.0 --port 8000 --loop asyncio
       '
@@ -723,7 +695,7 @@ services:
         condition: service_healthy
     command: >
       sh -c "
-        echo '🚀 Resetting databases and loading fresh data...' &&
+        echo 'Bundled persona initialization is retired. Use docs/firstweek/RUNBOOK.md.' >&2; exit 1;
 
         # Install PostgreSQL client
         apt-get update && apt-get install -y --no-install-recommends postgresql-client &&
@@ -788,7 +760,7 @@ services:
         condition: service_completed_successfully
     command: >
       sh -c "
-        echo '🚀 Loading sample executive profile data...' &&
+        echo 'Bundled persona initialization is retired. Use docs/firstweek/RUNBOOK.md.' >&2; exit 1;
 
         # Install PostgreSQL client for pg_isready
         apt-get update && apt-get install -y --no-install-recommends postgresql-client &&

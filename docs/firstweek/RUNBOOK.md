@@ -1,5 +1,15 @@
 # FirstWeek foundation runbook
 
+## Project administration (M1-01)
+
+Company administrators create projects from the directory and become the first maintainer. Only assigned maintainers edit Settings or manage People. Add an active, company-verified and email-verified person by exact username. Membership writes serialize on the project row and retain an active maintainer. New projects start without indexed knowledge; maintainers add sources through Knowledge.
+
+Management writes require JSON and the exact browser Origin. Set `FIRSTWEEK_ORIGIN` when a proxy changes the request host; the local host defaults to `http://127.0.0.1:5173`. Existing project settings, roles and revocations survive restart. Bootstrap grants membership only when creating a project for the first time.
+
+The additive migration `202609080001_project_knowledge_origin/migration.sql` adds `hasCuratedKnowledge`. The isolated `firstweek_demo` had no Prisma migration history (Prisma deploy reported P3005); this exact SQL was applied directly after schema inspection, without reset. Do not apply baseline migrations blindly to an existing database. Regenerate Prisma client after applying the column.
+
+Run `FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/tests/projectAdministration.integration.test.js` for concurrency and authorization checks against disposable records in the fixed local `firstweek_demo` database. The test cleans its records. Live browser checks covered create, empty knowledge, add, promotion, settings save, last-maintainer rejection, confirmed removal and reload persistence at desktop/mobile sizes. Milestone acceptance is recorded in TRACK.md.
+
 ## Available now
 
 Five private project guides, a reproducible local full-text index, strict company/project retrieval, internal RAG endpoints, and an authenticated membership gateway. The initial Impeccable frontend now includes sign-in, a project directory, project overview, sourced questions, a source reader, knowledge and people views. This is not the completed production deployment. The standalone local wrapper now defaults to semantic retrieval and conversational generation using the existing provider code; the core API retains explicit environment flags.
@@ -20,13 +30,23 @@ node --test backend/auth-service/tests/projectAccess.test.js backend/auth-servic
 
 `check` exits nonzero when an evidence file changes or disappears. Re-read changed evidence and edit the affected guide before updating its manifest hash. It does not rewrite guides or bless changed evidence automatically.
 
-The importer rebuilds the complete single-company corpus atomically. It is intended for the small local demo corpus, not concurrent multi-tenant ingestion. An old process can finish reading its old snapshot while new requests open the new one. Future managed uploads belong in PostgreSQL with job/version state, as described in the implementation plan.
+The importer rebuilds the complete single-company corpus atomically. It is intended for the small local demo corpus, not concurrent multi-tenant ingestion. An old process can finish reading its old snapshot while new requests open the new one. Managed uploads live in PostgreSQL and are unaffected by this SQLite rebuild.
+
+## Managed documents (M1-03)
+
+Maintainers upload UTF-8 `.md` and `.txt` files through Knowledge. Limits are 256 KiB per file, 240 chunks per document and 100 documents per project. Unsupported formats, binary control characters, invalid Unicode and unsafe filenames are rejected. Browser file decoding is strict; the authenticated JSON API validates the decoded text independently. Raw files, PDFs, remote URLs and arbitrary server paths are not ingested. Markdown links and images do not trigger external requests from the source reader.
+
+The additive `202609080003_project_documents/migration.sql` creates scoped PostgreSQL document and chunk tables. It was applied only to the isolated `firstweek_demo`; regenerate the auth Prisma client afterward. Document text and chunks commit together, so a successful upload is immediately searchable without a background worker. Deletion cascades to chunks. A failed transaction leaves no partial document. Back up these PostgreSQL tables together with projects and memberships; the curated SQLite file is not a backup of uploads.
+
+Members read sources and maintainers create/delete them. All operations use server-derived company/project scope. Uploads are searched lexically within the bounded project collection, including recent user questions for follow-ups; curated guides keep their hybrid retrieval. Managed evidence is forwarded only by the authenticated gateway and carries document IDs/timestamps. Documents changing while an answer is generated cause a retry response, withholding the old evidence. Previously displayed text in another browser tab cannot be recalled; durable saved-message deletion handling remains part of M1-04.
+
+Run `NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/tests/projectDocuments.integration.test.js backend/auth-service/tests/firstweekRoutes.test.js` for disposable PostgreSQL authorization, Unicode, quota concurrency, retrieval, deletion and pending-answer checks. Use `.firstweek/venv/bin/python -m unittest RAG.firstweek.test_api RAG.firstweek.test_index -q` for the local RAG regression suite. The local auth wrapper accepts up to 2 MiB JSON to accommodate escaped text; the document byte limit is enforced after parsing.
 
 ## Frontend preview
 
 Start `npm run dev` from `frontend/` and open `http://localhost:5173/preview/northstar-api`. This explicit development-only route contains a fictional project; it exercises navigation, excerpt answers and source reading without private data or a database. The preview module is excluded from production output. The real workspace is `/projects`, requires sign-in, and reads only the authenticated API. There is no mock fallback on private routes.
 
-Actual company/project data requires the identities and index setup below. Conversation turns are currently in-memory and reset when leaving the Ask view. Uploads, editable ownership, persistent conversations and interactive project administration remain planned. The older signup, password recovery and account/admin screens are retained during migration.
+Actual company/project data requires the identities and index setup below. Project administration, maintained responsibilities and text uploads are implemented. Conversation turns are currently in memory and reset when leaving Ask; durable conversations remain M1-04. The older signup, password recovery and account/admin screens are retained during migration.
 
 ## Connect to actual identities
 
@@ -56,7 +76,7 @@ Set `FIRSTWEEK_GENERATE=true` to use the existing `RAG/config/llm_config.yaml` p
 
 ## Remaining before launch
 
-The remaining legacy auth/account surface revamp, interactive membership administration, editable responsibilities, durable project conversations, managed ingestion, public publication/API widget and production deployment remain in later plan phases. The isolated migration, real sessions and immediate revocation passed locally; in-flight revocation is covered by the gateway tests. Verify provider generation, RAG model indexing and production proxy isolation before exposing the service. No private project sources are published by this work.
+Durable project conversations, broader imports and refresh workflows, the legacy account-screen revamp, public publication/widget and production deployment remain in later phases. Project administration, editable responsibilities and bounded text uploads are implemented locally. Production migration baselining, backups and proxy isolation still need deployment verification. No private project sources are published by this work.
 
 ## Working authenticated local demo
 
@@ -80,12 +100,12 @@ node scripts/firstweek-local-server.js
 python scripts/firstweek-local-rag.py
 
 # frontend/ directory
-AUTH_SERVICE_URL=http://127.0.0.1:3003 VITE_API_BASE_URL=/api/users VITE_FIRSTWEEK_API_URL=/api/firstweek npm run dev -- --host 127.0.0.1 --port 5174
+AUTH_SERVICE_URL=http://127.0.0.1:3003 VITE_API_BASE_URL=/api/users VITE_FIRSTWEEK_API_URL=/api/firstweek node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-Open `http://127.0.0.1:5174`. Credentials are in owner-readable `.firstweek/local/access.json`; service secrets are in `.firstweek/local/runtime.json`. Both are ignored by Git. The account is a local test identity with access to all five projects, not evidence of real project ownership. Restarting the auth script restores its seeded memberships. Other existing backend integrations are not started by this local wrapper.
+Open `http://127.0.0.1:5173`. Credentials are in owner-readable `.firstweek/local/access.json`; service secrets are in `.firstweek/local/runtime.json`. Both are ignored by Git. The account is a local test identity initially assigned to all five projects, not evidence of real project ownership. Restarting the auth script preserves revoked memberships and edited roles/settings. Other existing backend integrations are not started by this local wrapper.
 
-During this task the Python environment is `/tmp/firstweek-test-env`; use `/tmp/firstweek-test-env/bin/python scripts/firstweek-local-rag.py` while it exists. The local RAG wrapper defaults to Groq generation plus the compact `sentence-transformers/all-MiniLM-L6-v2` embedding model for these English guides. It reads only provider credentials from the root `.env`. Local vectors remain on disk; generated answers send selected passages, the question and up to six recent chat messages to the configured provider. The user approved this transfer and live Groq verification passed: the original stack/deployment question returned a cited stack and an honest unconfirmed deployment status; a contextual follow-up and greeting also generated successfully. A real browser session verified sign-in, project navigation, MoneyPlant questions and source reading at desktop and mobile widths. Separate live API checks verified anonymous rejection, ignored client scope, `no-store`, immediate member removal, restored membership, service-token enforcement and logout invalidation.
+The local Python environment is `.firstweek/venv`; run `.firstweek/venv/bin/python scripts/firstweek-local-rag.py` from the repository root. The wrapper defaults to Groq generation and the cached `sentence-transformers/all-MiniLM-L6-v2` embedding model. It reads provider credentials from the root `.env`. Vectors remain local; selected passages, questions and bounded chat context are sent to the configured provider under the user's existing authorization. Local browser verification covered sign-in, project navigation, cited answers, source reading and managed uploads at desktop/mobile sizes. API checks covered anonymous rejection, ignored client scope, `no-store`, revocation and service-token enforcement.
 
 Stop the service terminal processes with Ctrl-C, then stop this isolated database with `pg_ctl -D .firstweek/local/postgres stop`. Nothing here deploys or publishes the private corpus.
 

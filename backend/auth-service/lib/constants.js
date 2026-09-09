@@ -128,8 +128,8 @@ const TOKEN_TYPES = {
 
 // Cookie names for different token types
 const COOKIE_NAMES = {
-  ACCESS_TOKEN: "firstweek_avatar_access_token",
-  REFRESH_TOKEN: "firstweek_avatar_refresh_token",
+  ACCESS_TOKEN: "firstweek_access_token",
+  REFRESH_TOKEN: "firstweek_refresh_token",
 };
 
 // Session configuration

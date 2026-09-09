@@ -18,7 +18,7 @@ Curated Markdown project guides and their evidence hashes live on the server. An
 Read `frontend/src/firstweek/Workspace.jsx` for project navigation and chat, `backend/auth-service/routes/firstweekRoutes.js` for the access gateway, `RAG/firstweek/api.py` for generation, and `RAG/firstweek/index.py` for retrieval. The local setup is documented in `docs/firstweek/RUNBOOK.md`.
 
 ## Current limitations
-The local authenticated flow, hybrid retrieval and Groq generation have been verified. This does not establish a production deployment. Conversations remain in memory. Interactive membership administration, editable responsibilities, managed uploads and a separately published portfolio collection remain planned. Legacy avatar services are preserved in the repository but are not the active FirstWeek retrieval path.
+The local authenticated flow, hybrid retrieval and Groq generation have been verified. This does not establish a production deployment. Conversations remain in memory. Membership administration is implemented, with PostgreSQL concurrency, authorization, restart and authenticated desktop/mobile browser checks. Editable responsibilities, managed uploads and a separately published portfolio collection remain planned. New projects start with no indexed sources. Legacy avatar services are preserved in the repository but are not the active FirstWeek retrieval path.
 
 ## Ownership
 The workspace owner selected this project for their portfolio. A current team responsibility map has not been supplied; do not invent individual component owners.

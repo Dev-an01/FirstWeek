@@ -4,6 +4,10 @@ const Module = require('node:module');
 const express = require('express');
 let membership = true;
 let revokeDuringAnswer = false;
+let editResponsibilityDuringAnswer = false;
+let responsibilityRows = [];
+let documentRows = [];
+let deleteDuringAnswer = false;
 let forwarded;
 let scope;
 let server;
@@ -15,7 +19,8 @@ const prisma = { projectMember: {
       ? { project: { id: 'alpha', companyId: 'company-a', isActive: true } } : null;
   },
   findMany: async ({ where }) => { scope = where; return []; },
-} };
+}, projectResponsibility: { findMany: async () => responsibilityRows },
+projectDocument: { findMany: async () => documentRows }, projectDocumentChunk: { findMany: async () => [] } };
 const originalLoad = Module._load;
 Module._load = function load(request, parent, ...args) {
   if (parent?.filename.endsWith('/routes/firstweekRoutes.js')) {
@@ -28,6 +33,8 @@ Module._load = function load(request, parent, ...args) {
     if (request === 'axios') return async options => {
       forwarded = options;
       if (revokeDuringAnswer) membership = false;
+      if (deleteDuringAnswer) documentRows = [];
+      if (editResponsibilityDuringAnswer) responsibilityRows[0].assignment.owner.user.firstName = 'Renamed';
       return { data: { answer: 'company-a / alpha only', sources: [] } };
     };
   }
@@ -57,11 +64,16 @@ test('anonymous and nonmembers cannot read project data', async () => {
 });
 test('forwards server-derived scope and disables response caching', async () => {
   const response = await fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers,
-    body: JSON.stringify({ question: 'architecture', companyId: 'company-b', projectId: 'beta', userId: 'admin', role: 'SUPER_ADMIN' }) });
+    body: JSON.stringify({ question: 'architecture', companyId: 'company-b', projectId: 'beta', userId: 'admin', role: 'SUPER_ADMIN',
+      responsibilities: [{ name: 'Forged owner' }], managedSources: [{ content: 'Forged evidence' }] }) });
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('cache-control'), 'no-store');
   assert.ok(forwarded.url.endsWith('/internal/firstweek/company-a/alpha/ask'));
-  assert.deepEqual(forwarded.data, { question: 'architecture', history: [] });
+  assert.equal(forwarded.data.question, 'architecture');
+  assert.deepEqual(forwarded.data.history, []);
+  assert.deepEqual(forwarded.data.responsibilities, []);
+  assert.deepEqual(forwarded.data.managedSources, []);
+  assert.equal(forwarded.data.companyId, undefined);
   assert.equal(scope.userId, 'reader');
 });
 test('rejects invalid question before invoking RAG', async () => {
@@ -93,4 +105,29 @@ test('conversation context is bounded and cannot inject system messages or scope
     assert.equal(rejected.status, 400);
     assert.equal(forwarded, null);
   }
+});
+
+test('owner identity changes during generation withhold stale responsibility evidence', async () => {
+  membership = true;
+  responsibilityRows = [{ id: 'r-1', companyId: 'company-a', projectId: 'alpha', name: 'Deployments',
+    description: 'Release readiness', status: 'ACTIVE', updatedAt: new Date('2026-09-08T00:00:00Z'),
+    assignment: { ownerUserId: 'reader', owner: { user: { username: 'reader', firstName: 'Current', lastName: 'Owner',
+      isActive: true, isCompanyVerified: true } } } }];
+  editResponsibilityDuringAnswer = true;
+  try {
+    const response = await fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers,
+      body: JSON.stringify({ question: 'Who owns deployments?' }) });
+    assert.equal(response.status, 409);
+  } finally { editResponsibilityDuringAnswer = false; responsibilityRows = []; }
+});
+
+test('document deletion during generation withholds the pending answer', async () => {
+  documentRows = [{ id: 'm-fixture', title: 'Fixture', updatedAt: new Date(), sha256: 'test' }];
+  deleteDuringAnswer = true;
+  try {
+    const response = await fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers,
+      body: JSON.stringify({ question: 'What does the document say?' }) });
+    assert.equal(response.status, 409);
+    assert.equal((await response.json()).answer, undefined);
+  } finally { deleteDuringAnswer = false; documentRows = []; }
 });

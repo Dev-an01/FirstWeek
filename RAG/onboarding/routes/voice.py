@@ -42,7 +42,7 @@ LANGUAGE_CODE_MAP = {
 RAG_SERVICE_URL = os.getenv("RAG_SERVICE_URL", "http://localhost:8000")
 
 # GCP config
-GCP_PROJECT_ID = os.getenv("GCP_VOICE_CLONING_PROJECT_ID", os.getenv("GCP_PROJECT_ID", "firstweek-ai-avatar"))
+GCP_PROJECT_ID = os.getenv("GCP_VOICE_CLONING_PROJECT_ID") or os.getenv("GCP_PROJECT_ID")
 
 
 async def _validate_executive_company(pool, company_id: str, executive_id: str):
@@ -179,6 +179,9 @@ async def generate_voice_key(
     """
     pool = request.app.state.pool
     await _validate_executive_company(pool, company_id, executive_id)
+
+    if not GCP_PROJECT_ID:
+        raise HTTPException(status_code=503, detail="Voice cloning is not configured: set GCP_VOICE_CLONING_PROJECT_ID or GCP_PROJECT_ID.")
 
     if language not in CONSENT_SCRIPTS:
         raise HTTPException(status_code=400, detail=f"Unsupported language: {language}. Use 'en' or 'ja'.")
