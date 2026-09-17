@@ -1,11 +1,23 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 import { CompanyRequiredRoute } from './components/Auth/CompanyRequiredRoute';
 import { OnboardingRoute } from './components/Auth/OnboardingRoute';
 import { AdminRoute, SuperAdminRoute } from './components/Auth/AdminRoute';
 import { PageLoader } from './components/PageLoader';
 import './i18n/config';
+import { publicApi } from './firstweek/publicApi';
+import { initializePrivateAuth } from './store/authStore';
+
+function PrivateAuthLifecycle() {
+  const { pathname } = useLocation();
+  const publicRoute = pathname === '/showcase' || pathname.startsWith('/showcase/');
+  useEffect(() => {
+    if (!publicRoute) return initializePrivateAuth();
+    return undefined;
+  }, [publicRoute]);
+  return null;
+}
 
 // Keep auth pages as normal imports - they're needed immediately
 import { SignupPage } from './pages/SignupPage';
@@ -84,8 +96,10 @@ const CompanyInfoPage = lazy(() =>
 function App() {
   return (
     <BrowserRouter>
+      <PrivateAuthLifecycle />
       <Suspense fallback={<PageLoader />}>
         <Routes>
+          <Route path="/showcase/:projectId?/:view?" element={<FirstWeekWorkspace client={publicApi} publicAccess />} />
           {import.meta.env.DEV && (
             <Route
               path="/preview/:projectId?/:view?"

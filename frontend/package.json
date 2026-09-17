@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:public": "vite build --mode public",
+    "test:public": "node --test server/public.test.js",
     "preview": "vite preview",
     "test": "jest",
     "test:coverage": "jest --coverage",

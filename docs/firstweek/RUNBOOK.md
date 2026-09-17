@@ -38,7 +38,7 @@ Maintainers upload UTF-8 `.md` and `.txt` files through Knowledge. Limits are 25
 
 The additive `202609080003_project_documents/migration.sql` creates scoped PostgreSQL document and chunk tables. It was applied only to the isolated `firstweek_demo`; regenerate the auth Prisma client afterward. Document text and chunks commit together, so a successful upload is immediately searchable without a background worker. Deletion cascades to chunks. A failed transaction leaves no partial document. Back up these PostgreSQL tables together with projects and memberships; the curated SQLite file is not a backup of uploads.
 
-Members read sources and maintainers create/delete them. All operations use server-derived company/project scope. Uploads are searched lexically within the bounded project collection, including recent user questions for follow-ups; curated guides keep their hybrid retrieval. Managed evidence is forwarded only by the authenticated gateway and carries document IDs/timestamps. Documents changing while an answer is generated cause a retry response, withholding the old evidence. Previously displayed text in another browser tab cannot be recalled; durable saved-message deletion handling remains part of M1-04.
+Members read sources and maintainers create/delete them. All operations use server-derived company/project scope. Uploads are searched lexically within the bounded project collection, including recent user questions for follow-ups; curated guides keep their hybrid retrieval. Managed evidence is forwarded only by the authenticated gateway and carries document IDs/timestamps. Documents changing while an answer is generated cause a retry response, withholding the old evidence. Deleting an upload clears saved conversation content for every user in that project, including titles, questions, answers, source copies and pending requests. Text already seen or copied outside the app cannot be recalled.
 
 Run `NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/tests/projectDocuments.integration.test.js backend/auth-service/tests/firstweekRoutes.test.js` for disposable PostgreSQL authorization, Unicode, quota concurrency, retrieval, deletion and pending-answer checks. Use `.firstweek/venv/bin/python -m unittest RAG.firstweek.test_api RAG.firstweek.test_index -q` for the local RAG regression suite. The local auth wrapper accepts up to 2 MiB JSON to accommodate escaped text; the document byte limit is enforced after parsing.
 
@@ -46,7 +46,7 @@ Run `NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/te
 
 Start `npm run dev` from `frontend/` and open `http://localhost:5173/preview/northstar-api`. This explicit development-only route contains a fictional project; it exercises navigation, excerpt answers and source reading without private data or a database. The preview module is excluded from production output. The real workspace is `/projects`, requires sign-in, and reads only the authenticated API. There is no mock fallback on private routes.
 
-Actual company/project data requires the identities and index setup below. Project administration, maintained responsibilities and text uploads are implemented. Conversation turns are currently in memory and reset when leaving Ask; durable conversations remain M1-04. The older signup, password recovery and account/admin screens are retained during migration.
+Actual company/project data requires the identities and index setup below. Project administration, maintained responsibilities, text uploads and private saved conversations are implemented. Saved conversations survive navigation, reload and auth-service restart. The older signup, password recovery and account/admin screens are retained during migration.
 
 ## Connect to actual identities
 
@@ -76,7 +76,7 @@ Set `FIRSTWEEK_GENERATE=true` to use the existing `RAG/config/llm_config.yaml` p
 
 ## Remaining before launch
 
-Durable project conversations, broader imports and refresh workflows, the legacy account-screen revamp, public publication/widget and production deployment remain in later phases. Project administration, editable responsibilities and bounded text uploads are implemented locally. Production migration baselining, backups and proxy isolation still need deployment verification. No private project sources are published by this work.
+M1 integration acceptance, broader imports and refresh workflows, the legacy account-screen revamp, public publication/widget and production deployment remain in later phases. Project administration, editable responsibilities, bounded text uploads and private saved conversations are implemented locally. Production migration baselining, backups and proxy isolation still need deployment verification. No private project sources are published by this work.
 
 ## Working authenticated local demo
 
@@ -121,12 +121,76 @@ python scripts/firstweek-local-rag.py
 
 The global legacy RAG model remains BGE-M3. `FIRSTWEEK_EMBEDDING_MODEL` changes only this process; rebuild the index when changing models. A lexical-only rebuild will not work with `FIRSTWEEK_SEMANTIC=true`. For explicit offline excerpt mode use both `FIRSTWEEK_GENERATE=false FIRSTWEEK_SEMANTIC=false` when starting the local wrapper.
 
-The browser sends the last three completed turns within the selected project, with a six-message/4,000-character-per-message limit enforced again at the gateway and internal API. History supports follow-ups but is not evidence, and cannot supply system messages, membership or company scope. New conversation clears this context. Enter sends; Shift+Enter adds a line. Turns remain in memory and clear when leaving the Ask view.
+The authenticated Ask screen uses persisted conversations. The browser sends only the current question and a request ID to the selected conversation's turn endpoint. The server derives context from its last three completed turns; browser-supplied history is rejected on this endpoint. Context supports follow-ups but is not evidence. The development preview and older stateless `/ask` endpoint retain their separate compatibility behavior. Enter sends; Shift+Enter adds a line.
+
+## Saved conversations (M1-04)
+
+The additive `202609090001_project_conversations/migration.sql` creates `project_conversations` and adds the project's knowledge version. It was applied only to isolated `firstweek_demo`. Generate the auth Prisma client after applying it. Conversations reference the exact company/project/user membership and are deleted when that membership is removed. Company administrators cannot read another user's conversations.
+
+Ask supports new, select/open and delete actions. The selected conversation ID is preserved in the page URL. Limits are 50 conversations per user/project, 20 completed turns per conversation and 300,000 serialized bytes per answer including sources. Completed request IDs are idempotent while their turns remain in that conversation; reusing an ID with a different question is rejected. Knowledge invalidation clears that replay history too.
+
+Short project-row transactions reserve a pending turn and validate current membership. Model calls run outside the transaction. A version fence prevents expired or superseded workers from saving late answers. Pending requests become retryable after 60 seconds; failed or expired questions remain available as drafts until retried or invalidated. The UI reloads authoritative history after a failure and keeps an explicit error and retry draft. A successful response replaces displayed history, so it cannot append stale turns from before an invalidation.
+
+Before returning saved titles/content or generating another turn, the server checks current curated document hashes, managed-source metadata, maintained ownership and project version. Changed knowledge conservatively resets the conversation rather than displaying possibly stale private copies. An unavailable knowledge service returns an error, not saved content with an assumed-valid snapshot. Upload deletion additionally clears all project conversations inside its transaction. Ownership and other knowledge changes invalidate conversations on their next checked access.
+
+Verification includes real PostgreSQL isolation, competing sends, completed replay, timeout/late-worker fencing, deletion invalidation and membership cascade. HTTP tests prove server-owned history, replay without another provider call and failure/retry recovery. Browser checks covered two turns retained through reload and auth restart, authoritative replacement after a second-tab source change, failed-draft recovery with deleted content absent, mobile layout and conversation deletion returning 404.
+
+The M1-04 browser checks used local source excerpts: automatic approval review blocked a fresh external generation call. The running local RAG process was restarted with `FIRSTWEEK_GENERATE=false FIRSTWEEK_SEMANTIC=false`; live provider generation was not revalidated for this milestone. Source-excerpt responses are visibly labelled. Restore the appropriate generation configuration only under authorized provider use.
+
+Run `NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/tests/projectConversations.integration.test.js backend/auth-service/tests/conversationRoutes.integration.test.js` for the disposable database and HTTP checks. Include the conversation table when backing up project data. Local M1 integration is accepted in `M1-ACCEPTANCE.md`; this is not deployment approval.
+
+## Private onboarding profiles (M2-01)
+
+Migration `202609090002_onboarding_profiles/migration.sql` adds nullable onboarding focus/experience and a profile version to project membership, with database allowlist constraints. Applied only to isolated `firstweek_demo`; regenerate the auth Prisma client after applying. There are no inferred job titles, experience levels, owners or permission changes.
+
+Members use the Onboarding tab to set or clear their own project preferences. `GET/PUT /api/firstweek/projects/:projectId/onboarding-profile` derives company and user from the session, requires current membership, and accepts exactly `onboardingRole` (null, ENGINEERING, PRODUCT, DESIGN, OPERATIONS) and `onboardingExperience` (null, NEW, EXPERIENCED) on same-origin JSON writes. Other members' profiles are not returned by the member directory. Membership removal deletes the preferences; re-adding starts with null defaults.
+
+Saving changed preferences increments only the member's profile version and immediately clears that member's saved questions, answers, titles and pending drafts for this project. Other members' history remains unchanged; same-value saves do nothing. The form warns about this reset before saving. Existing default-profile conversations retain their prior hash on upgrade. A later reset to null still advances the version and clears outdated history.
+
+Saved conversations check profile version inside the project lock, and the older stateless ask endpoint checks it after generation. Both use server-loaded preferences, never browser-supplied profile claims. RAG maps the enums to bounded explanation guidance; preferences are not evidence or verified biography. Offline source excerpts are unchanged. Mocked-provider tests verify all focus/experience guidance combinations; a fresh external-provider quality evaluation remains outside this local acceptance.
+
+Checks: `NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/tests/onboardingProfiles.integration.test.js backend/auth-service/tests/conversationRoutes.integration.test.js backend/auth-service/tests/firstweekRoutes.test.js`. The complete suite passes 18 Node and 21 Python checks. Browser verification covers ordinary-member access, save/reload/auth-restart persistence, null reset and per-user conversation clearing. Desktop/390px captures: `/private/tmp/firstweek-m2-onboarding-desktop.png` and `/private/tmp/firstweek-m2-onboarding-mobile.png`. The disposable acceptance company, project, users and conversations were removed.
 
 Deployment instructions are not proof of current deployment. The assistant is instructed to answer supported parts of a multi-part question and explicitly identify undocumented facts. Generated citation IDs are validated, but this is not an entailment check. A provider timeout or invalid citation produces an error, never a fabricated response.
 
+## Company teams and maintained answer context (M2-02)
+
+The additive `202609100001_company_teams/migration.sql` creates `company_teams` and `team_assignments` in isolated `firstweek_demo`. Regenerate the auth Prisma client after applying. From All projects, open Company teams to read the directory; company administrators also get create/edit team, assign/edit member and explicit removal confirmation controls. This directory is available even when the verified company member has no project memberships.
+
+Teams are explicitly company-shared records, visible to current active verified company members even without a project assignment. Only a current COMPANY_ADMIN can maintain them. Team membership grants no project permissions. These routes derive company scope from the session and never accept a body company/user ID:
+
+- `GET /api/firstweek/company/teams`: maintained team names/descriptions, assignment text, timestamps and member display names/usernames; `canManage` comes from the current database role. No emails, onboarding profiles or project memberships are exposed.
+- `POST /api/firstweek/company/teams` and `PATCH /api/firstweek/company/teams/:teamId`: exact JSON `{name, description}`. Names are required (120 characters), descriptions may be empty (2,000 characters). Duplicate names are rejected case-insensitively within a company.
+- `DELETE /api/firstweek/company/teams/:teamId`: empty JSON object; cascades only that team's assignments, not users or projects.
+- `PUT /api/firstweek/company/teams/:teamId/assignments`: exact JSON `{username, assignment}`; resolves an existing active, email/company-verified same-company user. Required assignment text is capped at 500 characters; repeat writes update the existing assignment.
+- `DELETE /api/firstweek/company/teams/:teamId/assignments`: exact JSON `{username}`; also permits removing assignments for now-inactive users.
+
+All mutations require same-origin JSON. Company-row locking serializes quota and duplicate checks: 100 teams/company and 200 assignments/team, with existing assignments still editable at capacity. Company projects are then locked in deterministic order; the change increments their knowledge versions and clears saved conversations atomically, preventing retained stale team answers. Inactive or unverified users' assignments are omitted from reads. Company inactivity and stale administrator authority fail closed.
+
+Both assignment foreign keys include companyId. User deletion cascades assignments; company transfers are restricted while team assignments exist, so an authorized transfer must explicitly remove those assignments first. They are never silently moved into another company's team. Existing project-membership constraints remain separate.
+
+Private Ask selects at most eight matching company-team/assignment records from the current server-owned directory. Numbered evidence exposes maintained text and timestamps; assignment evidence explicitly does not prove project ownership or membership. Both saved and stateless answers compare fresh company context before completing. Member names and eligible assignment changes invalidate the context hash. The public showcase has no company directory endpoint or source connection.
+
+Run `NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 node --test backend/auth-service/tests/companyTeams.integration.test.js` for the real PostgreSQL and HTTP checks, including two-company isolation, validation, fresh permissions, no implicit project access, persistence across client reconnect, transfer protection, deletion cascades, competing quota writes and company-wide pending-response fencing. Fixtures are disposable and cleaned up at the end. Browser acceptance covers member read-only access, auth restart persistence, administrator edits/removals, saved-answer invalidation and removed evidence; see TRACK.md for the dated verdict and exact limits. The private browser checks use offline excerpts, not a new live-provider evaluation.
+
+## Reading paths and private progress (M2-03)
+
+The additive `202609150001_reading_paths/migration.sql` is applied to the newly authorized local cluster `.firstweek/m203/postgres`, database `firstweek_demo`, role `firstweek_local`, loopback port 5548. The older `.firstweek/local/postgres` is preserved. Do not reset either cluster. Regenerate the Prisma client after schema changes. For this runtime, set `FIRSTWEEK_DATABASE_URL=postgresql://firstweek_local@127.0.0.1:5548/firstweek_demo` and `FIRSTWEEK_ORIGIN=http://127.0.0.1:5175` when starting `scripts/firstweek-local-server.js`; auth listens on 3003 and Vite on 5175. The browser origin must match exactly for writes. RAG verification uses `FIRSTWEEK_GENERATE=false FIRSTWEEK_SEMANTIC=false`, without new provider calls.
+
+The private Reading path tab uses managed project sources only. Current maintainers create/edit/remove up to 50 steps and reorder the complete list. Members mark their own steps complete; completion grants no permissions and is never exposed to another member. Profile filters affect personal counts, not access. Maintainers see a separately labelled full management list. Material edits advance a revision and reset effective completion; stale completion requests return 409 and require reload. Source deletion cascades its steps/progress; membership deletion removes that member's progress. Curated-source reading paths remain deferred to M3.
+
+Routes under `/api/firstweek/projects/:projectId/reading-path`: GET reads private progress; POST creates; PATCH/DELETE `/:stepId` edits/removes; PUT `/order` takes exactly `{stepIds}`; PUT `/:stepId/completion` takes exactly `{revision}`. Write guards require same-origin JSON. Session identity supplies company/user scope, and current project membership/maintainer authority is checked server-side. Responses are no-store.
+
+Run the focused checks against this explicitly isolated target:
+
+```sh
+NODE_ENV=test FIRSTWEEK_TEST_DATABASE=1 FIRSTWEEK_DATABASE_URL=postgresql://firstweek_local@127.0.0.1:5548/firstweek_demo node --test backend/auth-service/tests/readingPaths.integration.test.js backend/auth-service/tests/readingPathRoutes.test.js
+```
+
+Database fixtures use unique company IDs and exact cleanup. HTTP guard tests mock services; database tests separately cover real validation, isolation, cascades, profiles and bounded write races. Browser evidence under `.firstweek/m203/` includes desktop/390px completion and actual auth-restart persistence. Latest acceptance/cleanup and independent review are recorded in TRACK.md; these instructions do not establish production readiness.
+
 ## Curated collection and repository name
 
-The repository directory is `/Users/dev_an/projects/FirstWeek`. Five projects are active: FirstWeek, MoneyPlant, AI PR Review Agent, RAG-Builder and Personal Site. Each has a private visual architecture plus an indexed text equivalent. The index contains 45 sections. The local seed and explicit registration script deactivate only the retired IDs in the manifest; they do not delete repositories or unrelated database projects. Removed guides are absent from the rebuilt index, so their old document URLs no longer resolve.
+The repository directory is `/Users/dev_an/projects/FirstWeek`. Five projects are active: FirstWeek, MoneyPlant, AI PR Review Agent, RAG-Builder and Personal Site. Each has a private visual architecture plus an indexed text equivalent. The index contains 46 sections after the 2026-09-16 reading-path guide refresh. The local seed and explicit registration script deactivate only the retired IDs in the manifest; they do not delete repositories or unrelated database projects. Removed guides are absent from the rebuilt index, so their old document URLs no longer resolve.
 
 WasmEdge, riscV, random_exp and OopsC++ are excluded. Learning RAG and C++ Shell remain excluded until the owner publishes them. Remaining product phases await the owner’s confirmation.

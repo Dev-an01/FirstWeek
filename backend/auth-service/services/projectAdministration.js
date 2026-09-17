@@ -49,6 +49,7 @@ async function manageProject(prisma, actor, projectId, action, body, userId) {
     if (!membership) fail(404, 'Project resource not found.');
     if (membership.role !== 'MAINTAINER') fail(403, 'Only project maintainers can manage this project.');
     const scope = { companyId: actor.companyId, projectId };
+    await tx.project.update({ where: { companyId_id: { companyId: actor.companyId, id: projectId } }, data: { knowledgeVersion: { increment: 1 } } });
     if (action === 'settings') return tx.project.update({ where: { companyId_id: { companyId: actor.companyId, id: projectId } }, data });
     if (action === 'add') {
       const target = await tx.user.findFirst({ where: { username: data.username, companyId: actor.companyId,

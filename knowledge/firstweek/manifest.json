@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "visibility": "private",
   "companyId": "local-workspace",
-  "snapshotAt": "2026-09-06T22:08:17.429328+00:00",
+  "snapshotAt": "2026-09-16",
   "sourceRoot": "/Users/dev_an/projects",
   "projects": [
     {
@@ -27,15 +27,15 @@
         },
         {
           "path": "FirstWeek/frontend/src/firstweek/Workspace.jsx",
-          "sha256": "d41826b0636ccf27160b6696111c54d76db00509af6b620d1131a45e02addeb5"
+          "sha256": "fa9c28046e754754e2396035f7766932108e4c671d1f51e7943e21f1d31b20cd"
         },
         {
           "path": "FirstWeek/backend/auth-service/routes/firstweekRoutes.js",
-          "sha256": "e88b2c15fc1f61b07f565bfab7dadd0e070300759854f2fe4d68d93e861667a4"
+          "sha256": "0f1d98ed5dfacb59f7e7ced9f9c1314283389dfc67779ef12082beccf1ec2bac"
         },
         {
           "path": "FirstWeek/RAG/firstweek/api.py",
-          "sha256": "423fa2455e92f41f6aa5bc4427271d595cd027ccdcfc9a1a2035a0628f427dfc"
+          "sha256": "32af49840f6a6f773f3414c0767f8dec61e40736aff7de6587bb25686cf3ec16"
         },
         {
           "path": "FirstWeek/RAG/firstweek/index.py",
@@ -43,52 +43,100 @@
         },
         {
           "path": "FirstWeek/backend/auth-service/shared/prisma/schema.prisma",
-          "sha256": "940c772314f6370421107ac61f4036a6a336497b5bb8d2f061359f24594c2ffb"
+          "sha256": "14141249059d50b2d1334c213d3c3c6fb7e1d1755319c5c67f15b6a6d148ed30"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/routes/conversationRoutes.js",
+          "sha256": "cd8608eb3a44e46c5fc236acbf15037676b85f0f954972c06c487860f7b3d87c"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/projectConversations.js",
+          "sha256": "61326ed1c19f20a5b984f0dd9d4fbf64beccee35a446270e68df2511c3648877"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/projectDocuments.js",
+          "sha256": "1b6bbf888e1997ee701033b5201939a8bcc950ca8cd922598dafd03f83abf93d"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/projectResponsibilities.js",
+          "sha256": "d0a3ffa7064deb7d61a48d47149a70406c5becf3e3fb5e2ad1644a89974588a7"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/projectAdministration.js",
+          "sha256": "ace553f10b52b4a89f9c754bc4da01441f788eecb7105ec3df41a07be5e7deda"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/onboardingProfiles.js",
+          "sha256": "afcfc8ba88ddb0dd3504074880a177daf16dd19cf58cecb512e17bae38a59d5f"
+        },
+        {
+          "path": "FirstWeek/frontend/src/firstweek/OnboardingProfile.jsx",
+          "sha256": "de48e98360b80b71a4905b758d774b22063344db3053c020afd114a738a4e18b"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/companyTeams.js",
+          "sha256": "be5c2f2f0dea80eb129b2c49532864e7c1417a82d38d455270aeb75d355e4f62"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/companyContext.js",
+          "sha256": "5d2ca06f75ccf6662329d974816942a7b2cf4d70b5242db43c72c7d646e0d1e4"
+        },
+        {
+          "path": "FirstWeek/frontend/src/firstweek/CompanyTeams.jsx",
+          "sha256": "40e9a2c3aded5d04016cc98b97a38d14de307ab34f31c20d6466a92b52502058"
+        },
+        {
+          "path": "FirstWeek/backend/auth-service/services/readingPaths.js",
+          "sha256": "dff59f79b42593bceef72fccacdd4485741777948bfd79bea571eccf1dd7031f"
+        },
+        {
+          "path": "FirstWeek/frontend/src/firstweek/ReadingPath.jsx",
+          "sha256": "fc068ba0e5ba225a1bfe328d016877f6c59d8a4d8c153c6d58c347ebd0f65443"
         }
       ],
       "architecture": {
         "title": "From question to grounded answer",
-        "caption": "The active FirstWeek request path. PostgreSQL authorizes access; the local index retrieves evidence. Groq generates the final answer.",
+        "caption": "PostgreSQL authorizes access and stores private workspace data. Scoped evidence supports saved answers or local excerpts.",
         "nodes": [
           {
             "id": "browser",
             "label": "Project workspace",
-            "detail": "React sends the question and recent turns.",
+            "detail": "React sends the current question and a request ID for a private conversation.",
             "col": 0,
             "row": 0
           },
           {
             "id": "gateway",
             "label": "Membership gateway",
-            "detail": "Express verifies the session and project access.",
+            "detail": "Express verifies access and derives history from saved turns.",
             "col": 1,
             "row": 0
           },
           {
             "id": "identity",
-            "label": "Identity database",
-            "detail": "PostgreSQL stores users, projects and memberships.",
+            "label": "Workspace database",
+            "detail": "PostgreSQL stores memberships, responsibilities, uploads, reading progress and private conversations.",
             "col": 2,
             "row": 0
           },
           {
             "id": "retrieval",
             "label": "Scoped retrieval",
-            "detail": "FastAPI combines FTS5 and local vector similarity.",
+            "detail": "Curated FTS5 and optional vectors combine with scoped uploaded passages and maintained evidence.",
             "col": 1,
             "row": 1
           },
           {
             "id": "model",
             "label": "Generative model",
-            "detail": "Groq receives only selected evidence and conversation.",
-            "col": 2,
-            "row": 1
+            "detail": "When enabled, the configured provider receives selected evidence and bounded server-owned history.",
+            "col": 0,
+            "row": 2
           },
           {
             "id": "answer",
-            "label": "Cited response",
-            "detail": "The gateway rechecks membership before delivery.",
+            "label": "Saved response",
+            "detail": "Membership, knowledge and pending-version checks precede persistence. Offline mode returns labelled excerpts.",
             "col": 2,
             "row": 2
           }
@@ -97,17 +145,17 @@
           {
             "source": "browser",
             "target": "gateway",
-            "label": "question"
+            "label": "question + request ID"
           },
           {
             "source": "gateway",
             "target": "identity",
-            "label": "access check"
+            "label": "access + saved history"
           },
           {
             "source": "gateway",
             "target": "retrieval",
-            "label": "verified scope"
+            "label": "scope + maintained evidence"
           },
           {
             "source": "retrieval",
@@ -117,7 +165,17 @@
           {
             "source": "model",
             "target": "answer",
-            "label": "generated answer"
+            "label": "optional generation"
+          },
+          {
+            "source": "retrieval",
+            "target": "answer",
+            "label": "offline excerpts"
+          },
+          {
+            "source": "answer",
+            "target": "identity",
+            "label": "validated saved turn"
           }
         ]
       }

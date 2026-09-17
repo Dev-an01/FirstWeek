@@ -16,7 +16,7 @@ if (!fs.existsSync(configPath)) fs.writeFileSync(configPath, JSON.stringify({
 }), { mode: 0o600 });
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 Object.assign(process.env, {
-  DATABASE_URL: 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo',
+  DATABASE_URL: process.env.FIRSTWEEK_DATABASE_URL || 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo',
   JWT_ACCESS_SECRET: config.accessSecret, JWT_REFRESH_SECRET: config.refreshSecret,
   FIRSTWEEK_SERVICE_TOKEN: config.serviceToken, FIRSTWEEK_RAG_URL: 'http://127.0.0.1:8003',
   FIRSTWEEK_ORIGIN: process.env.FIRSTWEEK_ORIGIN || 'http://127.0.0.1:5173',
@@ -59,7 +59,12 @@ async function main() {
   app.post('/api/users/logout', auth.requireAuth, controller.logoutUser);
   app.post('/api/users/refresh', auth.validateRefreshToken, controller.refreshToken);
   app.use('/api/firstweek', require('../backend/auth-service/routes/firstweekRoutes'));
-  app.use((error, req, res, next) => res.status(500).json({ error: 'Local workspace request failed.' }));
+  app.use((error, req, res, next) => {
+    const details = { name: error?.name, type: error?.type, status: error?.status, code: error?.code };
+    console.error('Local workspace request failed:', details);
+    const status = Number.isInteger(error?.status) && error.status >= 400 && error.status < 500 ? error.status : 500;
+    res.status(status).json({ error: status === 413 ? 'Request is too large.' : status === 400 ? 'Request body is invalid.' : 'Local workspace request failed.' });
+  });
   const server = app.listen(3003, '127.0.0.1', () => console.log('FirstWeek local auth: http://127.0.0.1:3003. Local-only credentials: .firstweek/local/access.json'));
   process.on('SIGTERM', () => server.close(() => prisma.$disconnect().then(() => process.exit(0))));
   process.on('SIGINT', () => server.close(() => prisma.$disconnect().then(() => process.exit(0))));

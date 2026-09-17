@@ -33,6 +33,7 @@ async function saveResponsibility(prisma, actor, projectId, body, responsibility
     const membership = await findProjectMembership(tx, actor, projectId);
     if (!membership) fail(404, 'Project resource not found.');
     if (membership.role !== 'MAINTAINER') fail(403, 'Only project maintainers can manage responsibilities.');
+    await tx.project.update({ where: { companyId_id: { companyId: actor.companyId, id: projectId } }, data: { knowledgeVersion: { increment: 1 } } });
     const scope = { companyId: actor.companyId, projectId };
     if (data.ownerUserId && !await tx.projectMember.findFirst({ where: { ...scope, userId: data.ownerUserId,
       user: { isActive: true, isCompanyVerified: true } } })) {
@@ -53,6 +54,7 @@ async function deleteResponsibility(prisma, actor, projectId, responsibilityId) 
     const membership = await findProjectMembership(tx, actor, projectId);
     if (!membership) fail(404, 'Project resource not found.');
     if (membership.role !== 'MAINTAINER') fail(403, 'Only project maintainers can manage responsibilities.');
+    await tx.project.update({ where: { companyId_id: { companyId: actor.companyId, id: projectId } }, data: { knowledgeVersion: { increment: 1 } } });
     return tx.projectResponsibility.delete({ where: { companyId_projectId_id: { companyId: actor.companyId, projectId, id: responsibilityId } } });
   });
 }

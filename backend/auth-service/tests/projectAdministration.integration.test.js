@@ -5,7 +5,7 @@ const { randomUUID } = require('node:crypto');
 
 test('real PostgreSQL membership authority, concurrency, validation and empty projects',
   { skip: process.env.FIRSTWEEK_TEST_DATABASE !== '1' }, async () => {
-    process.env.DATABASE_URL = 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo';
+    process.env.DATABASE_URL = process.env.FIRSTWEEK_DATABASE_URL || 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo';
     process.env.NODE_ENV = 'test';
     const { prisma } = require('../shared/lib/prisma');
     assert.equal((await prisma.$queryRaw`SELECT current_database() AS name`)[0].name, 'firstweek_demo');

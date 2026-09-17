@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import {
   ArrowRight,
@@ -22,6 +22,9 @@ import { firstweekApi } from './api';
 import './firstweek.css';
 import { Brand } from './Brand';
 import { Architecture } from './Architecture';
+import { OnboardingProfile } from './OnboardingProfile';
+import { CompanyTeams } from './CompanyTeams';
+import { ReadingPath } from './ReadingPath';
 import { ProjectForm, MemberAdministration, ResponsibilityAdministration } from './ProjectAdministration';
 
 const tabs = [
@@ -30,6 +33,8 @@ const tabs = [
   ['ask', 'Ask FirstWeek'],
   ['knowledge', 'Knowledge'],
   ['team', 'People'],
+  ['onboarding', 'Onboarding'],
+  ['reading', 'Reading path'],
   ['settings', 'Settings'],
 ];
 const date = (value) =>
@@ -127,29 +132,28 @@ function KnowledgeAdministration({ project, client, onChanged, onOpen }) {
   </section>;
 }
 
-function ProjectList({ projects, loading, error, onRetry, basePath, client, canCreate, onCreated }) {
+function ProjectList({ projects, loading, error, onRetry, basePath, client, canCreate, onCreated, publicAccess = false }) {
   const [filter, setFilter] = useState('');
   const [creating, setCreating] = useState(false);
+  const [showCompany, setShowCompany] = useState(false);
   const shown = projects.filter((p) =>
-    `${p.name} ${p.description}`.toLowerCase().includes(filter.toLowerCase())
+    `${p.name} ${p.description} ${p.status || ''} ${(p.tags || []).join(' ')}`.toLowerCase().includes(filter.toLowerCase())
   );
   return (
     <div className="fw-directory">
       <div className="fw-intro">
         <h1>
-          Your first week,
+          {publicAccess ? 'Projects,' : 'Your first week,'}
           <br />
           <span>with context.</span>
         </h1>
         <p>
-          Get to know the work. Find your way through the code.
-          <br className="fw-desktop-break" /> Start with a project you’re part
-          of.
+          {publicAccess ? 'Explore the projects, follow their architecture, and ask how they work. No account needed.' : <>Get to know the work. Find your way through the code.<br className="fw-desktop-break" /> Start with a project you’re part of.</>}
         </p>
       </div>
       <div className="fw-list-heading">
         <h2>
-          Your projects <span>{projects.length}</span>
+          {publicAccess ? 'Public projects' : 'Your projects'} <span>{projects.length}</span>
         </h2>
         <label className="fw-search">
           <Search size={17} aria-hidden="true" />
@@ -164,7 +168,7 @@ function ProjectList({ projects, loading, error, onRetry, basePath, client, canC
       {canCreate && !creating && <button className="fw-primary fw-create-project" onClick={() => setCreating(true)}>Create project</button>}
       {canCreate && creating && <ProjectForm client={client} onSaved={onCreated} onCancel={() => setCreating(false)} />}
       {loading ? (
-        <Notice>Loading your project memberships…</Notice>
+        <Notice>{publicAccess ? 'Loading public projects…' : 'Loading your project memberships…'}</Notice>
       ) : error ? (
         <Notice error onRetry={onRetry}>
           {error}
@@ -172,10 +176,9 @@ function ProjectList({ projects, loading, error, onRetry, basePath, client, canC
       ) : !projects.length ? (
         <div className="fw-empty">
           <Folder size={30} />
-          <h3>You haven’t joined a project yet.</h3>
+          <h3>{publicAccess ? 'No projects are published yet.' : 'You haven’t joined a project yet.'}</h3>
           <p>
-            Ask your company administrator to add you to a project. Its guides
-            and conversations will appear here.
+            {publicAccess ? 'Published project guides will appear here when they are ready.' : 'Ask your company administrator to add you to a project. Its guides and conversations will appear here.'}
           </p>
         </div>
       ) : !shown.length ? (
@@ -197,22 +200,31 @@ function ProjectList({ projects, loading, error, onRetry, basePath, client, canC
                   {p.description ||
                     'Project knowledge and getting-started guides.'}
                 </span>
+                {(p.status || p.tags?.length) && <span className="fw-project-badges">
+                  {p.status && <small>{p.status}</small>}
+                  {p.tags?.map(tag => <small key={tag}>{tag}</small>)}
+                </span>}
               </span>
               <span className="fw-access">
                 <ShieldCheck size={14} />
-                Member access
+                {publicAccess ? 'Public guide' : 'Member access'}
               </span>
               <ArrowRight size={19} />
             </Link>
           ))}
         </div>
       )}
+      {!publicAccess && client.companyTeams && <section className="fw-company-directory">
+        <h2>Company teams</h2>
+        <button className="fw-text-button" aria-expanded={showCompany} aria-controls="fw-company-directory" onClick={() => setShowCompany(value => !value)}>{showCompany ? 'Hide company teams' : 'Show company teams'}</button>
+        <div id="fw-company-directory">{showCompany && <CompanyTeams client={client} />}</div>
+      </section>}
       <div className="fw-directory-note">
         <ShieldCheck size={18} />
         <p>
-          Your workspace is private.
+          {publicAccess ? 'Explore freely. The projects stay read-only.' : 'Your workspace is private.'}
           <br />
-          <span>Only projects you belong to appear here.</span>
+          <span>{publicAccess ? 'Only published guides are available. Private workspace data is never included.' : 'Only projects you belong to appear here.'}</span>
         </p>
       </div>
     </div>
@@ -334,9 +346,84 @@ function SourcePanel({ project, selected, onSelect, onClose, client }) {
   );
 }
 
-function Ask({ project, client, onSource }) {
-  const [question, setQuestion] = useState('');
-  const [turns, setTurns] = useState([]);
+function SavedAsk({ project, client, onSource }) {
+  const [params, setParams] = useSearchParams();
+  const selected = params.get('conversation');
+  const [items, setItems] = useState([]);
+  const [row, setRow] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [revision, setRevision] = useState(0);
+  const [failedDraft, setFailedDraft] = useState('');
+  const [sendError, setSendError] = useState('');
+  const attempt = useRef(null);
+  useEffect(() => {
+    const controller = new AbortController(); let timer;
+    setLoading(true); setError(''); setRow(null); setItems([]); onSource(null);
+    async function load() {
+      try {
+        const list = await client.conversations(project.id, controller.signal);
+        if (controller.signal.aborted) return;
+        setItems(list.conversations);
+        if (!selected && list.conversations.length) { setParams({ conversation: list.conversations[0].id }, { replace: true }); return; }
+        const value = selected ? await client.conversation(project.id, selected, controller.signal) : null;
+        if (controller.signal.aborted) return;
+        setRow(value); setLoading(false);
+        if (value?.pendingId) timer = setTimeout(load, 2000);
+      } catch (failure) { if (!controller.signal.aborted) { setError(failure.message); setLoading(false); } }
+    }
+    load();
+    return () => { controller.abort(); clearTimeout(timer); };
+  }, [project.id, client, selected, revision]);
+  async function create() {
+    setBusy(true); setError('');
+    try { const value = await client.createConversation(project.id); setFailedDraft(''); setSendError(''); setParams({ conversation: value.id }); }
+    catch (failure) { setError(failure.message); }
+    finally { setBusy(false); }
+  }
+  async function remove() {
+    if (!row || !confirm('Delete this private conversation and all its messages?')) return;
+    setBusy(true); setError('');
+    try { await client.deleteConversation(project.id, row.id); setFailedDraft(''); setSendError(''); setParams({}); setRevision(n => n + 1); }
+    catch (failure) { setError(failure.message); }
+    finally { setBusy(false); }
+  }
+  const savedClient = { ask: async (projectId, question, signal) => {
+    if (!attempt.current || attempt.current.question !== question || attempt.current.conversationId !== selected) {
+      attempt.current = { question, conversationId: selected, requestId: crypto.randomUUID() };
+    }
+    setBusy(true);
+    try {
+      const value = await client.sendTurn(projectId, selected, question, attempt.current.requestId, signal);
+      attempt.current = null; setFailedDraft(''); setSendError(''); setRow(value);
+      setItems(list => list.map(item => item.id === value.id ? { ...item, title: value.title } : item));
+      return value.turns.at(-1);
+    } catch (failure) { setFailedDraft(question); setSendError(failure.name === 'AbortError' ? 'Request stopped in this tab. Reloading its saved status.' : failure.message); setRevision(n => n + 1); throw failure; }
+    finally { setBusy(false); }
+  } };
+  return <>
+    <div className="fw-conversation-tools">
+      <label>Private conversations<select value={selected || ''} disabled={busy || loading} onChange={event => { setFailedDraft(''); setSendError(''); setParams({ conversation: event.target.value }); }}>
+        <option value="" disabled>Select a conversation</option>
+        {items.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
+      </select></label>
+      <button className="fw-text-button" disabled={busy} onClick={create}>New conversation</button>
+      {row && <button className="fw-icon-button" aria-label="Delete conversation" disabled={busy} onClick={remove}><Trash2 size={17} /></button>}
+    </div>
+    {sendError && <div className="fw-conversation-tools"><Notice error>{sendError} Your question is kept below for retry.</Notice></div>}
+    {error ? <div className="fw-main-section"><Notice error onRetry={() => setRevision(n => n + 1)}>{error}</Notice></div>
+      : loading ? <div className="fw-main-section"><Notice>Loading your conversations…</Notice></div>
+      : !row ? <div className="fw-main-section"><h2>Your questions, kept in one place.</h2><p className="fw-lead">Start a private conversation to save answers and pick up where you left off.</p><button className="fw-primary" disabled={busy} onClick={create}>Start a conversation</button></div>
+      : row.pendingId ? <div className="fw-main-section"><Notice>Finishing your previous question. Interrupted requests become available to retry within a minute.</Notice><p>{row.pendingQuestion}</p></div>
+      : <>{row.pendingQuestion && !sendError && <div className="fw-conversation-tools"><Notice error>The previous answer was interrupted. Your question is ready to retry.</Notice></div>}<Ask key={`${row.id}:${revision}`} project={project} client={savedClient} onSource={onSource} initialTurns={row.turns} initialQuestion={failedDraft || row.pendingQuestion || ''} saved /></>}
+  </>;
+}
+
+function Ask({ project, client, onSource, initialTurns = [], initialQuestion = '', saved = false, publicAccess = false }) {
+  const [question, setQuestion] = useState(initialQuestion);
+  const [localTurns, setTurns] = useState(initialTurns);
+  const turns = saved ? initialTurns : localTurns;
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const request = useRef(null);
@@ -366,7 +453,7 @@ function Ask({ project, client, onSource }) {
         history
       );
       if (!controller.signal.aborted) {
-        setTurns((t) => [...t, { question: text, ...answer }]);
+        if (!saved) setTurns((t) => [...t, { question: text, ...answer }]);
         setQuestion('');
       }
     } catch (failure) {
@@ -380,7 +467,8 @@ function Ask({ project, client, onSource }) {
   }
   return (
     <section className="fw-ask" aria-label="Ask about this project">
-      {!!turns.length && (
+      {publicAccess && <p className="fw-muted">Public guides only. This conversation is not saved and resets when you leave this tab or reload. Questions and recent messages are sent to the AI provider when AI chat is enabled. Don’t share private information.</p>}
+      {!!turns.length && !saved && (
         <button
           className="fw-text-button"
           disabled={pending}
@@ -541,7 +629,7 @@ function Ask({ project, client, onSource }) {
 }
 
 
-function ProjectDetail({ id, view, basePath, client, onChanged }) {
+function ProjectDetail({ id, view, basePath, client, onChanged, publicAccess = false }) {
   const [state, setState] = useState({ loading: true });
   const [selected, setSelected] = useState(null);
   const [revision, setRevision] = useState(0);
@@ -576,8 +664,8 @@ function ProjectDetail({ id, view, basePath, client, onChanged }) {
         </Link>
       </div>
     );
-  const { project } = state;
-  const availableTabs = tabs.filter(([key]) => key !== 'settings' || project.membershipRole === 'MAINTAINER');
+  const project = publicAccess ? { ...state.project, membershipRole: undefined } : state.project;
+  const availableTabs = tabs.filter(([key]) => (!publicAccess || ['overview', 'architecture', 'ask', 'knowledge'].includes(key)) && (key !== 'settings' || project.membershipRole === 'MAINTAINER') && (key !== 'onboarding' || client.onboardingProfile) && (key !== 'reading' || client.readingPath));
   const active = availableTabs.some(([key]) => key === view) ? view : 'overview';
   const refresh = () => { setSelected(null); setRevision(n => n + 1); onChanged(); };
   return (
@@ -591,6 +679,10 @@ function ProjectDetail({ id, view, basePath, client, onChanged }) {
           </div>
           <h1>{project.name}</h1>
           <p>{project.summary}</p>
+          {(project.status || project.tags?.length) && <div className="fw-project-badges">
+            {project.status && <small>{project.status}</small>}
+            {project.tags?.map(tag => <small key={tag}>{tag}</small>)}
+          </div>}
           <div className="fw-stack">
             {project.stack.map((s) => (
               <span key={s}>{s}</span>
@@ -618,9 +710,13 @@ function ProjectDetail({ id, view, basePath, client, onChanged }) {
       <div className={`fw-project-body ${selected ? 'fw-reading' : ''}`}>
         <div className="fw-main-pane">
           {active === 'ask' ? (
-            <Ask project={project} client={client} onSource={setSelected} />
+            !publicAccess && client.conversations ? <SavedAsk project={project} client={client} onSource={setSelected} /> : <Ask project={project} client={client} onSource={setSelected} publicAccess={publicAccess} />
           ) : active === 'architecture' ? (
             <Architecture project={project} onSource={setSelected} />
+          ) : active === 'onboarding' ? (
+            <OnboardingProfile key={project.id} project={project} client={client} />
+          ) : active === 'reading' ? (
+            <ReadingPath project={project} client={client} onSource={setSelected} />
           ) : active === 'team' ? (
             <><MemberAdministration project={project} client={client} onChanged={refresh} /><ResponsibilityAdministration project={project} client={client} /></>
           ) : active === 'settings' ? (
@@ -718,7 +814,7 @@ function ProjectDetail({ id, view, basePath, client, onChanged }) {
   );
 }
 
-export default function Workspace({ client = firstweekApi, preview = false }) {
+export default function Workspace({ client = firstweekApi, preview = false, publicAccess = false }) {
   const { projectId, view } = useParams();
   const [state, setState] = useState({ projects: [], loading: true });
   const [revision, setRevision] = useState(0);
@@ -726,7 +822,7 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
   const [signingOut, setSigningOut] = useState(false);
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
-  const basePath = preview ? '/preview' : '/projects';
+  const basePath = publicAccess ? '/showcase' : preview ? '/preview' : '/projects';
   useEffect(() => {
     const controller = new AbortController();
     setState({ projects: [], loading: true });
@@ -764,11 +860,11 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
         </Link>
         <div className="fw-workspace-label">
           <span className="fw-workspace-avatar">
-            {preview ? 'D' : user?.firstName?.[0] || 'W'}
+            {publicAccess ? 'P' : preview ? 'D' : user?.firstName?.[0] || 'W'}
           </span>
           <span>
-            {preview ? 'Demo workspace' : 'Your workspace'}
-            <small>Project onboarding</small>
+            {publicAccess ? 'Public showcase' : preview ? 'Demo workspace' : 'Your workspace'}
+            <small>{publicAccess ? 'Explore and ask' : 'Project onboarding'}</small>
           </span>
           <ShieldCheck size={15} />
         </div>
@@ -777,7 +873,7 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
             <Folder size={18} />
             All projects<span>{state.projects.length}</span>
           </NavLink>
-          {!preview && (
+          {!preview && !publicAccess && (
             <button
               className="fw-mobile-signout"
               aria-label="Sign out"
@@ -807,7 +903,7 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
             <br />
             <strong>More understanding.</strong>
           </p>
-          {preview ? (
+          {publicAccess ? <p>Published knowledge only.</p> : preview ? (
             <Link to="/login" className="fw-signout">
               Go to sign in <ArrowRight size={15} />
             </Link>
@@ -833,11 +929,11 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
         <div className="fw-topbar">
           <span>
             <ShieldCheck size={14} />
-            {preview
+            {publicAccess ? 'Public showcase · read-only projects' : preview
               ? 'Development preview · fictional project'
               : 'Private workspace · project members only'}
           </span>
-          <span>{preview ? 'Preview' : user?.firstName || 'Member'}</span>
+          <span>{publicAccess ? 'Visitor' : preview ? 'Preview' : user?.firstName || 'Member'}</span>
         </div>
         {projectId ? (
           <ProjectDetail
@@ -846,6 +942,7 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
             view={view}
             basePath={basePath}
             client={client}
+            publicAccess={publicAccess}
             onChanged={() => setRevision(n => n + 1)}
           />
         ) : (
@@ -856,7 +953,8 @@ export default function Workspace({ client = firstweekApi, preview = false }) {
             basePath={basePath}
             onRetry={() => setRevision((n) => n + 1)}
             client={client}
-            canCreate={!preview && state.canCreate}
+            canCreate={!preview && !publicAccess && state.canCreate}
+            publicAccess={publicAccess}
             onCreated={project => { setRevision(n => n + 1); navigate(`${basePath}/${project.id}`); }}
           />
         )}

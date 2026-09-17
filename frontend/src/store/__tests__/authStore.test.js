@@ -3,7 +3,7 @@
  * Tests for Zustand auth store actions and state management
  */
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useAuthStore } from '../authStore';
+import { initializePrivateAuth, useAuthStore } from '../authStore';
 import * as api from '../../services/api';
 import {
   mockUser,
@@ -26,7 +26,8 @@ import { simulateBroadcast } from '../../test/utils/testUtils';
 jest.mock('../../services/api');
 
 describe('authStore', () => {
-  beforeEach(() => {
+  let cleanupAuth;
+  beforeEach(async () => {
     // Reset store state before each test
     const { setState } = useAuthStore;
     setState({
@@ -37,7 +38,11 @@ describe('authStore', () => {
 
     // Clear all mocks
     jest.clearAllMocks();
+    api.getMe.mockResolvedValueOnce({ data: { user: null } });
+    await act(async () => { cleanupAuth = initializePrivateAuth(); });
+    jest.clearAllMocks();
   });
+  afterEach(() => cleanupAuth());
 
   describe('Initial State', () => {
     it('should have correct initial state', () => {

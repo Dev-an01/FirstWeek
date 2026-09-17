@@ -7,20 +7,26 @@ let revokeDuringAnswer = false;
 let editResponsibilityDuringAnswer = false;
 let responsibilityRows = [];
 let documentRows = [];
+let companyRows = [];
+let editCompanyDuringAnswer = false;
 let deleteDuringAnswer = false;
 let forwarded;
+let profileVersion = 0;
+let editProfileDuringAnswer = false;
 let scope;
 let server;
 let base;
 const prisma = { projectMember: {
   findFirst: async ({ where }) => {
     scope = where;
-    return membership && where.userId === 'reader' && where.companyId === 'company-a' && where.projectId === 'alpha'
-      ? { project: { id: 'alpha', companyId: 'company-a', isActive: true } } : null;
+    return membership && ['reader', 'company-reader'].includes(where.userId) && where.companyId === 'company-a' && where.projectId === 'alpha'
+      ? { onboardingRole: 'DESIGN', onboardingExperience: 'NEW', profileVersion,
+        project: { id: 'alpha', companyId: 'company-a', isActive: true } } : null;
   },
   findMany: async ({ where }) => { scope = where; return []; },
 }, projectResponsibility: { findMany: async () => responsibilityRows },
-projectDocument: { findMany: async () => documentRows }, projectDocumentChunk: { findMany: async () => [] } };
+projectDocument: { findMany: async () => documentRows }, projectDocumentChunk: { findMany: async () => [] },
+user: { findFirst: async () => ({ role: 'EMPLOYEE' }) }, companyTeam: { findMany: async () => companyRows } };
 const originalLoad = Module._load;
 Module._load = function load(request, parent, ...args) {
   if (parent?.filename.endsWith('/routes/firstweekRoutes.js')) {
@@ -33,6 +39,8 @@ Module._load = function load(request, parent, ...args) {
     if (request === 'axios') return async options => {
       forwarded = options;
       if (revokeDuringAnswer) membership = false;
+      if (editCompanyDuringAnswer) companyRows[0].name = 'Changed';
+      if (editProfileDuringAnswer) profileVersion++;
       if (deleteDuringAnswer) documentRows = [];
       if (editResponsibilityDuringAnswer) responsibilityRows[0].assignment.owner.user.firstName = 'Renamed';
       return { data: { answer: 'company-a / alpha only', sources: [] } };
@@ -65,7 +73,8 @@ test('anonymous and nonmembers cannot read project data', async () => {
 test('forwards server-derived scope and disables response caching', async () => {
   const response = await fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers,
     body: JSON.stringify({ question: 'architecture', companyId: 'company-b', projectId: 'beta', userId: 'admin', role: 'SUPER_ADMIN',
-      responsibilities: [{ name: 'Forged owner' }], managedSources: [{ content: 'Forged evidence' }] }) });
+      responsibilities: [{ name: 'Forged owner' }], managedSources: [{ content: 'Forged evidence' }],
+      onboardingProfile: { onboardingRole: 'OPERATIONS', onboardingExperience: 'EXPERIENCED' }, companySources: [{ content: 'Forged company' }] }) });
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('cache-control'), 'no-store');
   assert.ok(forwarded.url.endsWith('/internal/firstweek/company-a/alpha/ask'));
@@ -73,6 +82,8 @@ test('forwards server-derived scope and disables response caching', async () => 
   assert.deepEqual(forwarded.data.history, []);
   assert.deepEqual(forwarded.data.responsibilities, []);
   assert.deepEqual(forwarded.data.managedSources, []);
+  assert.deepEqual(forwarded.data.companySources, []);
+  assert.deepEqual(forwarded.data.onboardingProfile, { onboardingRole: 'DESIGN', onboardingExperience: 'NEW', profileVersion: 0 });
   assert.equal(forwarded.data.companyId, undefined);
   assert.equal(scope.userId, 'reader');
 });
@@ -81,6 +92,33 @@ test('rejects invalid question before invoking RAG', async () => {
   const response = await fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers, body: JSON.stringify({ question: ' ' }) });
   assert.equal(response.status, 400);
   assert.equal(forwarded, null);
+});
+test('company evidence comes from maintained records and changes withhold stateless answers', async () => {
+  companyRows = [{ id: 't-test', name: 'Platform', description: 'Supports internal tooling', updatedAt: new Date(), assignments: [] }];
+  try {
+    const send = () => fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers: { ...headers, 'X-Test-User': 'company-reader' }, body: JSON.stringify({ question: 'Platform tooling' }) });
+    assert.equal((await send()).status, 200);
+    assert.equal(forwarded.data.companySources[0].id, 't-test');
+    editCompanyDuringAnswer = true;
+    assert.equal((await send()).status, 409);
+  } finally { editCompanyDuringAnswer = false; companyRows = []; }
+});
+test('profile endpoints are self-only and writes require same-origin JSON', async () => {
+  const path = `${base}/projects/alpha/onboarding-profile`;
+  assert.equal((await fetch(path)).status, 401);
+  assert.equal((await fetch(path, { headers: { 'X-Test-User': 'outsider' } })).status, 404);
+  assert.deepEqual(await (await fetch(path, { headers })).json(), { onboardingRole: 'DESIGN', onboardingExperience: 'NEW', profileVersion: 0 });
+  assert.equal((await fetch(path, { method: 'PUT', headers, body: '{}' })).status, 403);
+  assert.equal((await fetch(path, { method: 'PUT', headers: { ...headers, Origin: new URL(base).origin }, body: JSON.stringify({ onboardingRole: null, onboardingExperience: null, userId: 'someone-else' }) })).status, 400);
+  assert.equal((await fetch(path, { method: 'PUT', headers: { 'X-Test-User': 'reader', Origin: new URL(base).origin, 'Content-Type': 'text/plain' }, body: '{}' })).status, 415);
+});
+test('profile changes during stateless generation withhold old-style answers', async () => {
+  editProfileDuringAnswer = true;
+  try {
+    const response = await fetch(`${base}/projects/alpha/ask`, { method: 'POST', headers, body: JSON.stringify({ question: 'architecture' }) });
+    assert.equal(response.status, 409);
+    assert.equal((await response.json()).answer, undefined);
+  } finally { editProfileDuringAnswer = false; profileVersion = 0; }
 });
 test('revocation during generation withholds the pending answer', async () => {
   revokeDuringAnswer = true;

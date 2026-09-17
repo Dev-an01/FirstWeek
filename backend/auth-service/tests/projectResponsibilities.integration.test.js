@@ -4,7 +4,7 @@ const { randomUUID } = require('node:crypto');
 
 test('responsibility owners stay project-scoped and removal leaves records unassigned',
   { skip: process.env.FIRSTWEEK_TEST_DATABASE !== '1' }, async () => {
-    process.env.DATABASE_URL = 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo';
+    process.env.DATABASE_URL = process.env.FIRSTWEEK_DATABASE_URL || 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo';
     const { prisma } = require('../shared/lib/prisma');
     const { createProject, manageProject } = require('../services/projectAdministration');
     const { listResponsibilities, saveResponsibility } = require('../services/projectResponsibilities');

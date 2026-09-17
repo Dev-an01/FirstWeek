@@ -1,12 +1,29 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { createPublicHandler } from './server/publicHandler.js';
+
+function mountPublicApi(server) {
+  // Server-only values from the usual local Vite env files. Nothing here is
+  // returned to the browser; only VITE_* settings belong in client code.
+  const localEnv = loadEnv(server.config.mode, server.config.envDir,
+    ['FIRSTWEEK_PUBLIC_', 'OPENAI_API_KEY', 'GROQ_API_KEY', 'OPENROUTER_API_KEY', 'UPSTASH_REDIS_REST_']);
+  const publicHandler = createPublicHandler({ env: { ...localEnv, ...process.env } });
+  server.middlewares.use((req, res, next) => {
+    if (req.url?.split('?')[0] !== '/api/public') return next();
+    return publicHandler(req, res).catch(() => { res.statusCode = 500; res.end('{"error":"Public demo unavailable."}'); });
+  });
+}
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), {
+    name: 'firstweek-public-api',
+    configureServer: mountPublicApi,
+    configurePreviewServer: mountPublicApi,
+  }],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   server: {

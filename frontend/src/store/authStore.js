@@ -9,9 +9,6 @@ import { sanitizeInput } from '../utils/sanitizer';
 
 // BroadcastChannel for cross-tab communication
 let authChannel = null;
-if (typeof BroadcastChannel !== 'undefined') {
-  authChannel = new BroadcastChannel('auth_channel');
-}
 
 /**
  * Create the auth store
@@ -187,20 +184,23 @@ export const useAuthStore = create((set, get) => ({
   },
 }));
 
-// Set up BroadcastChannel listener for cross-tab communication
-if (authChannel) {
-  authChannel.onmessage = (event) => {
-    const { checkAuth } = useAuthStore.getState();
+// The private app owns this lifecycle. Importing a shared component must not
+// issue authenticated requests or subscribe anonymous public visitors.
+export function initializePrivateAuth() {
+  if (typeof BroadcastChannel !== 'undefined') authChannel = new BroadcastChannel('auth_channel');
+  if (authChannel) {
+    authChannel.onmessage = (event) => {
+      const { checkAuth } = useAuthStore.getState();
 
-    if (event.data.type === 'login' || event.data.type === 'signup') {
-      // Another tab logged in, refresh auth state
-      checkAuth();
-    } else if (event.data.type === 'logout') {
-      // Another tab logged out, clear user state
-      useAuthStore.setState({ user: null, isAuthenticated: false });
-    }
-  };
+      if (event.data.type === 'login' || event.data.type === 'signup') {
+        // Another tab logged in, refresh auth state
+        checkAuth();
+      } else if (event.data.type === 'logout') {
+        // Another tab logged out, clear user state
+        useAuthStore.setState({ user: null, isAuthenticated: false });
+      }
+    };
+  }
+  useAuthStore.getState().checkAuth();
+  return () => { if (authChannel) { authChannel.onmessage = null; authChannel.close(); authChannel = null; } };
 }
-
-// Initialize auth check when store is created
-useAuthStore.getState().checkAuth();

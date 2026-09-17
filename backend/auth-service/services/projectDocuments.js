@@ -61,6 +61,7 @@ async function createDocument(prisma, actor, projectId, body) {
   return prisma.$transaction(async tx => {
     await tx.$queryRaw`SELECT id FROM projects WHERE "companyId" = ${actor.companyId} AND id = ${projectId} FOR UPDATE`;
     await requireMember(tx, actor, projectId, true);
+    await tx.project.update({ where: { companyId_id: { companyId: actor.companyId, id: projectId } }, data: { knowledgeVersion: { increment: 1 } } });
     if (await tx.projectDocument.count({ where: scope(actor, projectId) }) >= 100) fail(409, 'This project has reached its 100-document limit.');
     const id = `m-${randomUUID()}`; const parts = chunks(data.content);
     const row = await tx.projectDocument.create({ data: { ...scope(actor, projectId), id, ...data,
@@ -74,6 +75,10 @@ async function deleteDocument(prisma, actor, projectId, id) {
     await tx.$queryRaw`SELECT id FROM projects WHERE "companyId" = ${actor.companyId} AND id = ${projectId} FOR UPDATE`;
     await requireMember(tx, actor, projectId, true);
     await tx.projectDocument.delete({ where: { companyId_projectId_id: { ...scope(actor, projectId), id } } });
+    await tx.project.update({ where: { companyId_id: { companyId: actor.companyId, id: projectId } }, data: { knowledgeVersion: { increment: 1 } } });
+    await tx.projectConversation.updateMany({ where: scope(actor, projectId), data: {
+      turns: [], title: 'Conversation reset after source changes', knowledgeHash: '',
+      pendingId: null, pendingQuestion: null, pendingAt: null, version: { increment: 1 } } });
     return { id };
   });
 }

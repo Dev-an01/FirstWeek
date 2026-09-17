@@ -4,7 +4,7 @@ const { randomUUID } = require('node:crypto');
 
 test('managed documents are project-scoped, durable, searchable and deleted with their chunks',
   { skip: process.env.FIRSTWEEK_TEST_DATABASE !== '1' }, async () => {
-    process.env.DATABASE_URL = 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo';
+    process.env.DATABASE_URL = process.env.FIRSTWEEK_DATABASE_URL || 'postgresql://firstweek_local@127.0.0.1:5547/firstweek_demo';
     const { prisma } = require('../shared/lib/prisma');
     const { createProject, manageProject } = require('../services/projectAdministration');
     const { createDocument, listDocuments, readDocument, searchDocuments, deleteDocument, MAX_BYTES } = require('../services/projectDocuments');

@@ -44,6 +44,7 @@ model User {
 
   // Relations
   projectMemberships ProjectMember[]
+  teamAssignments TeamAssignment[]
   sessions Session[]
   emailVerifications EmailVerification[]
   passwordResets PasswordReset[]
@@ -188,6 +189,7 @@ model Company {
   
   // Relations
   projects       Project[]
+  teams          CompanyTeam[]
   users          User[]
   inviteCodes    InviteCode[]
   
@@ -197,8 +199,39 @@ model Company {
 }
 
 // =============================================
-// InviteCode Model - For employee self-registration
+// Maintained company-shared teams; assignments never grant project membership.
 // =============================================
+model CompanyTeam {
+  companyId String
+  id String
+  name String
+  description String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  assignments TeamAssignment[]
+
+  @@id([companyId, id])
+  @@unique([companyId, name])
+  @@map("company_teams")
+}
+
+model TeamAssignment {
+  companyId String
+  teamId String
+  userId String
+  assignment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  team CompanyTeam @relation(fields: [companyId, teamId], references: [companyId, id], onDelete: Cascade)
+  user User @relation(fields: [companyId, userId], references: [companyId, id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@id([companyId, teamId, userId])
+  @@index([companyId, userId])
+  @@map("team_assignments")
+}
+
+// InviteCode Model - For employee self-registration
 model InviteCode {
   id          String    @id @default(cuid())
   code        String    @unique    // The invite code string
@@ -243,12 +276,14 @@ model Project {
   description String @default("")
   isActive    Boolean @default(true)
   hasCuratedKnowledge Boolean @default(true)
+  knowledgeVersion Int @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   members     ProjectMember[]
   responsibilities ProjectResponsibility[]
   documents   ProjectDocument[]
+  readingSteps ProjectReadingStep[]
 
   @@id([companyId, id])
   @@map("projects")
@@ -268,6 +303,7 @@ model ProjectDocument {
   updatedAt  DateTime @updatedAt
   project    Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
   chunks     ProjectDocumentChunk[]
+  readingSteps ProjectReadingStep[]
 
   @@id([companyId, projectId, id])
   @@index([companyId, projectId, createdAt])
@@ -292,14 +328,79 @@ model ProjectMember {
   projectId String
   userId    String
   role      String @default("MEMBER")
+  onboardingRole String?
+  onboardingExperience String?
+  profileVersion Int @default(0)
   createdAt DateTime @default(now())
   project   Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
   user      User @relation(fields: [companyId, userId], references: [companyId, id], onDelete: Cascade)
   responsibilityAssignments ResponsibilityAssignment[]
+  conversations ProjectConversation[]
+  readingProgress ProjectReadingProgress[]
 
   @@id([companyId, projectId, userId])
   @@index([userId])
   @@map("project_members")
+}
+
+model ProjectConversation {
+  companyId String
+  projectId String
+  userId String
+  id String
+  title String @default("New conversation")
+  turns Json @default("[]")
+  knowledgeHash String
+  version Int @default(0)
+  pendingId String?
+  pendingQuestion String?
+  pendingAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  member ProjectMember @relation(fields: [companyId, projectId, userId], references: [companyId, projectId, userId], onDelete: Cascade)
+
+  @@id([companyId, projectId, userId, id])
+  @@map("project_conversations")
+}
+
+// Maintainer-authored steps reference managed project documents. A completion belongs
+// to one exact project member and never grants access or represents an ownership claim.
+model ProjectReadingStep {
+  companyId String
+  projectId String
+  id String
+  title String
+  description String @default("")
+  documentId String
+  focus String?
+  experience String?
+  position Int
+  revision Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project Project @relation(fields: [companyId, projectId], references: [companyId, id], onDelete: Cascade)
+  document ProjectDocument @relation(fields: [companyId, projectId, documentId], references: [companyId, projectId, id], onDelete: Cascade)
+  progress ProjectReadingProgress[]
+
+  @@id([companyId, projectId, id])
+  @@unique([companyId, projectId, position])
+  @@index([companyId, projectId, documentId])
+  @@map("project_reading_steps")
+}
+
+model ProjectReadingProgress {
+  companyId String
+  projectId String
+  stepId String
+  userId String
+  stepRevision Int
+  completedAt DateTime @default(now())
+  member ProjectMember @relation(fields: [companyId, projectId, userId], references: [companyId, projectId, userId], onDelete: Cascade)
+  step ProjectReadingStep @relation(fields: [companyId, projectId, stepId], references: [companyId, projectId, id], onDelete: Cascade)
+
+  @@id([companyId, projectId, stepId, userId])
+  @@index([companyId, projectId, userId])
+  @@map("project_reading_progress")
 }
 
 model ProjectResponsibility {

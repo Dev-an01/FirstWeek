@@ -8,7 +8,7 @@ web
 
 ## Users
 
-People joining software projects who need to understand the codebase, project purpose, company structure and responsibilities. Access is restricted to people assigned to each project. Company administrators manage membership. Portfolio visitors are a separate future audience with a separately published knowledge collection.
+People joining software projects who need to understand the codebase, project purpose, company structure and responsibilities. Private workspace access is restricted to people assigned to each project. Company administrators manage membership. Portfolio visitors use a separate read-only showcase with deliberately authored public knowledge, architecture and ephemeral chat; personal-site embedding remains future work.
 
 ## Product Purpose
 

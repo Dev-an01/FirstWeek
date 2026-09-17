@@ -4,9 +4,13 @@ const rateLimit = require('express-rate-limit');
 const { prisma } = require('../shared/lib/prisma');
 const { requireAuth } = require('../middleware/authMiddleware');
 const { findProjectMembership } = require('../services/projectAccess');
+const { readProfile, saveProfile } = require('../services/onboardingProfiles');
+const { listTeams, saveTeam, deleteTeam, assignMember } = require('../services/companyTeams');
+const { companyContext, companySources } = require('../services/companyContext');
 const { createProject, manageProject } = require('../services/projectAdministration');
 const { listResponsibilities, saveResponsibility, deleteResponsibility } = require('../services/projectResponsibilities');
 const { listDocuments, readDocument, createDocument, deleteDocument, searchDocuments } = require('../services/projectDocuments');
+const { readPath, saveStep, removeStep, reorderSteps, completeStep } = require('../services/readingPaths');
 
 const router = express.Router();
 const responsibilityPayload = items => items.slice(0, 100).map(item => ({ id: item.id, name: item.name,
@@ -49,6 +53,12 @@ const mutation = (handler) => async (req, res, next) => {
   }
 };
 router.post('/projects', managementWrite, mutation(req => createProject(prisma, req.user, req.body)));
+router.get('/company/teams', mutation(req => listTeams(prisma, req.user)));
+router.post('/company/teams', managementWrite, mutation(req => saveTeam(prisma, req.user, req.body)));
+router.patch('/company/teams/:teamId', managementWrite, mutation(req => saveTeam(prisma, req.user, req.body, req.params.teamId)));
+router.delete('/company/teams/:teamId', managementWrite, mutation(req => deleteTeam(prisma, req.user, req.params.teamId, req.body)));
+router.put('/company/teams/:teamId/assignments', managementWrite, mutation(req => assignMember(prisma, req.user, req.params.teamId, req.body)));
+router.delete('/company/teams/:teamId/assignments', managementWrite, mutation(req => assignMember(prisma, req.user, req.params.teamId, req.body, true)));
 
 router.use('/projects/:projectId', async (req, res, next) => {
   const membership = await findProjectMembership(prisma, req.user, req.params.projectId);
@@ -60,6 +70,15 @@ router.use('/projects/:projectId', async (req, res, next) => {
 
 router.patch('/projects/:projectId', managementWrite, mutation(req =>
   manageProject(prisma, req.user, req.params.projectId, 'settings', req.body)));
+router.use('/projects/:projectId/conversations', require('./conversationRoutes')(prisma, managementWrite));
+router.get('/projects/:projectId/onboarding-profile', mutation(req => readProfile(prisma, req.user, req.params.projectId)));
+router.put('/projects/:projectId/onboarding-profile', managementWrite, mutation(req => saveProfile(prisma, req.user, req.params.projectId, req.body)));
+router.get('/projects/:projectId/reading-path', mutation(req => readPath(prisma, req.user, req.params.projectId)));
+router.post('/projects/:projectId/reading-path', managementWrite, mutation(req => saveStep(prisma, req.user, req.params.projectId, req.body)));
+router.patch('/projects/:projectId/reading-path/:stepId', managementWrite, mutation(req => saveStep(prisma, req.user, req.params.projectId, req.body, req.params.stepId)));
+router.delete('/projects/:projectId/reading-path/:stepId', managementWrite, mutation(req => removeStep(prisma, req.user, req.params.projectId, req.params.stepId)));
+router.put('/projects/:projectId/reading-path/order', managementWrite, mutation(req => reorderSteps(prisma, req.user, req.params.projectId, req.body)));
+router.put('/projects/:projectId/reading-path/:stepId/completion', managementWrite, mutation(req => completeStep(prisma, req.user, req.params.projectId, req.params.stepId, req.body)));
 router.post('/projects/:projectId/members', managementWrite, mutation(req =>
   manageProject(prisma, req.user, req.params.projectId, 'add', req.body)));
 router.patch('/projects/:projectId/members/:userId', managementWrite, mutation(req =>
@@ -77,7 +96,7 @@ router.patch('/projects/:projectId/responsibilities/:responsibilityId', manageme
 router.delete('/projects/:projectId/responsibilities/:responsibilityId', managementWrite, mutation(req =>
   deleteResponsibility(prisma, req.user, req.params.projectId, req.params.responsibilityId)));
 
-async function forward(req, res, suffix, data, transform = value => value, documentsSnapshot) {
+async function forward(req, res, suffix, data, transform = value => value, documentsSnapshot, companySnapshot) {
   const token = process.env.FIRSTWEEK_SERVICE_TOKEN || '';
   if (token.length < 32) return res.status(503).json({ error: 'Project knowledge is not configured yet.' });
   const project = req.firstweekProject;
@@ -97,8 +116,14 @@ async function forward(req, res, suffix, data, transform = value => value, docum
         return res.status(409).json({ error: 'Project responsibilities changed while answering. Please ask again.' });
       }
     }
+    if (data?.onboardingProfile && JSON.stringify(await readProfile(prisma, req.user, project.id)) !== JSON.stringify(data.onboardingProfile)) {
+      return res.status(409).json({ error: 'Your onboarding preferences changed while answering. Please ask again.' });
+    }
     if (documentsSnapshot && JSON.stringify(await listDocuments(prisma, req.user, project.id)) !== documentsSnapshot) {
       return res.status(409).json({ error: 'Project documents changed while loading. Please try again.' });
+    }
+    if (companySnapshot !== undefined && (await companyContext(prisma, req.user)).hash !== companySnapshot) {
+      return res.status(409).json({ error: 'Company context changed while answering. Please ask again.' });
     }
     return res.json(transform(suffix === '' ? { ...result.data, name: project.name, summary: project.description,
       membershipRole: req.firstweekMembershipRole } : result.data));
@@ -159,15 +184,18 @@ router.post('/projects/:projectId/ask', rateLimit({
   }
   try {
     const responsibilities = await listResponsibilities(prisma, req.user, req.params.projectId);
+    const onboardingProfile = await readProfile(prisma, req.user, req.params.projectId);
+    const company = await companyContext(prisma, req.user);
     const documentsSnapshot = JSON.stringify(await listDocuments(prisma, req.user, req.params.projectId));
     const recent = history.filter(message => message.role === 'user').slice(-2).map(message => message.content);
     const managedSources = await searchDocuments(prisma, req.user, req.params.projectId, [question, ...recent].join('\n').slice(0, 2000));
-    if (req.firstweekProject.hasCuratedKnowledge === false && !responsibilities.length && !managedSources.length) return res.json({
+    const maintainedCompanySources = companySources(company, [question, ...recent].join('\n').slice(0, 2000));
+    if (req.firstweekProject.hasCuratedKnowledge === false && !responsibilities.length && !managedSources.length && !maintainedCompanySources.length) return res.json({
       answer: 'No matching evidence was found. Try a more specific question or ask a maintainer to add a source.', sources: [], mode: 'no-evidence', retrieval: 'none' });
     return forward(req, res, '/ask', { question: question.trim(), projectName: req.firstweekProject.name,
       hasCuratedKnowledge: req.firstweekProject.hasCuratedKnowledge,
-      responsibilities: responsibilityPayload(responsibilities), managedSources,
-      history: history.map(({ role, content }) => ({ role, content })) }, undefined, documentsSnapshot);
+      responsibilities: responsibilityPayload(responsibilities), managedSources, onboardingProfile, companySources: maintainedCompanySources,
+      history: history.map(({ role, content }) => ({ role, content })) }, undefined, documentsSnapshot, company.hash);
   } catch (error) { return next(error); }
 });
 router.use((error, req, res, next) => {
