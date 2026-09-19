@@ -2,7 +2,7 @@
 
 ## Scope
 
-Anonymous visitors can browse the six published project summaries, architecture and guides, and ask grounded questions. The sixth project, Movie Enquirer, is published as a completed, self-coded learning project. No account is required. Public APIs have no create, edit, upload, membership, company, onboarding-profile or saved-conversation operations. The private workspace remains at `/projects` in the normal local/private build; the Vercel build uses a public-only entry point.
+Anonymous visitors can browse the six published project summaries, architecture and guides, and ask grounded questions. The sixth project, Movie Enquirer, is published with completed status. No account is required. Public APIs have no create, edit, upload, membership, company, onboarding-profile or saved-conversation operations. The private workspace remains at `/projects` in the normal local/private build; the Vercel build uses a public-only entry point.
 
 This is a deliberately small M5/M6 slice. The personal-site integration API, embedded widget, publication admin UI and full production acceptance remain deferred. The existing M2 work is preserved, not declared complete.
 

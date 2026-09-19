@@ -10,7 +10,7 @@ jest.mock('react-markdown', () => ({ __esModule: true, default: ({ children }) =
 jest.mock('../../services/api');
 
 const project = { id: 'example', name: 'Example project', description: 'Public summary', summary: 'Public summary', stack: ['React'],
-  status: 'Completed', tags: ['Self-coded', 'No AI coding agents'], membershipRole: 'MAINTAINER',
+  status: 'Completed', tags: [], membershipRole: 'MAINTAINER',
   documents: [{ id: 'guide', title: 'Public guide', managed: true }] };
 const client = () => ({
   projects: jest.fn().mockResolvedValue({ projects: [project], canCreate: true }),
@@ -33,8 +33,6 @@ test('anonymous public directory never initializes private auth or exposes manag
   expect((await screen.findAllByText('Example project')).length).toBeGreaterThan(0);
   expect(screen.getByText('Public projects')).toBeInTheDocument();
   expect(screen.getByText('Completed')).toBeInTheDocument();
-  expect(screen.getByText('Self-coded')).toBeInTheDocument();
-  expect(screen.getByText('No AI coding agents')).toBeInTheDocument();
   expect(screen.queryByText('Create project')).not.toBeInTheDocument();
   expect(screen.queryByText('Company teams')).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Sign out' })).not.toBeInTheDocument();

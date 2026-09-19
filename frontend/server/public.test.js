@@ -50,7 +50,7 @@ test('anonymous reads return only explicitly published project DTOs and sources'
   const learningRag = await call('projects/learning-rag');
   assert.equal(learningRag.body.name, 'Movie Enquirer');
   assert.equal(learningRag.body.status, 'Completed');
-  assert.deepEqual(learningRag.body.tags, ['Self-coded', 'No AI coding agents']);
+  assert.deepEqual(learningRag.body.tags, []);
   assert.match(learningRag.body.documents[0].title, /Public project guide/);
 });
 

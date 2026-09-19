@@ -6,7 +6,7 @@ Purpose: give reviewers the current system shape before they inspect a scoped di
 
 - M1 and M2-01/M2-02/M2-03 are accepted locally. Gauss accepted M2-03 at 100/100 on 2026-09-16; M2-04 overall integration/acceptance remains next. See `TRACK.md` for the live acceptance record and `MILESTONES.md` for scope.
 - Private workspace: authenticated, company and project membership scoped, with curated and managed knowledge, maintained context, saved conversations and onboarding preferences.
-- Public showcase: separate six-project authored collection and anonymous read-only API. Movie Enquirer is published as completed and self-coded at the owner's direction. The collection must never import the private manifest, database, project documents, company teams, profiles, or saved conversations.
+- Public showcase: separate six-project collection and anonymous read-only API. Movie Enquirer is published with completed status. The collection must never import the private manifest, database, project documents, company teams, profiles, or saved conversations.
 - Private corpus: five curated projects and 46 indexed sections after the M2-03 guide refresh (2026-09-16). Public deployment is not yet accepted.
 
 ## System graph
