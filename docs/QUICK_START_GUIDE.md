@@ -48,8 +48,6 @@ DB_PASSWORD=postgres123
 # Google Cloud TTS (for Japanese voice)
 GCP_PROJECT_ID=your-gcp-project
 
-# Recall.ai (for meeting bot integration)
-RECALL_API_KEY=your-recall-key
 ```
 
 ---

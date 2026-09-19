@@ -90,7 +90,7 @@ Verdict: **ACCEPT, 100/100** for the bounded local managed-source reading-path a
 
 ## Engineering constraints
 
-Reuse React/Vite, Express auth, Prisma/PostgreSQL, FastAPI and existing embeddings/provider clients. Avoid routing private data through legacy unscoped chat/retrieval. Authorization derives from server identity, never body scope. Keep private content out of bundles, logs and public APIs. Use additive migrations; no database reset. Managed ingestion needs durable state separate from destructive curated rebuilds. Prefer bounded synchronous ingestion only if it is genuinely safe at the supported size, otherwise explicit jobs and recovery. Reuse established FirstWeek/Impeccable design patterns.
+Use React/Vite, Express auth, Prisma/PostgreSQL, FastAPI and configured embedding/provider clients. Route private data only through project-scoped chat and retrieval. Authorization derives from server identity, never body scope. Keep private content out of bundles, logs and public APIs. Use additive migrations; no database reset. Managed ingestion needs durable state separate from destructive curated rebuilds. Prefer bounded synchronous ingestion only if it is genuinely safe at the supported size, otherwise explicit jobs and recovery. Follow established FirstWeek/Impeccable design patterns.
 
 ## Implementation workflow
 

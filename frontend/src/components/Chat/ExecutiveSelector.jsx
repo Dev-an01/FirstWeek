@@ -265,7 +265,7 @@ export function ExecutiveSelector({ isOpen, onClose }) {
             <p className="text-sm text-gray-600 mt-1">
               {t(
                 'chat.selectExecutive.subtitle',
-                'Choose an AI avatar to start your conversation'
+                'Choose a project guide to start your conversation'
               )}
             </p>
           </div>

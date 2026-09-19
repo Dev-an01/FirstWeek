@@ -90,7 +90,7 @@ components:
 
 FirstWeek uses deep pine navigation, pale mineral surroundings and white reading sheets to make project context feel settled and approachable. Plain humanist typography, compact source rows and fine dividers support reading. Lime identifies actions and small identity accents.
 
-This is the system implemented by `frontend/src/firstweek/firstweek.css`, `Workspace.jsx`, `Login.jsx` and `Brand.jsx`, following direction seed `4e541dc4`. It applies to the new FirstWeek workspace and login surface. Legacy screens, including linked account flows, do not yet inherit it. The finish reviewer disposition is **ship** for the supplied overview and login desktop/mobile captures; Ask, Knowledge and People have source review only. This record does not extend that visual validation or claim production readiness.
+This is the system implemented by `frontend/src/firstweek/firstweek.css`, `Workspace.jsx`, `Login.jsx` and `Brand.jsx`, following direction seed `4e541dc4`. It applies to the FirstWeek workspace and login surface. Linked account flows do not yet use this system. The finish reviewer disposition is **ship** for the supplied overview and login desktop/mobile captures; Ask, Knowledge and People have source review only. This record does not extend that visual validation or claim production readiness.
 
 **Key Characteristics:**
 
@@ -119,7 +119,7 @@ A green-tinted neutral family carries most of the interface; lime provides the b
 
 ## Typography
 
-**Display and body font:** self-hosted Atkinson, registered as `FirstWeek`, with `Segoe UI, sans-serif` fallback. Regular and bold Latin WOFF2 files were reused from the user's personal-site assets and are served from `/fonts/firstweek/` with `font-display: swap`. There is no distinct display or label family.
+**Display and body font:** self-hosted Atkinson, registered as `FirstWeek`, with `Segoe UI, sans-serif` fallback. Regular and bold Latin WOFF2 files are served from `/fonts/firstweek/` with `font-display: swap`. There is no distinct display or label family.
 
 The hierarchy is compact and purpose-based, not a mathematical scale. Body text uses the frontmatter body role; reading introductions use the reading role. Source prose uses a slightly looser line height (1.85) and a maximum measure of 72ch; lead descriptions stop at 66ch. Labels use 12px, metadata generally 10–11px, and row titles 12–16px.
 
@@ -182,7 +182,7 @@ The reading path uses numbered circular steps with title, description and arrow.
 
 ### Don't:
 
-- **Don't** assume legacy routes have adopted this system or were covered by the FirstWeek visual review.
+- **Don't** assume other account routes use this system or were covered by the FirstWeek visual review.
 - **Don't** turn intermediate CSS font-weight requests into claims of additional installed font faces.
 - **Don't** replace readable source rows with decorative imagery or hide evidence behind an unlabeled icon.
 

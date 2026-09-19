@@ -32,11 +32,11 @@ export function Navbar() {
             <div className="flex items-center gap-3">
               <img
                 src="/logo/header_logo.svg"
-                alt="AI Avatar Logo"
+                alt="FirstWeek logo"
                 className="h-8"
               />
               <span className="font-semibold text-primary text-lg">
-                AI Avatar
+                FirstWeek
               </span>
             </div>
           </div>

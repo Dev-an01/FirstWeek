@@ -12,7 +12,7 @@ Status: initial foundation and frontend slice implemented; this is not a product
 - Verified locally: MiniLM semantic model loading and retrieval for natural-language stack questions; bounded conversational context, provider-failure handling, and generation integration using a test double.
 - User approved Groq processing of selected private guide passages and recent chat turns. Live Groq tests passed for the exact deployment/technology question, a contextual bot-architecture follow-up, and a greeting.
 - Not yet live-verified: production infrastructure.
-- Still planned: managed ingestion, editable responsibilities/membership administration, durable project conversations/checklists, remaining legacy screen migration, published portfolio collection and deployment.
+- Still planned: managed ingestion, editable responsibilities/membership administration, durable project conversations/checklists, remaining account-screen work, published portfolio collection and deployment.
 
 ## Product and access contract
 
@@ -20,17 +20,16 @@ FirstWeek is a project onboarding workspace for people who belong to a project. 
 
 The initial local corpus is private. The requested `/User/projects` does not exist; the source root is `/Users/dev_an/projects`. Reading repositories does not establish personal authorship, current maintenance, deployment status, or team responsibilities. Missing ownership is shown as unknown.
 
-## Repository reuse assessment
+## System component plan
 
 | Component | Decision | Reason / required work |
 |---|---|---|
-| `frontend/` React, Vite, React Router, Zustand, Markdown, Lucide | Reuse platform; replace product surfaces | Existing auth state and HTTP helpers are useful. Avatar selection, video, executive impersonation and meeting invitations do not belong in the primary FirstWeek flow. |
-| Auth service, sessions, company model | Reuse and extend | Add projects and membership. Validate membership on every project request; company membership is insufficient. |
-| Chat service and persistent conversations | Reuse after adding project scope | Bind conversation to project and member; guard history, sockets, citations and interruption. Never send FirstWeek questions through legacy unscoped endpoints. |
-| RAG embedding model and provider clients | Reuse directly | Same embedding model manager and configurable LLM factory; generate onboarding answers without executive personas. |
-| Legacy vector/graph/memory retrieval | Adapt in a later integration phase | Current code includes NULL-company/global records and optional scope. No private FirstWeek data enters these legacy tables until all retrieval paths enforce mandatory project filters. |
-| Onboarding document parsers and chunking | Reuse after scope propagation | Uploads, jobs, chunks, deletion and status must carry immutable project and company IDs. |
-| Recall, avatar renderer, voice cloning | Keep out of initial runtime | Not required for project onboarding; preserve existing code during transition. |
+| `frontend/` React, Vite, React Router, Zustand, Markdown, Lucide | Build FirstWeek product surfaces | Keep authentication state and HTTP helpers aligned with project-scoped routes. |
+| Auth service, sessions, company model | Extend with project access | Add projects and membership. Validate membership on every project request; company membership is insufficient. |
+| Chat service and persistent conversations | Add mandatory project scope | Bind conversation to project and member; guard history, sockets, citations and interruption. |
+| RAG embedding model and provider clients | Configure for onboarding answers | Use the embedding manager and configurable LLM factory without personas. |
+| Vector, graph and memory retrieval | Enforce scope before integration | All retrieval paths must require project filters before private FirstWeek data is indexed. |
+| Onboarding document parsers and chunking | Propagate project scope | Uploads, jobs, chunks, deletion and status must carry immutable project and company IDs. |
 | Docker, Caddy, observability, evaluation | Adapt | Docker unavailable on this machine; frontend currently serves Vite dev. Replace production serving and verify service boundaries before deployment. |
 
 ## Corpus and provenance
@@ -41,10 +40,10 @@ Active projects: FirstWeek, AI PR Review Agent, MoneyPlant, RAG-Builder and Pers
 
 ## Phase 1 — Concrete foundation (current implementation)
 
-- Write this reuse assessment and source-backed about documents with a private manifest.
+- Document component boundaries and source-backed project guides with a private manifest.
 - Build a reproducible local project-scoped full-text index; parameterized queries, immutable per-document project scope, content hashes and atomic replacement.
 - Add opt-in semantic indexing using the existing RAG embedding model and rank fusion; never silently call lexical retrieval semantic RAG.
-- Reuse the RAG LLM factory for optional sourced generation. Without a configured model, return clearly labelled source excerpts, not simulated AI answers.
+- Use the RAG LLM provider for optional sourced generation. Without a configured model, return clearly labelled source excerpts, not simulated AI answers.
 - Introduce Project and ProjectMember in auth Prisma schema with a reviewed additive migration.
 - Add authenticated FirstWeek API gateway: project list, overview, documents, source reading and questions. Require active, verified company membership plus explicit project membership; no administrator read bypass.
 - Internal RAG routes require a dedicated service token and exact company/project scope. No corpus JSON or Markdown in the browser bundle or public directory.

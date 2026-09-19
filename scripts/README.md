@@ -15,7 +15,7 @@ Auto-detects the server's public IP and updates `.env` file.
 **What it does:**
 1. Detects public IP using GCP metadata service
 2. Falls back to external services if needed
-3. Updates `HOST` and `AVATAR_VIDEO_HOST` in `.env`
+3. Updates `HOST` in `.env`
 4. Creates backup (`.env.bak`) before updating
 
 ### `start.sh`

@@ -127,7 +127,7 @@ export function SignupPage() {
         <div className="flex flex-col items-center mb-6">
           <img
             src="/logo/header_logo.svg"
-            alt="AI Avatar Logo"
+            alt="FirstWeek logo"
             className="h-12 sm:h-16 mb-4"
           />
           <h1 className="text-xl sm:text-2xl font-bold text-primary text-center">

@@ -36,24 +36,9 @@ const ProfilePage = lazy(() =>
     default: module.ProfilePage,
   }))
 );
-const InviteMeetPage = lazy(() =>
-  import('./pages/InviteMeetPage').then((module) => ({
-    default: module.InviteMeetPage,
-  }))
-);
 const ChatPage = lazy(() =>
   import('./pages/ChatPage').then((module) => ({
     default: module.ChatPage,
-  }))
-);
-const ChatTranscriptionPage = lazy(() =>
-  import('./pages/ChatTranscriptionPage').then((module) => ({
-    default: module.ChatTranscriptionPage,
-  }))
-);
-const VideoChatPage = lazy(() =>
-  import('./pages/VideoChatPage.tsx').then((module) => ({
-    default: module.VideoChatPage,
   }))
 );
 
@@ -142,44 +127,11 @@ function App() {
           />
 
           <Route
-            path="/invite-meet"
-            element={
-              <ProtectedRoute>
-                <CompanyRequiredRoute>
-                  <InviteMeetPage />
-                </CompanyRequiredRoute>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
             path="/chat/:conversationId?"
             element={
               <ProtectedRoute>
                 <CompanyRequiredRoute>
                   <ChatPage />
-                </CompanyRequiredRoute>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/transcription/:id?"
-            element={
-              <ProtectedRoute>
-                <CompanyRequiredRoute>
-                  <ChatTranscriptionPage />
-                </CompanyRequiredRoute>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/videochat"
-            element={
-              <ProtectedRoute>
-                <CompanyRequiredRoute>
-                  <VideoChatPage />
                 </CompanyRequiredRoute>
               </ProtectedRoute>
             }

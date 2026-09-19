@@ -98,8 +98,8 @@ This is not a generic chatbot. We're building **Cognitive Twins** - AI represent
 │                                                                             │
 │  CLIENTS                                                                    │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                       │
-│  │ Frontend │ │ Avatar   │ │ Chat     │ │ External │                       │
-│  │ (Vite)   │ │ Bot      │ │ Service  │ │ APIs     │                       │
+│  │ Frontend │ │ Project  │ │ Chat     │ │ External │                       │
+│  │ (Vite)   │ │ Guide    │ │ Service  │ │ APIs     │                       │
 │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘                       │
 │       │            │            │            │                              │
 │       └────────────┴────────────┴────────────┘                              │

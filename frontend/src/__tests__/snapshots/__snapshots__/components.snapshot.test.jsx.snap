@@ -57,7 +57,7 @@ exports[`Component Snapshots LoginPage Snapshots should match snapshot for initi
         class="flex flex-col items-center mb-6"
       >
         <img
-          alt="AI Avatar Logo"
+          alt="FirstWeek logo"
           class="h-12 sm:h-16 mb-4"
           src="/logo/header_logo.svg"
         />
@@ -304,7 +304,7 @@ exports[`Component Snapshots LoginPage Snapshots should match snapshot with vali
         class="flex flex-col items-center mb-6"
       >
         <img
-          alt="AI Avatar Logo"
+          alt="FirstWeek logo"
           class="h-12 sm:h-16 mb-4"
           src="/logo/header_logo.svg"
         />
@@ -580,7 +580,7 @@ exports[`Component Snapshots Responsive Layout Snapshots should match snapshot f
         class="flex flex-col items-center mb-6"
       >
         <img
-          alt="AI Avatar Logo"
+          alt="FirstWeek logo"
           class="h-12 sm:h-16 mb-4"
           src="/logo/header_logo.svg"
         />
@@ -827,7 +827,7 @@ exports[`Component Snapshots Responsive Layout Snapshots should match snapshot f
         class="flex flex-col items-center mb-6"
       >
         <img
-          alt="AI Avatar Logo"
+          alt="FirstWeek logo"
           class="h-12 sm:h-16 mb-4"
           src="/logo/header_logo.svg"
         />
@@ -1074,7 +1074,7 @@ exports[`Component Snapshots Responsive Layout Snapshots should match snapshot f
         class="flex flex-col items-center mb-6"
       >
         <img
-          alt="AI Avatar Logo"
+          alt="FirstWeek logo"
           class="h-12 sm:h-16 mb-4"
           src="/logo/header_logo.svg"
         />
