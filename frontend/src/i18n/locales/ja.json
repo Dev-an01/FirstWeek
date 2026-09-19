@@ -1,11 +1,10 @@
 {
   "navbar": {
-    "title": "FIRSTWEEKアバター"
+    "title": "FirstWeek"
   },
   "sidebar": {
     "dashboard": "ダッシュボード",
     "chat": "チャット",
-    "inviteToMeet": "ミーティングに招待",
     "profile": "マイプロフィール",
     "session": "セッション",
     "logout": "ログアウト",
@@ -18,16 +17,6 @@
       "title": "新しい会話",
       "description": "AIアシスタントとの新しい会話を開始",
       "button": "開始する"
-    },
-    "videoChat": {
-      "title": "新しいビデオチャット",
-      "description": "AI搭載のビデオ会話を開始",
-      "button": "ビデオチャットを開く"
-    },
-    "scheduleMeeting": {
-      "title": "ミーティングをスケジュール",
-      "description": "新しいAI搭載ミーティングを設定",
-      "button": "ミーティングをスケジュール"
     },
     "recentActivity": {
       "title": "最近のアクティビティ"

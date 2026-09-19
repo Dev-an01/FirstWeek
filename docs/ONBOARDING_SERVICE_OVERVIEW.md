@@ -1,7 +1,6 @@
 # Onboarding Service - Comprehensive Overview
 
 Last 6 commits analyzed:
-- `649cc41` - Update: Optimizing Avatar Interface  
 - `a9fe614` - Fix: Add missing model files
 - `01f7c07` - frontend implementation with onboarding pipeline
 - `d3f4274` - knowledge base separation with executive profile data

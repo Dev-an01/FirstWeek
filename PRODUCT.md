@@ -16,7 +16,7 @@ Help project members find grounded answers, understand how a project works and i
 
 ## Positioning
 
-Project onboarding supported by inspectable sources and explicit access boundaries. The existing RAG/backend are reused where appropriate. Missing or stale knowledge is made visible rather than answered with invented facts.
+Project onboarding supported by inspectable sources and explicit access boundaries. Missing or stale knowledge is made visible rather than answered with invented facts.
 
 ## Operating Context
 
@@ -24,7 +24,7 @@ The existing application is React/Vite with Express identity/chat services and P
 
 ## Capabilities and Constraints
 
-Project membership is a backend authorization boundary. The browser must not bundle private project data. Company knowledge must be explicitly shared; private project retrieval may not inherit legacy global results. Current project owners and company structure have not been supplied. Existing avatar, voice and meeting functionality is not central to the new use case. Production readiness requires live integration and isolation verification.
+Project membership is a backend authorization boundary. The browser must not bundle private project data. Company knowledge must be explicitly shared, and private project retrieval must remain project-scoped. Current project owners and company structure have not been supplied. Production readiness requires live integration and isolation verification.
 
 ## Brand Commitments
 
@@ -32,7 +32,7 @@ Name: FirstWeek. Frontend design uses Impeccable as explicitly requested. No vis
 
 ## Evidence on Hand
 
-`knowledge/firstweek/manifest.json` and the adjacent Markdown guides record the inspected repositories, source paths and hashes. `docs/firstweek/IMPLEMENTATION_PLAN.md` records reuse and implementation scope. Existing security audit documents identify pending work. There are no verified customer testimonials, measured onboarding improvements or confirmed responsibility assignments to display.
+`knowledge/firstweek/manifest.json` and the adjacent Markdown guides record the inspected repositories, source paths and hashes. `docs/firstweek/IMPLEMENTATION_PLAN.md` records implementation scope. Security review documents identify pending work. There are no verified customer testimonials, measured onboarding improvements or confirmed responsibility assignments to display.
 
 ## Product Principles
 
@@ -40,4 +40,4 @@ Name: FirstWeek. Frontend design uses Impeccable as explicitly requested. No vis
 - Answers expose their sources and knowledge limits.
 - Project understanding and next steps come before model configuration.
 - Public portfolio knowledge is deliberately published.
-- Reuse working infrastructure and verify its behavior before making production claims.
+- Verify infrastructure behavior before making production claims.

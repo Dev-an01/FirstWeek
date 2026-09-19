@@ -50,7 +50,7 @@ describe('LoginPage', () => {
       renderWithProviders(<LoginPage />);
 
       expect(
-        screen.getByRole('img', { name: /AI Avatar Logo/i })
+        screen.getByRole('img', { name: /FirstWeek logo/i })
       ).toBeInTheDocument();
       expect(
         screen.getByPlaceholderText(/email or username/i)
