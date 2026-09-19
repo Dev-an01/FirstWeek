@@ -128,7 +128,6 @@ FirstWeek/
 │       ├── pages/         # Route pages
 │       ├── services/      # API clients
 │       └── i18n/          # Translations (en, ja)
-├── frontend-avatar/       # WebRTC avatar interface
 ├── backend/
 │   ├── auth-service/      # Authentication, project membership
 │   ├── chat-service/      # WebSocket chat, conversation management
@@ -145,7 +144,6 @@ FirstWeek/
 │   └── onboarding/        # Profile & voiceprint onboarding
 ├── knowledge/             # Curated project guides & manifests
 ├── docs/                  # Architecture docs, runbooks, audits
-├── kubernetes/            # K8s manifests & deployment scripts
 ├── scripts/               # Utility & setup scripts
 ├── docker-compose.yml     # Development environment
 ├── docker-compose.prod.yml# Production environment
@@ -166,7 +164,6 @@ FirstWeek/
 | [API Documentation](API_DOCUMENTATION.yaml) | OpenAPI specification |
 | [RAG Architecture](docs/AI-OFFICER_RAG_COMPLETE_GUIDE.md) | Complete RAG system guide |
 | [Security Audit](docs/SECURITY_AUDIT.md) | Security review and findings |
-| [Kubernetes Guide](kubernetes/README.md) | Deployment to GCP/GKE |
 
 ---
 
@@ -189,23 +186,6 @@ Key variables include database credentials, API keys for LLM/embedding providers
 ```bash
 docker compose -f docker-compose.prod.yml up --build -d
 ```
-
-### Kubernetes (GCP/GKE)
-
-Step-by-step scripts are provided in `kubernetes/scripts/`:
-
-```bash
-./kubernetes/scripts/1-setup-gcp.sh
-./kubernetes/scripts/2-create-cluster.sh
-./kubernetes/scripts/3-build-images.sh
-./kubernetes/scripts/4-deploy-secrets.sh
-./kubernetes/scripts/5-deploy-app.sh
-./kubernetes/scripts/6-health-check.sh
-```
-
-See the [Kubernetes README](kubernetes/README.md) for details.
-
----
 
 ## License
 

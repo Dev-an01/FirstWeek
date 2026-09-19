@@ -27,7 +27,6 @@ services:
       - auth-service
       - chat-service
       - recall-service
-      - avatar-interface
       - rag-api
     restart: unless-stopped
     networks:
@@ -105,36 +104,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
-    init: true
-
-  avatar-interface:
-    build:
-      context: ./frontend-avatar
-      dockerfile: Dockerfile
-    container_name: firstweek-interface-prod
-    environment:
-      - NODE_ENV=production
-      - PORT=3004
-      - RAG_API_URL=http://rag-api:8000
-      - AVATAR_VIDEO_HOST=${AVATAR_VIDEO_HOST:-example.invalid}
-      - AVATAR_VIDEO_PORT=${AVATAR_VIDEO_PORT:-}
-      - AVATAR_VIDEO_PROTOCOL=${AVATAR_VIDEO_PROTOCOL:-wss}
-      - AVATAR_VIDEO_PATH=${AVATAR_VIDEO_PATH:-/ws}
-    # no volume mounts in production
-    ports:
-      - "3004:3004"
-    depends_on:
-      rag-api:
-        condition: service_healthy
-    restart: unless-stopped
-    networks:
-      - firstweek-network
-    healthcheck:
-      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3004/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
     init: true
 
   auth-service:
