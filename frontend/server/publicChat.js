@@ -2,6 +2,22 @@ import { createHmac } from 'node:crypto';
 
 const stop = new Set('a an and are as at be by can do does for from how i in is it me of on or project tell that the this to what where which with you'.split(' '));
 const words = value => [...new Set(value.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) || [])].filter(word => !stop.has(word));
+const near = (left, right) => {
+  if (left.length < 5 || right.length < 5 || left[0] !== right[0] || Math.abs(left.length - right.length) > 1) return false;
+  if (left.length === right.length) return [...left].filter((letter, index) => letter !== right[index]).length <= 1;
+  const [shorter, longer] = left.length < right.length ? [left, right] : [right, left];
+  let shortIndex = 0;
+  let longIndex = 0;
+  let skipped = false;
+  while (shortIndex < shorter.length && longIndex < longer.length) {
+    if (shorter[shortIndex] === longer[longIndex]) shortIndex++;
+    else if (skipped) return false;
+    else skipped = true;
+    longIndex++;
+  }
+  return true;
+};
+const includes = (tokens, word) => tokens.includes(word) || tokens.some(token => near(word, token));
 
 export function retrieve(project, question, history) {
   const query = words(question);
@@ -12,8 +28,8 @@ export function retrieve(project, question, history) {
   }))).map(source => {
     const body = words(`${source.heading} ${source.content}`);
     const heading = words(source.heading);
-    const score = query.reduce((sum, word) => sum + (body.includes(word) ? 3 : 0) + (heading.includes(word) ? 4 : 0), 0)
-      + recent.reduce((sum, word) => sum + (body.includes(word) ? 1 : 0) + (heading.includes(word) ? 1 : 0), 0);
+    const score = query.reduce((sum, word) => sum + (includes(body, word) ? 3 : 0) + (includes(heading, word) ? 4 : 0), 0)
+      + recent.reduce((sum, word) => sum + (includes(body, word) ? 1 : 0) + (includes(heading, word) ? 1 : 0), 0);
     return { source, score };
   }).filter(row => row.score || !query.length).sort((a, b) => b.score - a.score).slice(0, 4).map(row => row.source);
 }

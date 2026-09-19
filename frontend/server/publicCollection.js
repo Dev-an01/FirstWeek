@@ -1,7 +1,7 @@
 // Deliberately authored publication snapshot. Never import the private manifest,
 // databases, uploads, company directory, profiles, or saved conversations here.
 // Editing this file and redeploying is the publication/removal workflow for v1.
-const snapshot = '2026-09-17';
+const snapshot = '2026-09-19';
 const guide = (id, sections) => ({
   id: `${id}-public-guide`, title: 'Public project guide', snapshot_at: snapshot,
   sections: Object.entries(sections).map(([heading, content]) => ({ heading, content })),
@@ -78,16 +78,17 @@ export const publicCollection = Object.freeze([
       'Where to start': 'Follow the project collection, project API handler and project-detail component to understand how case studies reach visitors.',
       'Current limitations': 'A FirstWeek personal-site API and embedded assistant are future work; this demo only provides chat within FirstWeek itself. Protected content and private notes are outside this public snapshot.',
     }, { status: 'Active portfolio', tags: ['Version-controlled case studies'] }),
-  project('learning-rag', 'Learning RAG', 'A movie RAG search engine built from first principles across lexical, semantic, hybrid and multimodal retrieval',
-    ['Python', 'BM25', 'Sentence Transformers', 'CLIP', 'OpenRouter'],
-    architecture('From a movie query to a grounded answer', 'A completed command-line learning project over a local 5,000-movie dataset.', [
+  project('learning-rag', 'Movie Enquirer', 'A movie RAG search engine built from first principles across lexical, semantic, hybrid and multimodal retrieval',
+    ['Python', 'Streamlit', 'BM25', 'Sentence Transformers', 'CLIP', 'OpenRouter'],
+    architecture('From a movie query to a grounded answer', 'A completed learning project with command-line tools and a hosted Streamlit showcase over a 5,000-movie dataset.', [
+      ['Streamlit showcase', 'Visitors can run hybrid search or ask for a recommendation in the hosted demo.'],
       ['Lexical retrieval', 'Text normalization, an inverted index and BM25 preserve exact and rare-term matches.'],
       ['Semantic and hybrid retrieval', 'MiniLM chunk embeddings combine with BM25 through weighted fusion or Reciprocal Rank Fusion.'],
       ['Reranking and generation', 'Optional rerankers refine candidates before OpenRouter generates an answer from retrieved movies.'],
     ]), {
-      About: 'Learning RAG is a completed command-line movie search and retrieval-augmented generation project over 5,000 local movie records. It was self-coded manually by Anand: no vibe coding or AI coding agent was used to write the application code. The product can still call an LLM at runtime for query enhancement, reranking and grounded generation; that runtime feature is separate from how the code was authored.',
-      Architecture: 'The project builds text preprocessing, an inverted index, TF-IDF and BM25 before adding MiniLM embeddings and overlapping semantic chunks. It combines lexical and semantic rankings through weighted fusion or Reciprocal Rank Fusion, supports optional LLM and local cross-encoder reranking, and passes the top retrieved movies to OpenRouter for grounded answers. CLIP adds direct image-to-movie retrieval.',
-      'Where to start': 'Follow text_utils.py, inverted_index.py, semantic_search.py and hybrid_search.py in that order. Then read query_enhancement.py, augmented_generation_cli.py and evaluation_cli.py to see how retrieval becomes RAG and how precision, recall and F1 are measured.',
-      'Current limitations': 'The project is complete as a learning build, not a hosted production service. It uses local files and caches, assumes consecutive movie IDs, has a ten-case golden evaluation set, and does not programmatically validate generated citations. A demo UI and hosting path are documented as future work.',
+      About: 'Movie Enquirer is a completed movie search and retrieval-augmented generation project over 5,000 local movie records. Its command-line tools expose the retrieval stages, and a deployed Streamlit showcase provides Search and Ask modes. The retrieval implementation was self-coded manually by Anand without vibe coding or an AI coding agent. The Streamlit presentation layer was built later with AI assistance, and the product can call an LLM at runtime; those uses are separate from how the core RAG code was authored.',
+      Architecture: 'The project builds text preprocessing, an inverted index, TF-IDF and BM25 before adding MiniLM embeddings and overlapping semantic chunks. It combines lexical and semantic rankings through weighted fusion or Reciprocal Rank Fusion, supports optional LLM and local cross-encoder reranking, and passes the top retrieved movies to OpenRouter for grounded answers. CLIP adds direct image-to-movie retrieval. The Streamlit app reuses the hybrid retriever, shows five ranked movie sources and keeps retrieval-only Search available when generation is unavailable.',
+      'Where to start': 'Follow text_utils.py, inverted_index.py, semantic_search.py and hybrid_search.py in that order. Then read query_enhancement.py, augmented_generation_cli.py and evaluation_cli.py to see how retrieval becomes RAG and how precision, recall and F1 are measured. app.py is the hosted Streamlit presentation layer.',
+      'Current limitations': 'The project is complete as a learning build, not a production movie service. The hosted demo is a single Streamlit process backed by local files and caches, assumes consecutive movie IDs, and uses a ten-case golden evaluation set. Ask mode depends on OpenRouter, has no conversational memory or user accounts, and does not programmatically validate generated citations.',
     }, { status: 'Completed', tags: ['Self-coded', 'No AI coding agents'] }),
 ]);

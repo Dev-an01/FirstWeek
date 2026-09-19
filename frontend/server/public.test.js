@@ -30,7 +30,9 @@ test('anonymous reads return only explicitly published project DTOs and sources'
   const list = await call('projects');
   assert.equal(list.statusCode, 200);
   assert.equal(list.body.canCreate, false);
-  assert.equal(list.body.projects.length, 6);
+  assert.deepEqual(list.body.projects.map(project => project.id), [
+    'firstweek', 'ai-pr-review-agent', 'rag-builder', 'moneyplant', 'personal-site', 'learning-rag',
+  ]);
   assert.equal(list.headers['Cache-Control'], 'no-store');
   for (const item of list.body.projects) {
     const detail = await call(`projects/${item.id}`);
@@ -46,6 +48,7 @@ test('anonymous reads return only explicitly published project DTOs and sources'
   assert.equal((await call('projects/private-fixture')).statusCode, 404);
   assert.equal((await call('projects/firstweek/documents/moneyplant-public-guide')).statusCode, 404);
   const learningRag = await call('projects/learning-rag');
+  assert.equal(learningRag.body.name, 'Movie Enquirer');
   assert.equal(learningRag.body.status, 'Completed');
   assert.deepEqual(learningRag.body.tags, ['Self-coded', 'No AI coding agents']);
   assert.match(learningRag.body.documents[0].title, /Public project guide/);
@@ -82,6 +85,8 @@ test('excerpt mode is explicit, scoped and needs no provider or private services
   assert.ok(result.body.sources.length);
   assert.ok(result.body.sources.every(source => source.projectId === 'firstweek'));
   assert.equal((await ask({ body: { question: 'xyzzyquuxblorp' } })).body.mode, 'no-evidence');
+  const movieEnquirer = publicCollection.find(project => project.id === 'learning-rag');
+  assert.equal(retrieve(movieEnquirer, 'what is the achitecture of this project', [])[0]?.heading, 'Architecture');
   const followup = retrieve(publicCollection[0], 'Tell me more', [{ role: 'user', content: 'architecture' }]);
   assert.equal(followup[0].heading, 'Architecture');
 });
@@ -94,10 +99,11 @@ test('OpenAI is first and receives bounded grounded input', async () => {
     if (call.url === 'https://limits.example/') return { ok: true, json: async () => ({ result: 1 }) };
     return { ok: true, json: async () => ({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'The public endpoint retrieves published evidence [1].' }] }] }) };
   } });
-  const result = await ask({ handler, body: { question: 'Explain the architecture', history: [{ role: 'user', content: 'Hi' }, { role: 'assistant', content: 'Hello' }] } });
+  const result = await ask({ handler, body: { question: 'what is the achitecture of this project', history: [{ role: 'user', content: 'Hi' }, { role: 'assistant', content: 'Hello' }] } });
   assert.equal(result.statusCode, 200);
   assert.equal(result.body.provider, 'openai');
   assert.equal(result.body.model, 'gpt-5.6-luna');
+  assert.equal(result.body.sources[0].heading, 'Architecture');
   assert.equal(calls.length, 3);
   assert.equal(calls[0].body[2], '3');
   assert.equal(calls[1].body[2], '1');
@@ -109,6 +115,7 @@ test('OpenAI is first and receives bounded grounded input', async () => {
   assert.match(calls[2].body.input[0].content, /untrusted data/);
   assert.equal(calls[2].body.input[1].content, 'Hi');
   assert.match(calls[2].body.input.at(-1).content, /Current numbered evidence/);
+  assert.match(calls[2].body.input.at(-1).content, /\[1\] Architecture/);
   assert.doesNotMatch(JSON.stringify(result.body), /test-openai-secret|test-groq-secret|test-openrouter-secret|test-redis-secret/);
 });
 
