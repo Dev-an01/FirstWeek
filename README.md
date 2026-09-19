@@ -149,7 +149,7 @@ cd frontend
 npm run dev -- --mode public --host 127.0.0.1
 ```
 
-Groq and OpenRouter are optional fallbacks. See the [public deployment guide](docs/firstweek/PUBLIC-DEPLOYMENT.md) for the complete provider order, accepted values, rate limits, and Vercel setup.
+Groq and OpenRouter are optional fallbacks. See the [public deployment guide](https://github.com/Dev-an01/FirstWeek/blob/public-showcase/docs/firstweek/PUBLIC-DEPLOYMENT.md) on the `public-showcase` branch for the complete provider order, accepted values, rate limits, and Vercel setup.
 
 ## Run the private workspace
 
@@ -251,7 +251,7 @@ FirstWeek/
 │   └── onboarding-service/    Profile extraction and synthesis
 ├── RAG/                       Python retrieval, graph, embeddings, and API
 ├── knowledge/                 Curated private project guides and manifest
-├── docs/firstweek/            Roadmap, runbooks, acceptance, deployment notes
+├── docs/firstweek/            Roadmap, runbooks, and implementation notes
 ├── TRACK.md                   Current status and acceptance evidence
 ├── PRODUCT.md                 Product scope and principles
 └── docker-compose*.yml        Local and production-oriented service definitions
@@ -290,7 +290,7 @@ The public demo is designed for Vercel with:
 - Build command: `npm run build:public`
 - Output directory: `dist`
 
-Do not publish until the protected-preview checks in the [public deployment guide](docs/firstweek/PUBLIC-DEPLOYMENT.md) pass.
+Do not publish until the protected-preview checks in the [public deployment guide](https://github.com/Dev-an01/FirstWeek/blob/public-showcase/docs/firstweek/PUBLIC-DEPLOYMENT.md) pass.
 
 ### Private application
 
@@ -303,10 +303,10 @@ The repository contains Docker Compose definitions, but the roadmap does not cla
 | [Product](PRODUCT.md) | Users, product purpose, constraints, and principles |
 | [Current tracker](TRACK.md) | Live milestone status, verification evidence, and next work |
 | [Roadmap](docs/firstweek/MILESTONES.md) | M1-M6 outcomes and acceptance criteria |
-| [Project map](docs/firstweek/PROJECT-MAP.md) | Current components and repository navigation |
+| [Project map](https://github.com/Dev-an01/FirstWeek/blob/public-showcase/docs/firstweek/PROJECT-MAP.md) | Current public components and repository navigation |
 | [Runbook](docs/firstweek/RUNBOOK.md) | Private setup, operations, tests, and recovery behavior |
-| [Public deployment](docs/firstweek/PUBLIC-DEPLOYMENT.md) | Public environment variables, limits, Vercel setup, and launch checklist |
-| [M2 acceptance](docs/firstweek/M2-ACCEPTANCE.md) | Current combined M2 integration evidence and pending checks |
+| [Public deployment](https://github.com/Dev-an01/FirstWeek/blob/public-showcase/docs/firstweek/PUBLIC-DEPLOYMENT.md) | Public environment variables, limits, Vercel setup, and launch checklist |
+| [M2 acceptance](https://github.com/Dev-an01/FirstWeek/blob/public-showcase/docs/firstweek/M2-ACCEPTANCE.md) | Current combined M2 integration evidence and pending checks |
 | [RAG architecture](docs/AI-OFFICER_RAG_COMPLETE_GUIDE.md) | Detailed RAG subsystem guide |
 
 ## Security and disclosure
