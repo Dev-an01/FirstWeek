@@ -37,25 +37,10 @@ Meeting → Recall.ai Bot → Your STT Service → RAG API → TTS → Avatar In
 
 The Avatar Interface must be **publicly accessible** for Recall.ai to render it.
 
-**Option A: Production (Recommended)**
+**Production**
 ```bash
-# Deploy frontend-avatar to your server
+# Provide an externally hosted avatar interface
 AVATAR_INTERFACE_URL=https://yourdomain.com/avatar
-```
-
-**Option B: Local Development with ngrok**
-```bash
-# Install ngrok
-npm install -g ngrok
-
-# Start avatar interface
-cd frontend-avatar && npm run dev
-
-# In another terminal, expose port 3004
-ngrok http 3004
-
-# Copy the HTTPS URL (e.g., https://abc123.ngrok.io)
-AVATAR_INTERFACE_URL=https://abc123.ngrok.io
 ```
 
 ### 3. Environment Configuration
@@ -82,7 +67,6 @@ docker-compose up
 
 # Or start individually
 docker-compose up recall-service
-docker-compose up avatar-interface
 ```
 
 ## API Endpoints
@@ -233,17 +217,7 @@ curl http://localhost:3003/api/bot/<bot_id>
 curl -X DELETE http://localhost:3003/api/bot/<bot_id>
 ```
 
-### 2. Test Avatar Interface
-
-```bash
-# Visit Avatar Interface directly
-open http://localhost:3004
-
-# Or with debug mode
-open http://localhost:3004?debug=true
-```
-
-### 3. Test RAG Integration
+### 2. Test RAG Integration
 
 ```bash
 # Simulate a transcript
@@ -284,7 +258,7 @@ curl -X POST http://localhost:3003/api/bot/<bot_id>/process-transcript \
 **Solutions**:
 - Check Avatar Interface audio element is playing
 - Verify TTS audio URL is accessible
-- Test audio playback locally: `open http://localhost:3004`
+- Test audio playback through the configured `AVATAR_INTERFACE_URL`
 - Check browser console for errors
 
 ### STT integration issues

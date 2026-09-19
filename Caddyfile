@@ -49,11 +49,6 @@ example.invalid, example.invalid, localhost, 127.0.0.1 {
 
     }
 
-    handle /avatar* {
-        reverse_proxy avatar-interface:3004
-
-    }
-
     handle /socket.io* {
         reverse_proxy chat-service:3002
 
@@ -82,34 +77,6 @@ example.invalid, example.invalid, localhost, 127.0.0.1 {
     }
 
     # Logs
-    log {
-        output file /var/log/caddy/example.invalid.log
-        format json
-    }
-}
-
-example.invalid {
-    tls /certs/example.invalid.pem /certs/example.invalid.key
-
-    # Proxy to Bridge Service on HOST machine (network_mode: host)
-    
-    # Audio Ingest (WebSocket) -> Host Port 3110
-    handle_path /audio* {
-        reverse_proxy host.docker.internal:3110
-    }
-
-    # Signal Server (Socket.io) -> Host Port 3111
-    handle_path /wrtc/* {
-        reverse_proxy host.docker.internal:3111
-    }
-
-    # Main Avatar Interface -> Container Name (assuming same network or valid DNS)
-    # If avatar-interface is ALSO on a different stack, you might need to use host.docker.internal:3004 too.
-    handle {
-        reverse_proxy avatar-interface:3004
-    }
-
-    encode gzip
     log {
         output file /var/log/caddy/example.invalid.log
         format json
@@ -167,12 +134,6 @@ example.invalid {
     # Direct RAG API access
     handle /api/v1* {
         reverse_proxy rag-api:8000
-
-    }
-
-    # Avatar interface
-    handle /avatar* {
-        reverse_proxy avatar-interface:3004
 
     }
 
